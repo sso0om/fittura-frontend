@@ -128,3 +128,14 @@
     @apply font-sans;
   }
 }
+
+@layer utilities {
+  /* 헤더 카테고리 레일 등 가로 스크롤 영역에서 스크롤바 숨김 (스크롤 자체는 유지) */
+  .no-scrollbar {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+}
