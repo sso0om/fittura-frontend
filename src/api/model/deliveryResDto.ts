@@ -4,8 +4,8 @@
  * OpenAPI definition
  * OpenAPI spec version: v0
  */
-import type { DeliveryResDtoDeliveryType } from './deliveryResDtoDeliveryType';
-import type { DeliveryResDtoStatus } from './deliveryResDtoStatus';
+import type { DeliveryType } from './deliveryType';
+import type { DeliveryStatus } from './deliveryStatus';
 
 /**
  * 배송 정보 DTO
@@ -13,8 +13,8 @@ import type { DeliveryResDtoStatus } from './deliveryResDtoStatus';
 export interface DeliveryResDto {
   deliveryId?: number;
   orderId?: number;
-  deliveryType?: DeliveryResDtoDeliveryType;
-  status?: DeliveryResDtoStatus;
+  deliveryType?: DeliveryType;
+  status?: DeliveryStatus;
   /** 대표 상품명 */
   repProductName?: string;
   /** 상품 종류 수 */

@@ -4,7 +4,7 @@
  * OpenAPI definition
  * OpenAPI spec version: v0
  */
-import type { SkuResDtoStatus } from './skuResDtoStatus';
+import type { SkuStatus } from './skuStatus';
 
 /**
  * SKU 응답 DTO
@@ -12,7 +12,7 @@ import type { SkuResDtoStatus } from './skuResDtoStatus';
 export interface SkuResDto {
   id?: number;
   price?: number;
-  status?: SkuResDtoStatus;
+  status?: SkuStatus;
   color?: string;
   material?: string;
 }

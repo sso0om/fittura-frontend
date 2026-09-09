@@ -4,7 +4,7 @@
  * OpenAPI definition
  * OpenAPI spec version: v0
  */
-import type { OrderWithDeliveryResDtoStatus } from './orderWithDeliveryResDtoStatus';
+import type { OrderStatus } from './orderStatus';
 import type { DeliveryResDto } from './deliveryResDto';
 
 /**
@@ -13,7 +13,7 @@ import type { DeliveryResDto } from './deliveryResDto';
 export interface OrderWithDeliveryResDto {
   orderId?: number;
   orderNumber?: string;
-  status?: OrderWithDeliveryResDtoStatus;
+  status?: OrderStatus;
   orderDate?: string;
   finalAmount?: number;
   deliveries?: DeliveryResDto[];

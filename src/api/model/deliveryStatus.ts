@@ -5,11 +5,11 @@
  * OpenAPI spec version: v0
  */
 
-export type DeliveryResDtoStatus = typeof DeliveryResDtoStatus[keyof typeof DeliveryResDtoStatus];
+export type DeliveryStatus = typeof DeliveryStatus[keyof typeof DeliveryStatus];
 
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
-export const DeliveryResDtoStatus = {
+export const DeliveryStatus = {
   READY: 'READY',
   ASSIGNED: 'ASSIGNED',
   IN_TRANSIT: 'IN_TRANSIT',

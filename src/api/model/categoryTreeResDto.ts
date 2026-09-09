@@ -4,7 +4,7 @@
  * OpenAPI definition
  * OpenAPI spec version: v0
  */
-import type { CategoryTreeResDtoStatus } from './categoryTreeResDtoStatus';
+import type { CategoryStatus } from './categoryStatus';
 
 export interface CategoryTreeResDto {
   id?: number;
@@ -12,5 +12,5 @@ export interface CategoryTreeResDto {
   parentId?: number;
   depth?: number;
   sortOrder?: number;
-  status?: CategoryTreeResDtoStatus;
+  status?: CategoryStatus;
 }

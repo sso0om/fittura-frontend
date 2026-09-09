@@ -5,10 +5,12 @@
  * OpenAPI spec version: v0
  */
 
-export type PaymentPrepareReqDtoPgProvider = typeof PaymentPrepareReqDtoPgProvider[keyof typeof PaymentPrepareReqDtoPgProvider];
+export type CategoryStatus = typeof CategoryStatus[keyof typeof CategoryStatus];
 
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
-export const PaymentPrepareReqDtoPgProvider = {
-  TOSS: 'TOSS',
+export const CategoryStatus = {
+  ACTIVE: 'ACTIVE',
+  DISABLED: 'DISABLED',
+  ARCHIVED: 'ARCHIVED',
 } as const;

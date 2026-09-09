@@ -4,14 +4,14 @@
  * OpenAPI definition
  * OpenAPI spec version: v0
  */
-import type { AttributeUpdateReqDtoAttributeKey } from './attributeUpdateReqDtoAttributeKey';
+import type { AttributeKey } from './attributeKey';
 
 /**
  * Product 요소 수정 요청 DTO
  */
 export interface AttributeUpdateReqDto {
   id?: number;
-  attributeKey: AttributeUpdateReqDtoAttributeKey;
+  attributeKey: AttributeKey;
   /**
    * @minLength 0
    * @maxLength 255

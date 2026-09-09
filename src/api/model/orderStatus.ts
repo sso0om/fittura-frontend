@@ -5,14 +5,15 @@
  * OpenAPI spec version: v0
  */
 
-export type OrderItemResDtoStatus = typeof OrderItemResDtoStatus[keyof typeof OrderItemResDtoStatus];
+export type OrderStatus = typeof OrderStatus[keyof typeof OrderStatus];
 
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
-export const OrderItemResDtoStatus = {
-  ORDERED: 'ORDERED',
-  CANCEL_REQUESTED: 'CANCEL_REQUESTED',
+export const OrderStatus = {
+  PENDING: 'PENDING',
+  PAID: 'PAID',
+  PREPARING: 'PREPARING',
+  COMPLETED: 'COMPLETED',
   CANCELLED: 'CANCELLED',
-  RETURN_REQUESTED: 'RETURN_REQUESTED',
   RETURNED: 'RETURNED',
 } as const;

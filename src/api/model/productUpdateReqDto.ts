@@ -4,7 +4,7 @@
  * OpenAPI definition
  * OpenAPI spec version: v0
  */
-import type { ProductUpdateReqDtoDeliveryType } from './productUpdateReqDtoDeliveryType';
+import type { DeliveryType } from './deliveryType';
 import type { SkuUpdateReqDto } from './skuUpdateReqDto';
 import type { AttributeUpdateReqDto } from './attributeUpdateReqDto';
 import type { CompositionUpdateReqDto } from './compositionUpdateReqDto';
@@ -20,7 +20,7 @@ export interface ProductUpdateReqDto {
    */
   name: string;
   description?: string;
-  deliveryType: ProductUpdateReqDtoDeliveryType;
+  deliveryType: DeliveryType;
   weight: number;
   width: number;
   height: number;

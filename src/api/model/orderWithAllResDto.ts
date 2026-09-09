@@ -4,7 +4,7 @@
  * OpenAPI definition
  * OpenAPI spec version: v0
  */
-import type { OrderWithAllResDtoStatus } from './orderWithAllResDtoStatus';
+import type { OrderStatus } from './orderStatus';
 import type { OrderAddressResDto } from './orderAddressResDto';
 import type { OrderItemResDto } from './orderItemResDto';
 
@@ -14,7 +14,7 @@ import type { OrderItemResDto } from './orderItemResDto';
 export interface OrderWithAllResDto {
   orderId?: number;
   orderNumber?: string;
-  status?: OrderWithAllResDtoStatus;
+  status?: OrderStatus;
   orderDate?: string;
   totalAmount?: number;
   discountAmount?: number;

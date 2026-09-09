@@ -4,7 +4,7 @@
  * OpenAPI definition
  * OpenAPI spec version: v0
  */
-import type { OrderItemResDtoStatus } from './orderItemResDtoStatus';
+import type { OrderItemStatus } from './orderItemStatus';
 
 /**
  * 주문 제품 응답 DTO
@@ -18,5 +18,5 @@ export interface OrderItemResDto {
   quantity?: number;
   discountAmount?: number;
   itemTotalAmount?: number;
-  status?: OrderItemResDtoStatus;
+  status?: OrderItemStatus;
 }

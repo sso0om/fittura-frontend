@@ -4,8 +4,8 @@
  * OpenAPI definition
  * OpenAPI spec version: v0
  */
-import type { ProductCreateReqDtoProductType } from './productCreateReqDtoProductType';
-import type { ProductCreateReqDtoDeliveryType } from './productCreateReqDtoDeliveryType';
+import type { ProductType } from './productType';
+import type { DeliveryType } from './deliveryType';
 import type { SkuCreateReqDto } from './skuCreateReqDto';
 import type { AttributeCreateReqDto } from './attributeCreateReqDto';
 import type { CompositionCreateReqDto } from './compositionCreateReqDto';
@@ -21,8 +21,8 @@ export interface ProductCreateReqDto {
    */
   name: string;
   description?: string;
-  productType: ProductCreateReqDtoProductType;
-  deliveryType: ProductCreateReqDtoDeliveryType;
+  productType: ProductType;
+  deliveryType: DeliveryType;
   weight: number;
   width: number;
   height: number;

@@ -4,9 +4,9 @@
  * OpenAPI definition
  * OpenAPI spec version: v0
  */
-import type { ProductWithAllResDtoProductType } from './productWithAllResDtoProductType';
-import type { ProductWithAllResDtoDeliveryType } from './productWithAllResDtoDeliveryType';
-import type { ProductWithAllResDtoStatus } from './productWithAllResDtoStatus';
+import type { ProductType } from './productType';
+import type { DeliveryType } from './deliveryType';
+import type { ProductStatus } from './productStatus';
 import type { SkuWithStockResDto } from './skuWithStockResDto';
 import type { ProductAttributeResDto } from './productAttributeResDto';
 import type { CompositionResDto } from './compositionResDto';
@@ -18,9 +18,9 @@ export interface ProductWithAllResDto {
   id?: number;
   name?: string;
   description?: string;
-  productType?: ProductWithAllResDtoProductType;
-  deliveryType?: ProductWithAllResDtoDeliveryType;
-  status?: ProductWithAllResDtoStatus;
+  productType?: ProductType;
+  deliveryType?: DeliveryType;
+  status?: ProductStatus;
   basePrice?: number;
   weight?: number;
   width?: number;

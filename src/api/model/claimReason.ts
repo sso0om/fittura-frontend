@@ -5,11 +5,11 @@
  * OpenAPI spec version: v0
  */
 
-export type ClaimOrderReqDtoReason = typeof ClaimOrderReqDtoReason[keyof typeof ClaimOrderReqDtoReason];
+export type ClaimReason = typeof ClaimReason[keyof typeof ClaimReason];
 
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
-export const ClaimOrderReqDtoReason = {
+export const ClaimReason = {
   CHANGE_OF_MIND: 'CHANGE_OF_MIND',
   FOUND_CHEAPER: 'FOUND_CHEAPER',
   DELIVERY_DELAYED: 'DELIVERY_DELAYED',
