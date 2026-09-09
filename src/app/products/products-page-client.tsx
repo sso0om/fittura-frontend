@@ -52,7 +52,7 @@ export function ProductsPageClient() {
   }
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+    <div className="mx-auto w-full max-w-[1600px] px-6 py-8 sm:px-8 lg:px-12">
       {(parentCategory ?? currentCategory) && (
         <nav
           aria-label="현재 위치"
@@ -68,19 +68,32 @@ export function ProductsPageClient() {
         </nav>
       )}
 
-      <ProductToolbar
-        totalCount={totalCount}
-        sort={sort}
-        onSortChange={handleSortChange}
-      />
+      <div className="flex gap-8">
+        {/* TODO: 필터 UI는 다음 작업에서 구현 예정 — 지금은 위치(왼쪽 15%)만 고정 */}
+        <aside className="border-border text-muted-foreground w-[15%] shrink-0 rounded-lg border border-dashed p-4 text-xs">
+          필터 영역 (준비 중)
+        </aside>
 
-      <ProductGrid
-        products={products}
-        isPending={isPending}
-        isError={isError}
-      />
+        <div className="min-w-0 flex-1">
+          <ProductToolbar
+            totalCount={totalCount}
+            sort={sort}
+            onSortChange={handleSortChange}
+          />
 
-      <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />
+          <ProductGrid
+            products={products}
+            isPending={isPending}
+            isError={isError}
+          />
+
+          <Pagination
+            page={page}
+            totalPages={totalPages}
+            onPageChange={setPage}
+          />
+        </div>
+      </div>
     </div>
   );
 }

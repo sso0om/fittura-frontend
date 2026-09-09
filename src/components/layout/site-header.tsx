@@ -24,7 +24,7 @@ export function SiteHeader() {
 
   return (
     <header className="bg-background/95 supports-[backdrop-filter]:bg-background/80 sticky top-0 z-40 border-b backdrop-blur">
-      <div className="mx-auto flex h-14 max-w-7xl items-center gap-4 px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto flex h-14 w-full max-w-[1600px] items-center gap-4 px-6 sm:px-8 lg:px-12">
         <Sheet open={mobileSearchOpen} onOpenChange={setMobileSearchOpen}>
           <SheetTrigger
             render={
