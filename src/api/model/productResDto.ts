@@ -14,5 +14,5 @@ export interface ProductResDto {
   status?: ProductStatus;
   productType?: ProductType;
   isSoldOut?: boolean;
-  thumbnailImageUrl?: string;
+  mainImageUrl?: string;
 }

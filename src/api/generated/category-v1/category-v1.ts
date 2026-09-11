@@ -20,7 +20,7 @@ import type {
 } from '@tanstack/react-query';
 
 import type {
-  RsDataListCategoryTreeResDto
+  RsDataListCategoryResDto
 } from '../../model';
 
 import { customInstance } from '../../mutator/custom-instance';
@@ -32,7 +32,7 @@ type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 
 /**
- * 활성화된 카테고리 조회(트리) API
+ * 활성화된 카테고리 조회(flat) API
  * @summary 활성화 카테고리 전체 조회
  */
 export const getActiveCategories = (
@@ -41,7 +41,7 @@ export const getActiveCategories = (
 ) => {
       
       
-      return customInstance<RsDataListCategoryTreeResDto>(
+      return customInstance<RsDataListCategoryResDto>(
       {url: `/api/v1/categories`, method: 'GET', signal
     },
       options);

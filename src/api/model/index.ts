@@ -57,6 +57,7 @@ export * from './productWithSkuResDto';
 export * from './rsDataAuthResDto';
 export * from './rsDataCartResDto';
 export * from './rsDataCategoryResDto';
+export * from './rsDataListCategoryResDto';
 export * from './rsDataListCategoryTreeResDto';
 export * from './rsDataListCompositionResDto';
 export * from './rsDataListProductAttributeResDto';
