@@ -3,6 +3,7 @@ import Axios, { AxiosRequestConfig, AxiosError } from 'axios';
 export const AXIOS_INSTANCE = Axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
   withCredentials: true,
+  paramsSerializer: { indexes: null },
 });
 
 export const customInstance = <T>(
