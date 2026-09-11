@@ -14,14 +14,13 @@ import { ProductGrid } from "@/components/product/product-grid";
 import { CategorySubNav } from "@/components/product/category-sub-nav";
 import { Pagination } from "@/components/ui/pagination";
 
-const PAGE_SIZE = 20;
-
 export function ProductsPageClient() {
   const searchParams = useSearchParams();
   const categoryIdParam = searchParams.get("categoryId");
   const categoryId = categoryIdParam ? Number(categoryIdParam) : undefined;
 
   const [page, setPage] = useState(0);
+  const [size, setSize] = useState(20);
   const [sort, setSort] = useState<ProductSort>("createdDate,desc");
   const [activeOnly, setActiveOnly] = useState(false);
 
@@ -49,7 +48,7 @@ export function ProductsPageClient() {
     categoryId,
     inStockOnly: activeOnly,
     page,
-    size: PAGE_SIZE,
+    size,
     sort: [sort],
   });
 
@@ -65,6 +64,11 @@ export function ProductsPageClient() {
 
   function handleActiveOnlyChange(next: boolean) {
     setActiveOnly(next);
+    setPage(0);
+  }
+
+  function handlePageSizeChange(nextSize: number) {
+    setSize(nextSize);
     setPage(0);
   }
 
@@ -107,6 +111,8 @@ export function ProductsPageClient() {
             onSortChange={handleSortChange}
             activeOnly={activeOnly}
             onActiveOnlyChange={handleActiveOnlyChange}
+            pageSize={size}
+            onPageSizeChange={handlePageSizeChange}
           />
 
           <ProductGrid

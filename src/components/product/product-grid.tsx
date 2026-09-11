@@ -19,7 +19,7 @@ export function ProductGrid({
 }: ProductGridProps) {
   if (isPending) {
     return (
-      <div className="grid grid-cols-2 gap-x-5 gap-y-6 sm:grid-cols-3 lg:grid-cols-4">
+      <div className="grid grid-cols-2 gap-x-5 gap-y-6 md:grid-cols-4">
         {Array.from({ length: 8 }).map((_, index) => (
           <div key={index} className="flex flex-col gap-3">
             <div className="bg-muted aspect-square w-full animate-pulse rounded-2xl" />
@@ -48,7 +48,7 @@ export function ProductGrid({
   }
 
   return (
-    <div className="grid grid-cols-2 gap-x-5 gap-y-6 sm:grid-cols-3 lg:grid-cols-4">
+    <div className="grid grid-cols-2 gap-x-5 gap-y-6 md:grid-cols-4">
       {products.map((product) => (
         <ProductCard
           key={product.id}

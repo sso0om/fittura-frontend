@@ -41,7 +41,7 @@ export function ProductCard({
 }: ProductCardProps) {
   const hasDiscount = discountRate > 0;
   const hasRating = rating != null && reviewCount != null;
-  const overlayLabel = discontinued ? "품절" : soldOut ? "임시품절" : null;
+  const overlayLabel = discontinued ? "품절" : soldOut ? "일시품절" : null;
 
   return (
     <article className={cn("group relative flex flex-col gap-3", className)}>

@@ -5,9 +5,10 @@ export interface ProductToolbarProps {
   totalCount: number;
   sort: ProductSort;
   onSortChange: (sort: ProductSort) => void;
-  /** 체크 시 statuses=[ACTIVE]만 조회(= 단종/"품절" 제외), 해제 시 statuses 미전송(백엔드 기본값) */
   activeOnly: boolean;
   onActiveOnlyChange: (activeOnly: boolean) => void;
+  pageSize: number;
+  onPageSizeChange: (pageSize: number) => void;
 }
 
 const SORT_OPTIONS: { value: ProductSort; label: string }[] = [
@@ -16,8 +17,13 @@ const SORT_OPTIONS: { value: ProductSort; label: string }[] = [
   { value: "basePrice,desc", label: "높은 가격순" },
 ];
 
+const PAGE_SIZE_OPTIONS = [20, 40, 60, 80];
+
+const selectClass =
+  "border-border bg-background text-foreground focus-visible:border-ring focus-visible:ring-ring/50 h-8 rounded-lg border px-3 text-[13px] outline-none focus-visible:ring-3";
+
 /**
- * 상품 개수 + 품절제외 체크박스 + 정렬 드롭다운
+ * 상품 개수 + 품절제외 체크박스 + 정렬 드롭다운 + 페이지당 개수 드롭다운
  */
 export function ProductToolbar({
   totalCount,
@@ -25,6 +31,8 @@ export function ProductToolbar({
   onSortChange,
   activeOnly,
   onActiveOnlyChange,
+  pageSize,
+  onPageSizeChange,
 }: ProductToolbarProps) {
   return (
     <div className="mb-5 flex items-center justify-between">
@@ -44,12 +52,24 @@ export function ProductToolbar({
         <select
           value={sort}
           onChange={(event) => onSortChange(event.target.value as ProductSort)}
-          className="border-border bg-background text-foreground focus-visible:border-ring focus-visible:ring-ring/50 h-8 rounded-lg border px-3 text-[13px] outline-none focus-visible:ring-3"
+          className={selectClass}
           aria-label="정렬 기준"
         >
           {SORT_OPTIONS.map((option) => (
             <option key={option.value} value={option.value}>
               {option.label}
+            </option>
+          ))}
+        </select>
+        <select
+          value={pageSize}
+          onChange={(event) => onPageSizeChange(Number(event.target.value))}
+          className={selectClass}
+          aria-label="페이지당 개수"
+        >
+          {PAGE_SIZE_OPTIONS.map((option) => (
+            <option key={option} value={option}>
+              {option}개씩
             </option>
           ))}
         </select>
