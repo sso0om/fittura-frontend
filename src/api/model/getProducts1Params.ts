@@ -4,10 +4,9 @@
  * OpenAPI definition
  * OpenAPI spec version: v0
  */
-import type { ProductStatus } from './productStatus';
 
 export type GetProducts1Params = {
-statuses?: ProductStatus[];
+inStockOnly?: boolean;
 categoryId?: number;
 keyword?: string;
 colors?: string[];

@@ -5,7 +5,7 @@ import { Fragment, useState } from "react";
 
 import { useCategoryTree } from "@/components/layout/use-category-tree";
 import { useGetProducts1 } from "@/api/generated/product-v1/product-v1";
-import { ProductStatus, type CategoryResDto } from "@/api/model";
+import type { CategoryResDto } from "@/api/model";
 import {
   ProductToolbar,
   type ProductSort,
@@ -23,6 +23,15 @@ export function ProductsPageClient() {
 
   const [page, setPage] = useState(0);
   const [sort, setSort] = useState<ProductSort>("createdDate,desc");
+  const [activeOnly, setActiveOnly] = useState(false);
+
+  // 카테고리 변경 시 필터/페이지 초기화
+  const [trackedCategoryId, setTrackedCategoryId] = useState(categoryId);
+  if (categoryId !== trackedCategoryId) {
+    setTrackedCategoryId(categoryId);
+    setActiveOnly(false);
+    setPage(0);
+  }
 
   const { data: categoryTree } = useCategoryTree();
 
@@ -38,7 +47,7 @@ export function ProductsPageClient() {
 
   const { data, isPending, isError } = useGetProducts1({
     categoryId,
-    statuses: [ProductStatus.ACTIVE],
+    inStockOnly: activeOnly,
     page,
     size: PAGE_SIZE,
     sort: [sort],
@@ -51,6 +60,11 @@ export function ProductsPageClient() {
 
   function handleSortChange(nextSort: ProductSort) {
     setSort(nextSort);
+    setPage(0);
+  }
+
+  function handleActiveOnlyChange(next: boolean) {
+    setActiveOnly(next);
     setPage(0);
   }
 
@@ -91,6 +105,8 @@ export function ProductsPageClient() {
             totalCount={totalCount}
             sort={sort}
             onSortChange={handleSortChange}
+            activeOnly={activeOnly}
+            onActiveOnlyChange={handleActiveOnlyChange}
           />
 
           <ProductGrid

@@ -16,7 +16,7 @@ export interface ProductCardProps {
   discountRate?: number;
   rating?: number;
   reviewCount?: number;
-  thumbnailUrl?: string;
+  mainImageUrl?: string;
   liked?: boolean;
   onToggleLike?: () => void;
   soldOut?: boolean;
@@ -32,7 +32,7 @@ export function ProductCard({
   discountRate = 0,
   rating,
   reviewCount,
-  thumbnailUrl,
+  mainImageUrl,
   liked = false,
   onToggleLike,
   soldOut = false,
@@ -53,9 +53,9 @@ export function ProductCard({
       />
 
       <div className="bg-muted relative aspect-square w-full overflow-hidden rounded-2xl">
-        {thumbnailUrl ? (
+        {mainImageUrl ? (
           <Image
-            src={thumbnailUrl}
+            src={mainImageUrl}
             alt=""
             fill
             sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"

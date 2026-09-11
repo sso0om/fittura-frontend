@@ -57,7 +57,7 @@ export function ProductGrid({
           price={product.basePrice ?? 0}
           soldOut={product.isSoldOut ?? false}
           discontinued={product.status === ProductStatus.DISCONTINUED}
-          thumbnailUrl={product.thumbnailImageUrl}
+          mainImageUrl={product.mainImageUrl}
         />
       ))}
     </div>
