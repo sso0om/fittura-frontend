@@ -9,7 +9,7 @@ export function SiteFooter() {
   const firstCategory = data?.topLevel[0];
 
   return (
-    <footer className="bg-muted/30 border-t">
+    <footer className="bg-muted/30 mt-16 border-t">
       <div className="mx-auto grid w-full max-w-[1600px] gap-8 px-6 py-10 sm:px-8 md:grid-cols-3 lg:px-12">
         <div>
           <p className="text-lg font-bold tracking-tight">FITTURA</p>

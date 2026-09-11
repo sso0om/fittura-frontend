@@ -1,16 +1,17 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { Fragment, useState } from "react";
 
 import { useCategoryTree } from "@/components/layout/use-category-tree";
 import { useGetProducts1 } from "@/api/generated/product-v1/product-v1";
-import { ProductStatus } from "@/api/model";
+import { ProductStatus, type CategoryResDto } from "@/api/model";
 import {
   ProductToolbar,
   type ProductSort,
 } from "@/components/product/product-toolbar";
 import { ProductGrid } from "@/components/product/product-grid";
+import { CategorySubNav } from "@/components/product/category-sub-nav";
 import { Pagination } from "@/components/ui/pagination";
 
 const PAGE_SIZE = 20;
@@ -24,14 +25,16 @@ export function ProductsPageClient() {
   const [sort, setSort] = useState<ProductSort>("createdDate,desc");
 
   const { data: categoryTree } = useCategoryTree();
-  const currentCategory = categoryTree
-    ? [...categoryTree.childrenByParentId.values()]
-        .flat()
-        .find((category) => category.id === categoryId)
-    : undefined;
-  const parentCategory = categoryTree?.topLevel.find(
-    (category) => category.id === currentCategory?.parentId,
-  );
+
+  const categoryTrail: CategoryResDto[] = [];
+  if (categoryTree && categoryId != null) {
+    let node: CategoryResDto | undefined = categoryTree.byId.get(categoryId);
+    while (node) {
+      categoryTrail.unshift(node);
+      node =
+        node.parentId != null ? categoryTree.byId.get(node.parentId) : undefined;
+    }
+  }
 
   const { data, isPending, isError } = useGetProducts1({
     categoryId,
@@ -53,20 +56,29 @@ export function ProductsPageClient() {
 
   return (
     <div className="mx-auto w-full max-w-[1600px] px-6 py-8 sm:px-8 lg:px-12">
-      {(parentCategory ?? currentCategory) && (
+      {categoryTrail.length > 0 && (
         <nav
           aria-label="현재 위치"
           className="text-muted-foreground mb-5 flex items-center gap-1.5 text-[13px]"
         >
-          {parentCategory && <span>{parentCategory.name}</span>}
-          {parentCategory && currentCategory && <span>/</span>}
-          {currentCategory && (
-            <span className="text-foreground font-semibold">
-              {currentCategory.name}
-            </span>
-          )}
+          {categoryTrail.map((category, index) => (
+            <Fragment key={category.id}>
+              {index > 0 && <span aria-hidden>&gt;</span>}
+              <span
+                className={
+                  index === categoryTrail.length - 1
+                    ? "text-foreground font-semibold"
+                    : undefined
+                }
+              >
+                {category.name}
+              </span>
+            </Fragment>
+          ))}
         </nav>
       )}
+
+      <CategorySubNav categoryId={categoryId} />
 
       <div className="flex gap-8">
         {/* TODO: 필터 UI는 다음 작업에서 구현 예정 — 지금은 위치(왼쪽 15%)만 고정 */}
