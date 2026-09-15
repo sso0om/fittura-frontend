@@ -1,8 +1,10 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
+import Link from "next/link";
 import { Fragment, useState } from "react";
 
+import { cn } from "cn";
 import { useCategoryTree } from "@/components/layout/use-category-tree";
 import { useGetProducts1 } from "@/api/generated/product-v1/product-v1";
 import type { CategoryResDto } from "@/api/model";
@@ -105,20 +107,31 @@ export function ProductsPageClient() {
           aria-label="현재 위치"
           className="text-muted-foreground mb-5 flex items-center gap-1.5 text-[13px]"
         >
-          {categoryTrail.map((category, index) => (
-            <Fragment key={category.id}>
-              {index > 0 && <span aria-hidden>&gt;</span>}
-              <span
-                className={
-                  index === categoryTrail.length - 1
-                    ? "text-foreground font-semibold"
-                    : undefined
-                }
-              >
-                {category.name}
-              </span>
-            </Fragment>
-          ))}
+          {categoryTrail.map((category, index) => {
+            const isLast = index === categoryTrail.length - 1;
+            const labelClassName = isLast
+              ? "text-foreground font-semibold"
+              : undefined;
+
+            return (
+              <Fragment key={category.id}>
+                {index > 0 && <span aria-hidden>&gt;</span>}
+                {index === 0 ? (
+                  <span className={labelClassName}>{category.name}</span>
+                ) : (
+                  <Link
+                    href={`/products?categoryId=${category.id}`}
+                    className={cn(
+                      "hover:text-foreground transition-colors",
+                      labelClassName,
+                    )}
+                  >
+                    {category.name}
+                  </Link>
+                )}
+              </Fragment>
+            );
+          })}
         </nav>
       )}
 
