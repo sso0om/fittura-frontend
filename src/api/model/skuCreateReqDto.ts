@@ -11,14 +11,6 @@
 export interface SkuCreateReqDto {
   price: number;
   stockQuantity: number;
-  /**
-   * @minLength 0
-   * @maxLength 50
-   */
-  color?: string;
-  /**
-   * @minLength 0
-   * @maxLength 50
-   */
-  material?: string;
+  colorId?: number;
+  materialId?: number;
 }

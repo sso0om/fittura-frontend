@@ -9,8 +9,8 @@ export type GetProducts1Params = {
 inStockOnly?: boolean;
 categoryId?: number;
 keyword?: string;
-colors?: string[];
-materials?: string[];
+colors?: number[];
+materials?: number[];
 /**
  * Zero-based page index (0..N)
  * @minimum 0
