@@ -14,6 +14,8 @@ import { ProductGrid } from "@/components/product/product-grid";
 import { CategorySubNav } from "@/components/product/category-sub-nav";
 import { Pagination } from "@/components/ui/pagination";
 
+const DEFAULT_SORT: ProductSort = "createdDate,desc";
+
 export function ProductsPageClient() {
   const searchParams = useSearchParams();
   const categoryIdParam = searchParams.get("categoryId");
@@ -21,14 +23,15 @@ export function ProductsPageClient() {
 
   const [page, setPage] = useState(0);
   const [size, setSize] = useState(20);
-  const [sort, setSort] = useState<ProductSort>("createdDate,desc");
+  const [sort, setSort] = useState<ProductSort>(DEFAULT_SORT);
   const [activeOnly, setActiveOnly] = useState(false);
 
-  // 카테고리 변경 시 필터/페이지 초기화
+  // 카테고리 변경 시 필터/정렬/페이지 초기화
   const [trackedCategoryId, setTrackedCategoryId] = useState(categoryId);
   if (categoryId !== trackedCategoryId) {
     setTrackedCategoryId(categoryId);
     setActiveOnly(false);
+    setSort(DEFAULT_SORT);
     setPage(0);
   }
 
