@@ -1,6 +1,6 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Fragment, useState } from "react";
 
 import { useCategoryTree } from "@/components/layout/use-category-tree";
@@ -11,15 +11,20 @@ import {
   type ProductSort,
 } from "@/components/product/product-toolbar";
 import { ProductGrid } from "@/components/product/product-grid";
+import { ProductFilterSidebar } from "@/components/product/product-filter-sidebar";
 import { CategorySubNav } from "@/components/product/category-sub-nav";
 import { Pagination } from "@/components/ui/pagination";
 
 const DEFAULT_SORT: ProductSort = "createdDate,desc";
 
 export function ProductsPageClient() {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const categoryIdParam = searchParams.get("categoryId");
   const categoryId = categoryIdParam ? Number(categoryIdParam) : undefined;
+
+  const selectedColors = searchParams.getAll("colors").map(Number);
+  const selectedMaterials = searchParams.getAll("materials").map(Number);
 
   const [page, setPage] = useState(0);
   const [size, setSize] = useState(20);
@@ -33,6 +38,22 @@ export function ProductsPageClient() {
     setActiveOnly(false);
     setSort(DEFAULT_SORT);
     setPage(0);
+  }
+
+  function updateFilterParam(key: "colors" | "materials", ids: number[]) {
+    const params = new URLSearchParams(searchParams.toString());
+    params.delete(key);
+    ids.forEach((id) => params.append(key, String(id)));
+    router.replace(`/products?${params.toString()}`, { scroll: false });
+    setPage(0);
+  }
+
+  function handleColorsChange(colorIds: number[]) {
+    updateFilterParam("colors", colorIds);
+  }
+
+  function handleMaterialsChange(materialIds: number[]) {
+    updateFilterParam("materials", materialIds);
   }
 
   const { data: categoryTree } = useCategoryTree();
@@ -50,6 +71,8 @@ export function ProductsPageClient() {
   const { data, isPending, isError } = useGetProducts1({
     categoryId,
     inStockOnly: activeOnly,
+    colors: selectedColors.length > 0 ? selectedColors : undefined,
+    materials: selectedMaterials.length > 0 ? selectedMaterials : undefined,
     page,
     size,
     sort: [sort],
@@ -99,15 +122,17 @@ export function ProductsPageClient() {
         </nav>
       )}
 
-      <CategorySubNav categoryId={categoryId} />
-
       <div className="flex gap-8">
-        {/* TODO: 필터 UI는 다음 작업에서 구현 예정 — 지금은 위치(왼쪽 15%)만 고정 */}
-        <aside className="border-border text-muted-foreground w-[15%] shrink-0 rounded-lg border border-dashed p-4 text-xs">
-          필터 영역 (준비 중)
-        </aside>
+        <ProductFilterSidebar
+          selectedColors={selectedColors}
+          selectedMaterials={selectedMaterials}
+          onColorsChange={handleColorsChange}
+          onMaterialsChange={handleMaterialsChange}
+        />
 
         <div className="min-w-0 flex-1">
+          <CategorySubNav categoryId={categoryId} />
+
           <ProductToolbar
             totalCount={totalCount}
             sort={sort}
