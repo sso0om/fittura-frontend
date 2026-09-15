@@ -9,16 +9,8 @@
  * SKU 생성 요청 DTO
  */
 export interface SkuCreateReqDto {
+  colorId?: number;
+  materialId?: number;
   price: number;
   stockQuantity: number;
-  /**
-   * @minLength 0
-   * @maxLength 50
-   */
-  color?: string;
-  /**
-   * @minLength 0
-   * @maxLength 50
-   */
-  material?: string;
 }

@@ -4,32 +4,32 @@
  * OpenAPI definition
  * OpenAPI spec version: v0
  */
-import type { ProductUpdateReqDtoDeliveryType } from './productUpdateReqDtoDeliveryType';
-import type { SkuUpdateReqDto } from './skuUpdateReqDto';
 import type { AttributeUpdateReqDto } from './attributeUpdateReqDto';
 import type { CompositionUpdateReqDto } from './compositionUpdateReqDto';
+import type { DeliveryType } from './deliveryType';
+import type { SkuUpdateReqDto } from './skuUpdateReqDto';
 
 /**
  * 상품 수정 요청 DTO
  */
 export interface ProductUpdateReqDto {
+  attributes?: AttributeUpdateReqDto[];
   categoryId: number;
+  compositions?: CompositionUpdateReqDto[];
+  deliveryType: DeliveryType;
+  depth: number;
+  description?: string;
+  height: number;
   /**
    * @minLength 0
    * @maxLength 255
    */
   name: string;
-  description?: string;
-  deliveryType: ProductUpdateReqDtoDeliveryType;
-  weight: number;
-  width: number;
-  height: number;
-  depth: number;
   /**
    * @minItems 1
    * @maxItems 2147483647
    */
   skus: SkuUpdateReqDto[];
-  attributes?: AttributeUpdateReqDto[];
-  compositions?: CompositionUpdateReqDto[];
+  weight: number;
+  width: number;
 }

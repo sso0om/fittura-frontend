@@ -5,11 +5,11 @@
  * OpenAPI spec version: v0
  */
 
-export type ProductCreateReqDtoProductType = typeof ProductCreateReqDtoProductType[keyof typeof ProductCreateReqDtoProductType];
+export type ProductType = typeof ProductType[keyof typeof ProductType];
 
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
-export const ProductCreateReqDtoProductType = {
+export const ProductType = {
   COMPLETE: 'COMPLETE',
   COMPONENT: 'COMPONENT',
 } as const;

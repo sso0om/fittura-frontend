@@ -4,13 +4,13 @@
  * OpenAPI definition
  * OpenAPI spec version: v0
  */
-import type { CategoryResDtoStatus } from './categoryResDtoStatus';
+import type { CategoryStatus } from './categoryStatus';
 
 export interface CategoryResDto {
+  depth?: number;
   id?: number;
   name?: string;
   parentId?: number;
-  depth?: number;
   sortOrder?: number;
-  status?: CategoryResDtoStatus;
+  status?: CategoryStatus;
 }

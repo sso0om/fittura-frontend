@@ -8,6 +8,6 @@ import type { PaymentPrepareResDto } from './paymentPrepareResDto';
 
 export interface RsDataPaymentPrepareResDto {
   code?: string;
-  message?: string;
   data?: PaymentPrepareResDto;
+  message?: string;
 }

@@ -4,10 +4,10 @@
  * OpenAPI definition
  * OpenAPI spec version: v0
  */
-import type { ProductAttributeResDtoAttributeKey } from './productAttributeResDtoAttributeKey';
+import type { AttributeKey } from './attributeKey';
 
 export interface ProductAttributeResDto {
-  id?: number;
-  attributeKey?: ProductAttributeResDtoAttributeKey;
+  attributeKey?: AttributeKey;
   attributeValue?: string;
+  id?: number;
 }

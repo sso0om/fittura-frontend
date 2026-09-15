@@ -6,8 +6,8 @@
  */
 
 export interface AuthResDto {
-  id?: number;
-  email?: string;
-  nickname?: string;
   accessToken?: string;
+  email?: string;
+  id?: number;
+  nickname?: string;
 }

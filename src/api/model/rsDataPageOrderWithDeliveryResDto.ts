@@ -8,6 +8,6 @@ import type { PageOrderWithDeliveryResDto } from './pageOrderWithDeliveryResDto'
 
 export interface RsDataPageOrderWithDeliveryResDto {
   code?: string;
-  message?: string;
   data?: PageOrderWithDeliveryResDto;
+  message?: string;
 }

@@ -4,15 +4,15 @@
  * OpenAPI definition
  * OpenAPI spec version: v0
  */
-import type { SkuResDtoStatus } from './skuResDtoStatus';
+import type { SkuStatus } from './skuStatus';
 
 /**
  * SKU 응답 DTO
  */
 export interface SkuResDto {
-  id?: number;
-  price?: number;
-  status?: SkuResDtoStatus;
   color?: string;
+  id?: number;
   material?: string;
+  price?: number;
+  status?: SkuStatus;
 }

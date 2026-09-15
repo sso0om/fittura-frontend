@@ -4,14 +4,14 @@
  * OpenAPI definition
  * OpenAPI spec version: v0
  */
-import type { GetProductsStatusesItem } from './getProductsStatusesItem';
+import type { ProductStatus } from './productStatus';
 
 export type GetProductsParams = {
-statuses?: GetProductsStatusesItem[];
+statuses?: ProductStatus[];
 categoryId?: number;
 keyword?: string;
-colors?: string[];
-materials?: string[];
+colors?: number[];
+materials?: number[];
 /**
  * Zero-based page index (0..N)
  * @minimum 0

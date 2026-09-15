@@ -27,69 +27,6 @@ type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 
 /**
- * SKU 일시품절 직접 처리
- * @summary SKU 일시품절
- */
-export const soldOutSku = (
-    productId: number,
-    skuId: number,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<RsDataVoid>(
-      {url: `/api/admin/v1/products/${productId}/skus/${skuId}/soldout`, method: 'PATCH'
-    },
-      options);
-    }
-  
-
-
-export const getSoldOutSkuMutationOptions = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof soldOutSku>>, TError,{productId: number;skuId: number}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof soldOutSku>>, TError,{productId: number;skuId: number}, TContext> => {
-
-const mutationKey = ['soldOutSku'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof soldOutSku>>, {productId: number;skuId: number}> = (props) => {
-          const {productId,skuId} = props ?? {};
-
-          return  soldOutSku(productId,skuId,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type SoldOutSkuMutationResult = NonNullable<Awaited<ReturnType<typeof soldOutSku>>>
-    
-    export type SoldOutSkuMutationError = ErrorType<unknown>
-
-    /**
- * @summary SKU 일시품절
- */
-export const useSoldOutSku = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof soldOutSku>>, TError,{productId: number;skuId: number}, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof soldOutSku>>,
-        TError,
-        {productId: number;skuId: number},
-        TContext
-      > => {
-
-      const mutationOptions = getSoldOutSkuMutationOptions(options);
-
-      return useMutation(mutationOptions, queryClient);
-    }
-    /**
  * SKU 단종 처리
  * @summary SKU 단종
  */
@@ -149,6 +86,69 @@ export const useDiscontinueSku = <TError = ErrorType<unknown>,
       > => {
 
       const mutationOptions = getDiscontinueSkuMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    /**
+ * SKU 일시품절 직접 처리
+ * @summary SKU 일시품절
+ */
+export const soldOutSku = (
+    productId: number,
+    skuId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<RsDataVoid>(
+      {url: `/api/admin/v1/products/${productId}/skus/${skuId}/soldout`, method: 'PATCH'
+    },
+      options);
+    }
+  
+
+
+export const getSoldOutSkuMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof soldOutSku>>, TError,{productId: number;skuId: number}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof soldOutSku>>, TError,{productId: number;skuId: number}, TContext> => {
+
+const mutationKey = ['soldOutSku'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof soldOutSku>>, {productId: number;skuId: number}> = (props) => {
+          const {productId,skuId} = props ?? {};
+
+          return  soldOutSku(productId,skuId,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type SoldOutSkuMutationResult = NonNullable<Awaited<ReturnType<typeof soldOutSku>>>
+    
+    export type SoldOutSkuMutationError = ErrorType<unknown>
+
+    /**
+ * @summary SKU 일시품절
+ */
+export const useSoldOutSku = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof soldOutSku>>, TError,{productId: number;skuId: number}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof soldOutSku>>,
+        TError,
+        {productId: number;skuId: number},
+        TContext
+      > => {
+
+      const mutationOptions = getSoldOutSkuMutationOptions(options);
 
       return useMutation(mutationOptions, queryClient);
     }

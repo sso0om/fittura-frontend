@@ -9,6 +9,6 @@
  * 장바구니 상품 추가 요청 DTO
  */
 export interface CartItemCreateReqDto {
-  skuId: number;
   quantity?: number;
+  skuId: number;
 }

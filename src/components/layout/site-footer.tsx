@@ -9,13 +9,13 @@ export function SiteFooter() {
   const firstCategory = data?.topLevel[0];
 
   return (
-    <footer className="bg-muted/30 border-t">
-      <div className="mx-auto grid max-w-7xl gap-8 px-4 py-10 sm:px-6 md:grid-cols-3 lg:px-8">
+    <footer className="bg-muted/30 mt-16 border-t">
+      <div className="mx-auto grid w-full max-w-[1600px] gap-8 px-6 py-10 sm:px-8 md:grid-cols-3 lg:px-12">
         <div>
           <p className="text-lg font-bold tracking-tight">FITTURA</p>
           <p className="text-muted-foreground mt-2 text-sm">
-            완제품부터 상판·하판·다리까지.<br/> 원하는 조합으로 완성하는 가구
-            쇼핑몰
+            완제품부터 상판·하판·다리까지.
+            <br /> 원하는 조합으로 완성하는 가구 쇼핑몰
           </p>
         </div>
         <div>
@@ -54,7 +54,7 @@ export function SiteFooter() {
         </div>
       </div>
       <div className="border-t">
-        <p className="text-muted-foreground mx-auto max-w-7xl px-4 py-4 text-xs sm:px-6 lg:px-8">
+        <p className="text-muted-foreground mx-auto w-full max-w-[1600px] px-6 py-4 text-xs sm:px-8 lg:px-12">
           &copy; {new Date().getFullYear()} FITTURA. All rights reserved.
         </p>
       </div>

@@ -24,6 +24,7 @@ import type {
   RsDataListCompositionResDto,
   RsDataListProductAttributeResDto,
   RsDataPageProductResDto,
+  RsDataProductFilterResDto,
   RsDataProductWithSkuResDto
 } from '../../model';
 
@@ -129,6 +130,98 @@ export function useGetProducts1<TData = Awaited<ReturnType<typeof getProducts1>>
 
 
 /**
+ * 색상/재질 필터 옵션 목록 조회 API
+ * @summary 상품 필터링 옵션 조회
+ */
+export const getProductFilter = (
+    
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<RsDataProductFilterResDto>(
+      {url: `/api/v1/products/filters`, method: 'GET', signal
+    },
+      options);
+    }
+  
+
+
+
+export const getGetProductFilterQueryKey = () => {
+    return [
+    `/api/v1/products/filters`
+    ] as const;
+    }
+
+    
+export const getGetProductFilterQueryOptions = <TData = Awaited<ReturnType<typeof getProductFilter>>, TError = ErrorType<unknown>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getProductFilter>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetProductFilterQueryKey();
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getProductFilter>>> = ({ signal }) => getProductFilter(requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getProductFilter>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetProductFilterQueryResult = NonNullable<Awaited<ReturnType<typeof getProductFilter>>>
+export type GetProductFilterQueryError = ErrorType<unknown>
+
+
+export function useGetProductFilter<TData = Awaited<ReturnType<typeof getProductFilter>>, TError = ErrorType<unknown>>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getProductFilter>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getProductFilter>>,
+          TError,
+          Awaited<ReturnType<typeof getProductFilter>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetProductFilter<TData = Awaited<ReturnType<typeof getProductFilter>>, TError = ErrorType<unknown>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getProductFilter>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getProductFilter>>,
+          TError,
+          Awaited<ReturnType<typeof getProductFilter>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetProductFilter<TData = Awaited<ReturnType<typeof getProductFilter>>, TError = ErrorType<unknown>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getProductFilter>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary 상품 필터링 옵션 조회
+ */
+
+export function useGetProductFilter<TData = Awaited<ReturnType<typeof getProductFilter>>, TError = ErrorType<unknown>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getProductFilter>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetProductFilterQueryOptions(options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+/**
  * 제품 상세 조회 API
  * @summary 제품 상세 조회
  */
@@ -221,98 +314,6 @@ export function useGetProduct1<TData = Awaited<ReturnType<typeof getProduct1>>, 
 
 
 /**
- * 완제품 - 상품 구성 목록 조회 API
- * @summary 상품 구성 정보 조회
- */
-export const getProductCompositions = (
-    productId: number,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
-) => {
-      
-      
-      return customInstance<RsDataListCompositionResDto>(
-      {url: `/api/v1/products/${productId}/compositions`, method: 'GET', signal
-    },
-      options);
-    }
-  
-
-
-
-export const getGetProductCompositionsQueryKey = (productId?: number,) => {
-    return [
-    `/api/v1/products/${productId}/compositions`
-    ] as const;
-    }
-
-    
-export const getGetProductCompositionsQueryOptions = <TData = Awaited<ReturnType<typeof getProductCompositions>>, TError = ErrorType<unknown>>(productId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getProductCompositions>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetProductCompositionsQueryKey(productId);
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getProductCompositions>>> = ({ signal }) => getProductCompositions(productId, requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, enabled: !!(productId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getProductCompositions>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetProductCompositionsQueryResult = NonNullable<Awaited<ReturnType<typeof getProductCompositions>>>
-export type GetProductCompositionsQueryError = ErrorType<unknown>
-
-
-export function useGetProductCompositions<TData = Awaited<ReturnType<typeof getProductCompositions>>, TError = ErrorType<unknown>>(
- productId: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getProductCompositions>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getProductCompositions>>,
-          TError,
-          Awaited<ReturnType<typeof getProductCompositions>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetProductCompositions<TData = Awaited<ReturnType<typeof getProductCompositions>>, TError = ErrorType<unknown>>(
- productId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getProductCompositions>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getProductCompositions>>,
-          TError,
-          Awaited<ReturnType<typeof getProductCompositions>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetProductCompositions<TData = Awaited<ReturnType<typeof getProductCompositions>>, TError = ErrorType<unknown>>(
- productId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getProductCompositions>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
- * @summary 상품 구성 정보 조회
- */
-
-export function useGetProductCompositions<TData = Awaited<ReturnType<typeof getProductCompositions>>, TError = ErrorType<unknown>>(
- productId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getProductCompositions>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getGetProductCompositionsQueryOptions(productId,options)
-
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-
-
-/**
  * 상품 고시 정보 목록 조회 API
  * @summary 상품 고시 정보 조회
  */
@@ -394,6 +395,98 @@ export function useGetProductAttributes<TData = Awaited<ReturnType<typeof getPro
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
   const queryOptions = getGetProductAttributesQueryOptions(productId,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+/**
+ * 완제품 - 상품 구성 목록 조회 API
+ * @summary 상품 구성 정보 조회
+ */
+export const getProductCompositions = (
+    productId: number,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<RsDataListCompositionResDto>(
+      {url: `/api/v1/products/${productId}/compositions`, method: 'GET', signal
+    },
+      options);
+    }
+  
+
+
+
+export const getGetProductCompositionsQueryKey = (productId?: number,) => {
+    return [
+    `/api/v1/products/${productId}/compositions`
+    ] as const;
+    }
+
+    
+export const getGetProductCompositionsQueryOptions = <TData = Awaited<ReturnType<typeof getProductCompositions>>, TError = ErrorType<unknown>>(productId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getProductCompositions>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetProductCompositionsQueryKey(productId);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getProductCompositions>>> = ({ signal }) => getProductCompositions(productId, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(productId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getProductCompositions>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetProductCompositionsQueryResult = NonNullable<Awaited<ReturnType<typeof getProductCompositions>>>
+export type GetProductCompositionsQueryError = ErrorType<unknown>
+
+
+export function useGetProductCompositions<TData = Awaited<ReturnType<typeof getProductCompositions>>, TError = ErrorType<unknown>>(
+ productId: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getProductCompositions>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getProductCompositions>>,
+          TError,
+          Awaited<ReturnType<typeof getProductCompositions>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetProductCompositions<TData = Awaited<ReturnType<typeof getProductCompositions>>, TError = ErrorType<unknown>>(
+ productId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getProductCompositions>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getProductCompositions>>,
+          TError,
+          Awaited<ReturnType<typeof getProductCompositions>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetProductCompositions<TData = Awaited<ReturnType<typeof getProductCompositions>>, TError = ErrorType<unknown>>(
+ productId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getProductCompositions>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary 상품 구성 정보 조회
+ */
+
+export function useGetProductCompositions<TData = Awaited<ReturnType<typeof getProductCompositions>>, TError = ErrorType<unknown>>(
+ productId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getProductCompositions>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetProductCompositionsQueryOptions(productId,options)
 
   const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 

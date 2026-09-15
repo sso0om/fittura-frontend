@@ -5,11 +5,11 @@
  * OpenAPI spec version: v0
  */
 
-export type SkuWithStockResDtoStatus = typeof SkuWithStockResDtoStatus[keyof typeof SkuWithStockResDtoStatus];
+export type SkuStatus = typeof SkuStatus[keyof typeof SkuStatus];
 
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
-export const SkuWithStockResDtoStatus = {
+export const SkuStatus = {
   ACTIVE: 'ACTIVE',
   SOLDOUT: 'SOLDOUT',
   DISCONTINUED: 'DISCONTINUED',

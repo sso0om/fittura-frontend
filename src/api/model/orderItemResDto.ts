@@ -4,19 +4,19 @@
  * OpenAPI definition
  * OpenAPI spec version: v0
  */
-import type { OrderItemResDtoStatus } from './orderItemResDtoStatus';
+import type { OrderItemStatus } from './orderItemStatus';
 
 /**
  * 주문 제품 응답 DTO
  */
 export interface OrderItemResDto {
-  id?: number;
-  skuId?: number;
-  productName?: string;
-  skuIdentifier?: string;
-  unitPrice?: number;
-  quantity?: number;
   discountAmount?: number;
+  id?: number;
   itemTotalAmount?: number;
-  status?: OrderItemResDtoStatus;
+  productName?: string;
+  quantity?: number;
+  skuId?: number;
+  skuIdentifier?: string;
+  status?: OrderItemStatus;
+  unitPrice?: number;
 }

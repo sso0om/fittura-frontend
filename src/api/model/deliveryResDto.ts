@@ -4,19 +4,19 @@
  * OpenAPI definition
  * OpenAPI spec version: v0
  */
-import type { DeliveryResDtoDeliveryType } from './deliveryResDtoDeliveryType';
-import type { DeliveryResDtoStatus } from './deliveryResDtoStatus';
+import type { DeliveryType } from './deliveryType';
+import type { DeliveryStatus } from './deliveryStatus';
 
 /**
  * 배송 정보 DTO
  */
 export interface DeliveryResDto {
   deliveryId?: number;
-  orderId?: number;
-  deliveryType?: DeliveryResDtoDeliveryType;
-  status?: DeliveryResDtoStatus;
-  /** 대표 상품명 */
-  repProductName?: string;
+  deliveryType?: DeliveryType;
   /** 상품 종류 수 */
   itemCnt?: number;
+  orderId?: number;
+  /** 대표 상품명 */
+  repProductName?: string;
+  status?: DeliveryStatus;
 }

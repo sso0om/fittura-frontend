@@ -5,19 +5,19 @@
  * OpenAPI spec version: v0
  */
 import type { OrderWithDeliveryResDto } from './orderWithDeliveryResDto';
-import type { SortObject } from './sortObject';
 import type { PageableObject } from './pageableObject';
+import type { SortObject } from './sortObject';
 
 export interface PageOrderWithDeliveryResDto {
-  totalElements?: number;
-  totalPages?: number;
-  size?: number;
   content?: OrderWithDeliveryResDto[];
-  number?: number;
-  sort?: SortObject;
+  empty?: boolean;
   first?: boolean;
   last?: boolean;
+  number?: number;
   numberOfElements?: number;
   pageable?: PageableObject;
-  empty?: boolean;
+  size?: number;
+  sort?: SortObject;
+  totalElements?: number;
+  totalPages?: number;
 }

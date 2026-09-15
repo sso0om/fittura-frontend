@@ -5,7 +5,7 @@
  * OpenAPI spec version: v0
  */
 import type { ClaimItemReqDto } from './claimItemReqDto';
-import type { ClaimOrderReqDtoReason } from './claimOrderReqDtoReason';
+import type { ClaimReason } from './claimReason';
 
 /**
  * 주문 취소 요청 DTO
@@ -16,6 +16,6 @@ export interface ClaimOrderReqDto {
    * @maxItems 2147483647
    */
   claimItems: ClaimItemReqDto[];
-  reason: ClaimOrderReqDtoReason;
+  reason: ClaimReason;
   reasonDetail: string;
 }

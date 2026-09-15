@@ -42,225 +42,6 @@ type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 
 /**
- * 제품 상세 조회 API
- * @summary 제품 상세 조회
- */
-export const getProduct = (
-    productId: number,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
-) => {
-      
-      
-      return customInstance<RsDataProductWithAllResDto>(
-      {url: `/api/admin/v1/products/${productId}`, method: 'GET', signal
-    },
-      options);
-    }
-  
-
-
-
-export const getGetProductQueryKey = (productId?: number,) => {
-    return [
-    `/api/admin/v1/products/${productId}`
-    ] as const;
-    }
-
-    
-export const getGetProductQueryOptions = <TData = Awaited<ReturnType<typeof getProduct>>, TError = ErrorType<unknown>>(productId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getProduct>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetProductQueryKey(productId);
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getProduct>>> = ({ signal }) => getProduct(productId, requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, enabled: !!(productId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getProduct>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetProductQueryResult = NonNullable<Awaited<ReturnType<typeof getProduct>>>
-export type GetProductQueryError = ErrorType<unknown>
-
-
-export function useGetProduct<TData = Awaited<ReturnType<typeof getProduct>>, TError = ErrorType<unknown>>(
- productId: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getProduct>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getProduct>>,
-          TError,
-          Awaited<ReturnType<typeof getProduct>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetProduct<TData = Awaited<ReturnType<typeof getProduct>>, TError = ErrorType<unknown>>(
- productId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getProduct>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getProduct>>,
-          TError,
-          Awaited<ReturnType<typeof getProduct>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetProduct<TData = Awaited<ReturnType<typeof getProduct>>, TError = ErrorType<unknown>>(
- productId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getProduct>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
- * @summary 제품 상세 조회
- */
-
-export function useGetProduct<TData = Awaited<ReturnType<typeof getProduct>>, TError = ErrorType<unknown>>(
- productId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getProduct>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getGetProductQueryOptions(productId,options)
-
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-
-
-/**
- * 제품 수정 API
- * @summary 제품 수정
- */
-export const updateProduct = (
-    productId: number,
-    productUpdateReqDto: BodyType<ProductUpdateReqDto>,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<RsDataVoid>(
-      {url: `/api/admin/v1/products/${productId}`, method: 'PUT',
-      headers: {'Content-Type': 'application/json', },
-      data: productUpdateReqDto
-    },
-      options);
-    }
-  
-
-
-export const getUpdateProductMutationOptions = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateProduct>>, TError,{productId: number;data: BodyType<ProductUpdateReqDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof updateProduct>>, TError,{productId: number;data: BodyType<ProductUpdateReqDto>}, TContext> => {
-
-const mutationKey = ['updateProduct'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateProduct>>, {productId: number;data: BodyType<ProductUpdateReqDto>}> = (props) => {
-          const {productId,data} = props ?? {};
-
-          return  updateProduct(productId,data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type UpdateProductMutationResult = NonNullable<Awaited<ReturnType<typeof updateProduct>>>
-    export type UpdateProductMutationBody = BodyType<ProductUpdateReqDto>
-    export type UpdateProductMutationError = ErrorType<unknown>
-
-    /**
- * @summary 제품 수정
- */
-export const useUpdateProduct = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateProduct>>, TError,{productId: number;data: BodyType<ProductUpdateReqDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof updateProduct>>,
-        TError,
-        {productId: number;data: BodyType<ProductUpdateReqDto>},
-        TContext
-      > => {
-
-      const mutationOptions = getUpdateProductMutationOptions(options);
-
-      return useMutation(mutationOptions, queryClient);
-    }
-    /**
- * 제품 삭제 API
- * @summary 제품 삭제
- */
-export const deleteProduct = (
-    productId: number,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<RsDataVoid>(
-      {url: `/api/admin/v1/products/${productId}`, method: 'DELETE'
-    },
-      options);
-    }
-  
-
-
-export const getDeleteProductMutationOptions = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteProduct>>, TError,{productId: number}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof deleteProduct>>, TError,{productId: number}, TContext> => {
-
-const mutationKey = ['deleteProduct'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteProduct>>, {productId: number}> = (props) => {
-          const {productId} = props ?? {};
-
-          return  deleteProduct(productId,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type DeleteProductMutationResult = NonNullable<Awaited<ReturnType<typeof deleteProduct>>>
-    
-    export type DeleteProductMutationError = ErrorType<unknown>
-
-    /**
- * @summary 제품 삭제
- */
-export const useDeleteProduct = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteProduct>>, TError,{productId: number}, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof deleteProduct>>,
-        TError,
-        {productId: number},
-        TContext
-      > => {
-
-      const mutationOptions = getDeleteProductMutationOptions(options);
-
-      return useMutation(mutationOptions, queryClient);
-    }
-    /**
  * 관리자용 제품 목록 조회 API - sort 예시: basePrice,desc / createdDate,desc
  * @summary 제품 목록 조회
  */
@@ -419,27 +200,27 @@ export const useCreateProduct = <TError = ErrorType<unknown>,
       return useMutation(mutationOptions, queryClient);
     }
     /**
- * 제품 단종 처리 API
- * @summary 제품 단종
+ * 제품 삭제 API
+ * @summary 제품 삭제
  */
-export const discontinueProduct = (
+export const deleteProduct = (
     productId: number,
  options?: SecondParameter<typeof customInstance>,) => {
       
       
       return customInstance<RsDataVoid>(
-      {url: `/api/admin/v1/products/${productId}/discontinue`, method: 'PATCH'
+      {url: `/api/admin/v1/products/${productId}`, method: 'DELETE'
     },
       options);
     }
   
 
 
-export const getDiscontinueProductMutationOptions = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof discontinueProduct>>, TError,{productId: number}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof discontinueProduct>>, TError,{productId: number}, TContext> => {
+export const getDeleteProductMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteProduct>>, TError,{productId: number}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof deleteProduct>>, TError,{productId: number}, TContext> => {
 
-const mutationKey = ['discontinueProduct'];
+const mutationKey = ['deleteProduct'];
 const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
@@ -449,10 +230,10 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof discontinueProduct>>, {productId: number}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteProduct>>, {productId: number}> = (props) => {
           const {productId} = props ?? {};
 
-          return  discontinueProduct(productId,requestOptions)
+          return  deleteProduct(productId,requestOptions)
         }
 
         
@@ -460,23 +241,242 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
   return  { mutationFn, ...mutationOptions }}
 
-    export type DiscontinueProductMutationResult = NonNullable<Awaited<ReturnType<typeof discontinueProduct>>>
+    export type DeleteProductMutationResult = NonNullable<Awaited<ReturnType<typeof deleteProduct>>>
     
-    export type DiscontinueProductMutationError = ErrorType<unknown>
+    export type DeleteProductMutationError = ErrorType<unknown>
 
     /**
- * @summary 제품 단종
+ * @summary 제품 삭제
  */
-export const useDiscontinueProduct = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof discontinueProduct>>, TError,{productId: number}, TContext>, request?: SecondParameter<typeof customInstance>}
+export const useDeleteProduct = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteProduct>>, TError,{productId: number}, TContext>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof discontinueProduct>>,
+        Awaited<ReturnType<typeof deleteProduct>>,
         TError,
         {productId: number},
         TContext
       > => {
 
-      const mutationOptions = getDiscontinueProductMutationOptions(options);
+      const mutationOptions = getDeleteProductMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    /**
+ * 제품 상세 조회 API
+ * @summary 제품 상세 조회
+ */
+export const getProduct = (
+    productId: number,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<RsDataProductWithAllResDto>(
+      {url: `/api/admin/v1/products/${productId}`, method: 'GET', signal
+    },
+      options);
+    }
+  
+
+
+
+export const getGetProductQueryKey = (productId?: number,) => {
+    return [
+    `/api/admin/v1/products/${productId}`
+    ] as const;
+    }
+
+    
+export const getGetProductQueryOptions = <TData = Awaited<ReturnType<typeof getProduct>>, TError = ErrorType<unknown>>(productId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getProduct>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetProductQueryKey(productId);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getProduct>>> = ({ signal }) => getProduct(productId, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(productId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getProduct>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetProductQueryResult = NonNullable<Awaited<ReturnType<typeof getProduct>>>
+export type GetProductQueryError = ErrorType<unknown>
+
+
+export function useGetProduct<TData = Awaited<ReturnType<typeof getProduct>>, TError = ErrorType<unknown>>(
+ productId: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getProduct>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getProduct>>,
+          TError,
+          Awaited<ReturnType<typeof getProduct>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetProduct<TData = Awaited<ReturnType<typeof getProduct>>, TError = ErrorType<unknown>>(
+ productId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getProduct>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getProduct>>,
+          TError,
+          Awaited<ReturnType<typeof getProduct>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetProduct<TData = Awaited<ReturnType<typeof getProduct>>, TError = ErrorType<unknown>>(
+ productId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getProduct>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary 제품 상세 조회
+ */
+
+export function useGetProduct<TData = Awaited<ReturnType<typeof getProduct>>, TError = ErrorType<unknown>>(
+ productId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getProduct>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetProductQueryOptions(productId,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+/**
+ * 제품 수정 API
+ * @summary 제품 수정
+ */
+export const updateProduct = (
+    productId: number,
+    productUpdateReqDto: BodyType<ProductUpdateReqDto>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<RsDataVoid>(
+      {url: `/api/admin/v1/products/${productId}`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: productUpdateReqDto
+    },
+      options);
+    }
+  
+
+
+export const getUpdateProductMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateProduct>>, TError,{productId: number;data: BodyType<ProductUpdateReqDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof updateProduct>>, TError,{productId: number;data: BodyType<ProductUpdateReqDto>}, TContext> => {
+
+const mutationKey = ['updateProduct'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateProduct>>, {productId: number;data: BodyType<ProductUpdateReqDto>}> = (props) => {
+          const {productId,data} = props ?? {};
+
+          return  updateProduct(productId,data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpdateProductMutationResult = NonNullable<Awaited<ReturnType<typeof updateProduct>>>
+    export type UpdateProductMutationBody = BodyType<ProductUpdateReqDto>
+    export type UpdateProductMutationError = ErrorType<unknown>
+
+    /**
+ * @summary 제품 수정
+ */
+export const useUpdateProduct = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateProduct>>, TError,{productId: number;data: BodyType<ProductUpdateReqDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof updateProduct>>,
+        TError,
+        {productId: number;data: BodyType<ProductUpdateReqDto>},
+        TContext
+      > => {
+
+      const mutationOptions = getUpdateProductMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    /**
+ * 제품 활성화 API
+ * @summary 제품 활성화
+ */
+export const activateProduct = (
+    productId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<RsDataVoid>(
+      {url: `/api/admin/v1/products/${productId}/activate`, method: 'PATCH'
+    },
+      options);
+    }
+  
+
+
+export const getActivateProductMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof activateProduct>>, TError,{productId: number}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof activateProduct>>, TError,{productId: number}, TContext> => {
+
+const mutationKey = ['activateProduct'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof activateProduct>>, {productId: number}> = (props) => {
+          const {productId} = props ?? {};
+
+          return  activateProduct(productId,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ActivateProductMutationResult = NonNullable<Awaited<ReturnType<typeof activateProduct>>>
+    
+    export type ActivateProductMutationError = ErrorType<unknown>
+
+    /**
+ * @summary 제품 활성화
+ */
+export const useActivateProduct = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof activateProduct>>, TError,{productId: number}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof activateProduct>>,
+        TError,
+        {productId: number},
+        TContext
+      > => {
+
+      const mutationOptions = getActivateProductMutationOptions(options);
 
       return useMutation(mutationOptions, queryClient);
     }
@@ -543,27 +543,27 @@ export const useDisableProduct = <TError = ErrorType<unknown>,
       return useMutation(mutationOptions, queryClient);
     }
     /**
- * 제품 활성화 API
- * @summary 제품 활성화
+ * 제품 단종 처리 API
+ * @summary 제품 단종
  */
-export const activateProduct = (
+export const discontinueProduct = (
     productId: number,
  options?: SecondParameter<typeof customInstance>,) => {
       
       
       return customInstance<RsDataVoid>(
-      {url: `/api/admin/v1/products/${productId}/activate`, method: 'PATCH'
+      {url: `/api/admin/v1/products/${productId}/discontinue`, method: 'PATCH'
     },
       options);
     }
   
 
 
-export const getActivateProductMutationOptions = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof activateProduct>>, TError,{productId: number}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof activateProduct>>, TError,{productId: number}, TContext> => {
+export const getDiscontinueProductMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof discontinueProduct>>, TError,{productId: number}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof discontinueProduct>>, TError,{productId: number}, TContext> => {
 
-const mutationKey = ['activateProduct'];
+const mutationKey = ['discontinueProduct'];
 const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
@@ -573,10 +573,10 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof activateProduct>>, {productId: number}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof discontinueProduct>>, {productId: number}> = (props) => {
           const {productId} = props ?? {};
 
-          return  activateProduct(productId,requestOptions)
+          return  discontinueProduct(productId,requestOptions)
         }
 
         
@@ -584,23 +584,23 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
   return  { mutationFn, ...mutationOptions }}
 
-    export type ActivateProductMutationResult = NonNullable<Awaited<ReturnType<typeof activateProduct>>>
+    export type DiscontinueProductMutationResult = NonNullable<Awaited<ReturnType<typeof discontinueProduct>>>
     
-    export type ActivateProductMutationError = ErrorType<unknown>
+    export type DiscontinueProductMutationError = ErrorType<unknown>
 
     /**
- * @summary 제품 활성화
+ * @summary 제품 단종
  */
-export const useActivateProduct = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof activateProduct>>, TError,{productId: number}, TContext>, request?: SecondParameter<typeof customInstance>}
+export const useDiscontinueProduct = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof discontinueProduct>>, TError,{productId: number}, TContext>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof activateProduct>>,
+        Awaited<ReturnType<typeof discontinueProduct>>,
         TError,
         {productId: number},
         TContext
       > => {
 
-      const mutationOptions = getActivateProductMutationOptions(options);
+      const mutationOptions = getDiscontinueProductMutationOptions(options);
 
       return useMutation(mutationOptions, queryClient);
     }

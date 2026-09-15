@@ -9,8 +9,8 @@
  * 구성품 응답 DTO
  */
 export interface CompositionResDto {
-  childSkuId?: number;
   childProductName?: string;
+  childSkuId?: number;
   quantity?: number;
   sortOrder?: number;
 }

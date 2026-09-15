@@ -40,225 +40,6 @@ type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 
 /**
- * 카테고리 단건 조회 API
- * @summary 카테고리 단건 조회
- */
-export const getCategory = (
-    categoryId: number,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
-) => {
-      
-      
-      return customInstance<RsDataCategoryResDto>(
-      {url: `/api/admin/v1/categories/${categoryId}`, method: 'GET', signal
-    },
-      options);
-    }
-  
-
-
-
-export const getGetCategoryQueryKey = (categoryId?: number,) => {
-    return [
-    `/api/admin/v1/categories/${categoryId}`
-    ] as const;
-    }
-
-    
-export const getGetCategoryQueryOptions = <TData = Awaited<ReturnType<typeof getCategory>>, TError = ErrorType<unknown>>(categoryId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCategory>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetCategoryQueryKey(categoryId);
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getCategory>>> = ({ signal }) => getCategory(categoryId, requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, enabled: !!(categoryId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getCategory>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetCategoryQueryResult = NonNullable<Awaited<ReturnType<typeof getCategory>>>
-export type GetCategoryQueryError = ErrorType<unknown>
-
-
-export function useGetCategory<TData = Awaited<ReturnType<typeof getCategory>>, TError = ErrorType<unknown>>(
- categoryId: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCategory>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getCategory>>,
-          TError,
-          Awaited<ReturnType<typeof getCategory>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetCategory<TData = Awaited<ReturnType<typeof getCategory>>, TError = ErrorType<unknown>>(
- categoryId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCategory>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getCategory>>,
-          TError,
-          Awaited<ReturnType<typeof getCategory>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetCategory<TData = Awaited<ReturnType<typeof getCategory>>, TError = ErrorType<unknown>>(
- categoryId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCategory>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
- * @summary 카테고리 단건 조회
- */
-
-export function useGetCategory<TData = Awaited<ReturnType<typeof getCategory>>, TError = ErrorType<unknown>>(
- categoryId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCategory>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getGetCategoryQueryOptions(categoryId,options)
-
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-
-
-/**
- * 카테고리 단건 수정 API
- * @summary 카테고리 단건 수정
- */
-export const updateCategory = (
-    categoryId: number,
-    categoryUpdateReqDto: BodyType<CategoryUpdateReqDto>,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<RsDataVoid>(
-      {url: `/api/admin/v1/categories/${categoryId}`, method: 'PUT',
-      headers: {'Content-Type': 'application/json', },
-      data: categoryUpdateReqDto
-    },
-      options);
-    }
-  
-
-
-export const getUpdateCategoryMutationOptions = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateCategory>>, TError,{categoryId: number;data: BodyType<CategoryUpdateReqDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof updateCategory>>, TError,{categoryId: number;data: BodyType<CategoryUpdateReqDto>}, TContext> => {
-
-const mutationKey = ['updateCategory'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateCategory>>, {categoryId: number;data: BodyType<CategoryUpdateReqDto>}> = (props) => {
-          const {categoryId,data} = props ?? {};
-
-          return  updateCategory(categoryId,data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type UpdateCategoryMutationResult = NonNullable<Awaited<ReturnType<typeof updateCategory>>>
-    export type UpdateCategoryMutationBody = BodyType<CategoryUpdateReqDto>
-    export type UpdateCategoryMutationError = ErrorType<unknown>
-
-    /**
- * @summary 카테고리 단건 수정
- */
-export const useUpdateCategory = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateCategory>>, TError,{categoryId: number;data: BodyType<CategoryUpdateReqDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof updateCategory>>,
-        TError,
-        {categoryId: number;data: BodyType<CategoryUpdateReqDto>},
-        TContext
-      > => {
-
-      const mutationOptions = getUpdateCategoryMutationOptions(options);
-
-      return useMutation(mutationOptions, queryClient);
-    }
-    /**
- * 카테고리 삭제(archived) API
- * @summary 카테고리 삭제
- */
-export const deleteCategory = (
-    categoryId: number,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<RsDataVoid>(
-      {url: `/api/admin/v1/categories/${categoryId}`, method: 'DELETE'
-    },
-      options);
-    }
-  
-
-
-export const getDeleteCategoryMutationOptions = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteCategory>>, TError,{categoryId: number}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof deleteCategory>>, TError,{categoryId: number}, TContext> => {
-
-const mutationKey = ['deleteCategory'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteCategory>>, {categoryId: number}> = (props) => {
-          const {categoryId} = props ?? {};
-
-          return  deleteCategory(categoryId,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type DeleteCategoryMutationResult = NonNullable<Awaited<ReturnType<typeof deleteCategory>>>
-    
-    export type DeleteCategoryMutationError = ErrorType<unknown>
-
-    /**
- * @summary 카테고리 삭제
- */
-export const useDeleteCategory = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteCategory>>, TError,{categoryId: number}, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof deleteCategory>>,
-        TError,
-        {categoryId: number},
-        TContext
-      > => {
-
-      const mutationOptions = getDeleteCategoryMutationOptions(options);
-
-      return useMutation(mutationOptions, queryClient);
-    }
-    /**
  * 모든 카테고리 조회(트리) API 
  * @summary 카테고리 전체 조회
  */
@@ -416,27 +197,27 @@ export const useCreateCategory = <TError = ErrorType<unknown>,
       return useMutation(mutationOptions, queryClient);
     }
     /**
- * 카테고리 비활성화 API
- * @summary 카테고리 비활성화
+ * 카테고리 삭제(archived) API
+ * @summary 카테고리 삭제
  */
-export const disableCategory = (
+export const deleteCategory = (
     categoryId: number,
  options?: SecondParameter<typeof customInstance>,) => {
       
       
-      return customInstance<RsDataCategoryResDto>(
-      {url: `/api/admin/v1/categories/${categoryId}/disable`, method: 'PATCH'
+      return customInstance<RsDataVoid>(
+      {url: `/api/admin/v1/categories/${categoryId}`, method: 'DELETE'
     },
       options);
     }
   
 
 
-export const getDisableCategoryMutationOptions = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof disableCategory>>, TError,{categoryId: number}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof disableCategory>>, TError,{categoryId: number}, TContext> => {
+export const getDeleteCategoryMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteCategory>>, TError,{categoryId: number}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof deleteCategory>>, TError,{categoryId: number}, TContext> => {
 
-const mutationKey = ['disableCategory'];
+const mutationKey = ['deleteCategory'];
 const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
@@ -446,10 +227,10 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof disableCategory>>, {categoryId: number}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteCategory>>, {categoryId: number}> = (props) => {
           const {categoryId} = props ?? {};
 
-          return  disableCategory(categoryId,requestOptions)
+          return  deleteCategory(categoryId,requestOptions)
         }
 
         
@@ -457,23 +238,180 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
   return  { mutationFn, ...mutationOptions }}
 
-    export type DisableCategoryMutationResult = NonNullable<Awaited<ReturnType<typeof disableCategory>>>
+    export type DeleteCategoryMutationResult = NonNullable<Awaited<ReturnType<typeof deleteCategory>>>
     
-    export type DisableCategoryMutationError = ErrorType<unknown>
+    export type DeleteCategoryMutationError = ErrorType<unknown>
 
     /**
- * @summary 카테고리 비활성화
+ * @summary 카테고리 삭제
  */
-export const useDisableCategory = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof disableCategory>>, TError,{categoryId: number}, TContext>, request?: SecondParameter<typeof customInstance>}
+export const useDeleteCategory = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteCategory>>, TError,{categoryId: number}, TContext>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof disableCategory>>,
+        Awaited<ReturnType<typeof deleteCategory>>,
         TError,
         {categoryId: number},
         TContext
       > => {
 
-      const mutationOptions = getDisableCategoryMutationOptions(options);
+      const mutationOptions = getDeleteCategoryMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    /**
+ * 카테고리 단건 조회 API
+ * @summary 카테고리 단건 조회
+ */
+export const getCategory = (
+    categoryId: number,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<RsDataCategoryResDto>(
+      {url: `/api/admin/v1/categories/${categoryId}`, method: 'GET', signal
+    },
+      options);
+    }
+  
+
+
+
+export const getGetCategoryQueryKey = (categoryId?: number,) => {
+    return [
+    `/api/admin/v1/categories/${categoryId}`
+    ] as const;
+    }
+
+    
+export const getGetCategoryQueryOptions = <TData = Awaited<ReturnType<typeof getCategory>>, TError = ErrorType<unknown>>(categoryId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCategory>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetCategoryQueryKey(categoryId);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getCategory>>> = ({ signal }) => getCategory(categoryId, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(categoryId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getCategory>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetCategoryQueryResult = NonNullable<Awaited<ReturnType<typeof getCategory>>>
+export type GetCategoryQueryError = ErrorType<unknown>
+
+
+export function useGetCategory<TData = Awaited<ReturnType<typeof getCategory>>, TError = ErrorType<unknown>>(
+ categoryId: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCategory>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getCategory>>,
+          TError,
+          Awaited<ReturnType<typeof getCategory>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetCategory<TData = Awaited<ReturnType<typeof getCategory>>, TError = ErrorType<unknown>>(
+ categoryId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCategory>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getCategory>>,
+          TError,
+          Awaited<ReturnType<typeof getCategory>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetCategory<TData = Awaited<ReturnType<typeof getCategory>>, TError = ErrorType<unknown>>(
+ categoryId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCategory>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary 카테고리 단건 조회
+ */
+
+export function useGetCategory<TData = Awaited<ReturnType<typeof getCategory>>, TError = ErrorType<unknown>>(
+ categoryId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCategory>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetCategoryQueryOptions(categoryId,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+/**
+ * 카테고리 단건 수정 API
+ * @summary 카테고리 단건 수정
+ */
+export const updateCategory = (
+    categoryId: number,
+    categoryUpdateReqDto: BodyType<CategoryUpdateReqDto>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<RsDataVoid>(
+      {url: `/api/admin/v1/categories/${categoryId}`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: categoryUpdateReqDto
+    },
+      options);
+    }
+  
+
+
+export const getUpdateCategoryMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateCategory>>, TError,{categoryId: number;data: BodyType<CategoryUpdateReqDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof updateCategory>>, TError,{categoryId: number;data: BodyType<CategoryUpdateReqDto>}, TContext> => {
+
+const mutationKey = ['updateCategory'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateCategory>>, {categoryId: number;data: BodyType<CategoryUpdateReqDto>}> = (props) => {
+          const {categoryId,data} = props ?? {};
+
+          return  updateCategory(categoryId,data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpdateCategoryMutationResult = NonNullable<Awaited<ReturnType<typeof updateCategory>>>
+    export type UpdateCategoryMutationBody = BodyType<CategoryUpdateReqDto>
+    export type UpdateCategoryMutationError = ErrorType<unknown>
+
+    /**
+ * @summary 카테고리 단건 수정
+ */
+export const useUpdateCategory = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateCategory>>, TError,{categoryId: number;data: BodyType<CategoryUpdateReqDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof updateCategory>>,
+        TError,
+        {categoryId: number;data: BodyType<CategoryUpdateReqDto>},
+        TContext
+      > => {
+
+      const mutationOptions = getUpdateCategoryMutationOptions(options);
 
       return useMutation(mutationOptions, queryClient);
     }
@@ -536,6 +474,68 @@ export const useActivateCategory = <TError = ErrorType<unknown>,
       > => {
 
       const mutationOptions = getActivateCategoryMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    /**
+ * 카테고리 비활성화 API
+ * @summary 카테고리 비활성화
+ */
+export const disableCategory = (
+    categoryId: number,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<RsDataCategoryResDto>(
+      {url: `/api/admin/v1/categories/${categoryId}/disable`, method: 'PATCH'
+    },
+      options);
+    }
+  
+
+
+export const getDisableCategoryMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof disableCategory>>, TError,{categoryId: number}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof disableCategory>>, TError,{categoryId: number}, TContext> => {
+
+const mutationKey = ['disableCategory'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof disableCategory>>, {categoryId: number}> = (props) => {
+          const {categoryId} = props ?? {};
+
+          return  disableCategory(categoryId,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DisableCategoryMutationResult = NonNullable<Awaited<ReturnType<typeof disableCategory>>>
+    
+    export type DisableCategoryMutationError = ErrorType<unknown>
+
+    /**
+ * @summary 카테고리 비활성화
+ */
+export const useDisableCategory = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof disableCategory>>, TError,{categoryId: number}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof disableCategory>>,
+        TError,
+        {categoryId: number},
+        TContext
+      > => {
+
+      const mutationOptions = getDisableCategoryMutationOptions(options);
 
       return useMutation(mutationOptions, queryClient);
     }

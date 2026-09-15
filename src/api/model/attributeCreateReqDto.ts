@@ -4,13 +4,13 @@
  * OpenAPI definition
  * OpenAPI spec version: v0
  */
-import type { AttributeCreateReqDtoAttributeKey } from './attributeCreateReqDtoAttributeKey';
+import type { AttributeKey } from './attributeKey';
 
 /**
  * Product 요소 생성 요청 DTO
  */
 export interface AttributeCreateReqDto {
-  attributeKey: AttributeCreateReqDtoAttributeKey;
+  attributeKey: AttributeKey;
   /**
    * @minLength 0
    * @maxLength 255
