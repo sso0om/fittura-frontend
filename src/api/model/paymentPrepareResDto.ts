@@ -4,8 +4,8 @@
  * OpenAPI definition
  * OpenAPI spec version: v0
  */
-import type { PaymentPrepareResDtoPgProvider } from './paymentPrepareResDtoPgProvider';
-import type { PaymentPrepareResDtoPaymentMethod } from './paymentPrepareResDtoPaymentMethod';
+import type { PaymentMethod } from './paymentMethod';
+import type { PgProvider } from './pgProvider';
 
 /**
  * 결제 준비 응답 DTO
@@ -13,8 +13,8 @@ import type { PaymentPrepareResDtoPaymentMethod } from './paymentPrepareResDtoPa
 export interface PaymentPrepareResDto {
   orderId?: number;
   paymentId?: number;
+  paymentMethod?: PaymentMethod;
   paymentNumber?: string;
-  pgProvider?: PaymentPrepareResDtoPgProvider;
-  paymentMethod?: PaymentPrepareResDtoPaymentMethod;
+  pgProvider?: PgProvider;
   totalAmount?: number;
 }

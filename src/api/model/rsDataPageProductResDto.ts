@@ -8,6 +8,6 @@ import type { PageProductResDto } from './pageProductResDto';
 
 export interface RsDataPageProductResDto {
   code?: string;
-  message?: string;
   data?: PageProductResDto;
+  message?: string;
 }

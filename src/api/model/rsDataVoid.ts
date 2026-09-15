@@ -7,6 +7,6 @@
 
 export interface RsDataVoid {
   code?: string;
-  message?: string;
   data?: unknown;
+  message?: string;
 }

@@ -5,11 +5,11 @@
  * OpenAPI spec version: v0
  */
 
-export type PaymentPrepareReqDtoPaymentMethod = typeof PaymentPrepareReqDtoPaymentMethod[keyof typeof PaymentPrepareReqDtoPaymentMethod];
+export type PaymentMethod = typeof PaymentMethod[keyof typeof PaymentMethod];
 
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
-export const PaymentPrepareReqDtoPaymentMethod = {
+export const PaymentMethod = {
   CARD: 'CARD',
   TRANSFER: 'TRANSFER',
   EASY_PAY: 'EASY_PAY',

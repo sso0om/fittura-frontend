@@ -4,17 +4,17 @@
  * OpenAPI definition
  * OpenAPI spec version: v0
  */
-import type { SkuWithStockResDtoStatus } from './skuWithStockResDtoStatus';
+import type { SkuStatus } from './skuStatus';
 
 /**
  * SKU 응답 DTO (관리자용)
  */
 export interface SkuWithStockResDto {
-  id?: number;
-  price?: number;
-  stockQuantity?: number;
-  reservedQuantity?: number;
-  status?: SkuWithStockResDtoStatus;
   color?: string;
+  id?: number;
   material?: string;
+  price?: number;
+  reservedQuantity?: number;
+  status?: SkuStatus;
+  stockQuantity?: number;
 }

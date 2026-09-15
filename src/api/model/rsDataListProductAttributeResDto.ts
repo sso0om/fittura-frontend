@@ -8,6 +8,6 @@ import type { ProductAttributeResDto } from './productAttributeResDto';
 
 export interface RsDataListProductAttributeResDto {
   code?: string;
-  message?: string;
   data?: ProductAttributeResDto[];
+  message?: string;
 }

@@ -4,14 +4,15 @@
  * OpenAPI definition
  * OpenAPI spec version: v0
  */
-import type { ProductResDtoStatus } from './productResDtoStatus';
-import type { ProductResDtoProductType } from './productResDtoProductType';
+import type { ProductType } from './productType';
+import type { ProductStatus } from './productStatus';
 
 export interface ProductResDto {
-  id?: number;
-  name?: string;
   basePrice?: number;
-  status?: ProductResDtoStatus;
-  productType?: ProductResDtoProductType;
+  id?: number;
   isSoldOut?: boolean;
+  mainImageUrl?: string;
+  name?: string;
+  productType?: ProductType;
+  status?: ProductStatus;
 }

@@ -5,11 +5,11 @@
  * OpenAPI spec version: v0
  */
 
-export type ProductWithSkuResDtoDeliveryType = typeof ProductWithSkuResDtoDeliveryType[keyof typeof ProductWithSkuResDtoDeliveryType];
+export type DeliveryType = typeof DeliveryType[keyof typeof DeliveryType];
 
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
-export const ProductWithSkuResDtoDeliveryType = {
+export const DeliveryType = {
   PARCEL: 'PARCEL',
   INSTALLATION: 'INSTALLATION',
 } as const;

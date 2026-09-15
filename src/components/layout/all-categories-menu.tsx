@@ -8,7 +8,7 @@ import { useCategoryTree } from "@/components/layout/use-category-tree";
 
 /**
  * "전체 카테고리" 버튼 + 2단 드롭다운 메뉴
- * 뎁스3 이하 탐색은 여기가 아닌, /products 목록 페이지 자체에서 처리
+ * 뎁스3 이하 탐색은 상품 목록 페이지 자체에서 처리
  */
 export function AllCategoriesMenu() {
   const { data } = useCategoryTree();

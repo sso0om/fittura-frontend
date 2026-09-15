@@ -9,17 +9,9 @@
  * SKU 수정 요청 DTO
  */
 export interface SkuUpdateReqDto {
+  colorId?: number;
   id?: number;
+  materialId?: number;
   price: number;
   stockQuantity: number;
-  /**
-   * @minLength 0
-   * @maxLength 50
-   */
-  color?: string;
-  /**
-   * @minLength 0
-   * @maxLength 50
-   */
-  material?: string;
 }

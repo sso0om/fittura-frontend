@@ -200,72 +200,6 @@ export const useCreateOrder = <TError = ErrorType<unknown>,
       return useMutation(mutationOptions, queryClient);
     }
     /**
- * 주문 취소 API
- * @summary 주문 취소
- */
-export const updateOrder = (
-    orderId: number,
-    claimOrderReqDto: BodyType<ClaimOrderReqDto>,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
-) => {
-      
-      
-      return customInstance<RsDataVoid>(
-      {url: `/api/v1/orders/${orderId}/cancel`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: claimOrderReqDto, signal
-    },
-      options);
-    }
-  
-
-
-export const getUpdateOrderMutationOptions = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateOrder>>, TError,{orderId: number;data: BodyType<ClaimOrderReqDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof updateOrder>>, TError,{orderId: number;data: BodyType<ClaimOrderReqDto>}, TContext> => {
-
-const mutationKey = ['updateOrder'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateOrder>>, {orderId: number;data: BodyType<ClaimOrderReqDto>}> = (props) => {
-          const {orderId,data} = props ?? {};
-
-          return  updateOrder(orderId,data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type UpdateOrderMutationResult = NonNullable<Awaited<ReturnType<typeof updateOrder>>>
-    export type UpdateOrderMutationBody = BodyType<ClaimOrderReqDto>
-    export type UpdateOrderMutationError = ErrorType<unknown>
-
-    /**
- * @summary 주문 취소
- */
-export const useUpdateOrder = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateOrder>>, TError,{orderId: number;data: BodyType<ClaimOrderReqDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof updateOrder>>,
-        TError,
-        {orderId: number;data: BodyType<ClaimOrderReqDto>},
-        TContext
-      > => {
-
-      const mutationOptions = getUpdateOrderMutationOptions(options);
-
-      return useMutation(mutationOptions, queryClient);
-    }
-    /**
  * 주문 조회 API
  * @summary 주문 조회
  */
@@ -357,3 +291,70 @@ export function useGetOrder<TData = Awaited<ReturnType<typeof getOrder>>, TError
 
 
 
+/**
+ * 주문 취소 API
+ * @summary 주문 취소
+ */
+export const updateOrder = (
+    orderId: number,
+    claimOrderReqDto: BodyType<ClaimOrderReqDto>,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<RsDataVoid>(
+      {url: `/api/v1/orders/${orderId}/cancel`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: claimOrderReqDto, signal
+    },
+      options);
+    }
+  
+
+
+export const getUpdateOrderMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateOrder>>, TError,{orderId: number;data: BodyType<ClaimOrderReqDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof updateOrder>>, TError,{orderId: number;data: BodyType<ClaimOrderReqDto>}, TContext> => {
+
+const mutationKey = ['updateOrder'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateOrder>>, {orderId: number;data: BodyType<ClaimOrderReqDto>}> = (props) => {
+          const {orderId,data} = props ?? {};
+
+          return  updateOrder(orderId,data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpdateOrderMutationResult = NonNullable<Awaited<ReturnType<typeof updateOrder>>>
+    export type UpdateOrderMutationBody = BodyType<ClaimOrderReqDto>
+    export type UpdateOrderMutationError = ErrorType<unknown>
+
+    /**
+ * @summary 주문 취소
+ */
+export const useUpdateOrder = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateOrder>>, TError,{orderId: number;data: BodyType<ClaimOrderReqDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof updateOrder>>,
+        TError,
+        {orderId: number;data: BodyType<ClaimOrderReqDto>},
+        TContext
+      > => {
+
+      const mutationOptions = getUpdateOrderMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    

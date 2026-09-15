@@ -5,11 +5,11 @@
  * OpenAPI spec version: v0
  */
 
-export type GetProductsStatusesItem = typeof GetProductsStatusesItem[keyof typeof GetProductsStatusesItem];
+export type ProductStatus = typeof ProductStatus[keyof typeof ProductStatus];
 
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
-export const GetProductsStatusesItem = {
+export const ProductStatus = {
   ACTIVE: 'ACTIVE',
   DISABLED: 'DISABLED',
   DISCONTINUED: 'DISCONTINUED',

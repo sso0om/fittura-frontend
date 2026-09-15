@@ -5,10 +5,10 @@
  * OpenAPI spec version: v0
  */
 
-export type PaymentPrepareResDtoPgProvider = typeof PaymentPrepareResDtoPgProvider[keyof typeof PaymentPrepareResDtoPgProvider];
+export type PgProvider = typeof PgProvider[keyof typeof PgProvider];
 
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
-export const PaymentPrepareResDtoPgProvider = {
+export const PgProvider = {
   TOSS: 'TOSS',
 } as const;

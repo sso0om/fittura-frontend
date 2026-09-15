@@ -9,12 +9,12 @@
  * 주문 주소 응답 DTO
  */
 export interface OrderAddressResDto {
-  receiverName?: string;
-  phoneNumber?: string;
-  zipCode?: string;
   address?: string;
   addressDetail?: string;
+  deliveryMemo?: string;
+  phoneNumber?: string;
+  receiverName?: string;
   sido?: string;
   sigungu?: string;
-  deliveryMemo?: string;
+  zipCode?: string;
 }

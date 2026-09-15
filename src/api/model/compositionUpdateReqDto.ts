@@ -9,8 +9,8 @@
  * 구성품 수정 요청 DTO
  */
 export interface CompositionUpdateReqDto {
-  id?: number;
   childSkuId: number;
+  id?: number;
   quantity: number;
   sortOrder: number;
 }

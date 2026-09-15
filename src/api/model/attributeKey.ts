@@ -5,10 +5,10 @@
  * OpenAPI spec version: v0
  */
 
-export type ProductAttributeResDtoAttributeKey = typeof ProductAttributeResDtoAttributeKey[keyof typeof ProductAttributeResDtoAttributeKey];
+export type AttributeKey = typeof AttributeKey[keyof typeof AttributeKey];
 
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
-export const ProductAttributeResDtoAttributeKey = {
+export const AttributeKey = {
   SIZE_LABEL: 'SIZE_LABEL',
 } as const;

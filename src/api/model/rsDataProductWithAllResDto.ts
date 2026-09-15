@@ -8,6 +8,6 @@ import type { ProductWithAllResDto } from './productWithAllResDto';
 
 export interface RsDataProductWithAllResDto {
   code?: string;
-  message?: string;
   data?: ProductWithAllResDto;
+  message?: string;
 }
