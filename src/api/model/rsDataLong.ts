@@ -7,6 +7,6 @@
 
 export interface RsDataLong {
   code?: string;
-  message?: string;
   data?: number;
+  message?: string;
 }

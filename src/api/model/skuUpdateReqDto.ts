@@ -9,9 +9,9 @@
  * SKU 수정 요청 DTO
  */
 export interface SkuUpdateReqDto {
+  colorId?: number;
   id?: number;
+  materialId?: number;
   price: number;
   stockQuantity: number;
-  colorId?: number;
-  materialId?: number;
 }

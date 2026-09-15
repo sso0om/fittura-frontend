@@ -9,24 +9,20 @@
  * 주문 주소 생성 요청 DTO
  */
 export interface AddressCreateReqDto {
-  /**
-   * @minLength 0
-   * @maxLength 100
-   */
-  receiverName: string;
+  /** @minLength 1 */
+  address: string;
+  addressDetail?: string;
+  deliveryMemo?: string;
   /**
    * @minLength 9
    * @maxLength 20
    */
   phoneNumber: string;
   /**
-   * @minLength 1
-   * @pattern \d{5}
+   * @minLength 0
+   * @maxLength 100
    */
-  zipCode: string;
-  /** @minLength 1 */
-  address: string;
-  addressDetail?: string;
+  receiverName: string;
   /**
    * @minLength 0
    * @maxLength 20
@@ -37,5 +33,9 @@ export interface AddressCreateReqDto {
    * @maxLength 20
    */
   sigungu: string;
-  deliveryMemo?: string;
+  /**
+   * @minLength 1
+   * @pattern \d{5}
+   */
+  zipCode: string;
 }

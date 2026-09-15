@@ -8,6 +8,6 @@ import type { OrderWithAllResDto } from './orderWithAllResDto';
 
 export interface RsDataOrderWithAllResDto {
   code?: string;
-  message?: string;
   data?: OrderWithAllResDto;
+  message?: string;
 }

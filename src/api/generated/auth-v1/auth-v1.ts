@@ -30,30 +30,28 @@ type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 
 /**
- * 회원가입 API
- * @summary 회원가입
+ * 로그아웃 API
+ * @summary 로그아웃
  */
-export const signUp = (
-    signUpReqDto: BodyType<SignUpReqDto>,
+export const logout = (
+    
  options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
       
       
-      return customInstance<RsDataAuthResDto>(
-      {url: `/api/v1/auth/signup`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: signUpReqDto, signal
+      return customInstance<RsDataVoid>(
+      {url: `/api/v1/auth/logout`, method: 'POST', signal
     },
       options);
     }
   
 
 
-export const getSignUpMutationOptions = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof signUp>>, TError,{data: BodyType<SignUpReqDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof signUp>>, TError,{data: BodyType<SignUpReqDto>}, TContext> => {
+export const getLogoutMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof logout>>, TError,void, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof logout>>, TError,void, TContext> => {
 
-const mutationKey = ['signUp'];
+const mutationKey = ['logout'];
 const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
@@ -63,10 +61,10 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof signUp>>, {data: BodyType<SignUpReqDto>}> = (props) => {
-          const {data} = props ?? {};
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof logout>>, void> = () => {
+          
 
-          return  signUp(data,requestOptions)
+          return  logout(requestOptions)
         }
 
         
@@ -74,23 +72,86 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
   return  { mutationFn, ...mutationOptions }}
 
-    export type SignUpMutationResult = NonNullable<Awaited<ReturnType<typeof signUp>>>
-    export type SignUpMutationBody = BodyType<SignUpReqDto>
-    export type SignUpMutationError = ErrorType<unknown>
+    export type LogoutMutationResult = NonNullable<Awaited<ReturnType<typeof logout>>>
+    
+    export type LogoutMutationError = ErrorType<unknown>
 
     /**
- * @summary 회원가입
+ * @summary 로그아웃
  */
-export const useSignUp = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof signUp>>, TError,{data: BodyType<SignUpReqDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+export const useLogout = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof logout>>, TError,void, TContext>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof signUp>>,
+        Awaited<ReturnType<typeof logout>>,
         TError,
-        {data: BodyType<SignUpReqDto>},
+        void,
         TContext
       > => {
 
-      const mutationOptions = getSignUpMutationOptions(options);
+      const mutationOptions = getLogoutMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    /**
+ * 토큰 재발급 API
+ * @summary 토큰 재발급
+ */
+export const reissueTokens = (
+    
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<RsDataAuthResDto>(
+      {url: `/api/v1/auth/reissue`, method: 'POST', signal
+    },
+      options);
+    }
+  
+
+
+export const getReissueTokensMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof reissueTokens>>, TError,void, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof reissueTokens>>, TError,void, TContext> => {
+
+const mutationKey = ['reissueTokens'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof reissueTokens>>, void> = () => {
+          
+
+          return  reissueTokens(requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ReissueTokensMutationResult = NonNullable<Awaited<ReturnType<typeof reissueTokens>>>
+    
+    export type ReissueTokensMutationError = ErrorType<unknown>
+
+    /**
+ * @summary 토큰 재발급
+ */
+export const useReissueTokens = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof reissueTokens>>, TError,void, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof reissueTokens>>,
+        TError,
+        void,
+        TContext
+      > => {
+
+      const mutationOptions = getReissueTokensMutationOptions(options);
 
       return useMutation(mutationOptions, queryClient);
     }
@@ -160,28 +221,30 @@ export const useSignIn = <TError = ErrorType<unknown>,
       return useMutation(mutationOptions, queryClient);
     }
     /**
- * 토큰 재발급 API
- * @summary 토큰 재발급
+ * 회원가입 API
+ * @summary 회원가입
  */
-export const reissueTokens = (
-    
+export const signUp = (
+    signUpReqDto: BodyType<SignUpReqDto>,
  options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
       
       
       return customInstance<RsDataAuthResDto>(
-      {url: `/api/v1/auth/reissue`, method: 'POST', signal
+      {url: `/api/v1/auth/signup`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: signUpReqDto, signal
     },
       options);
     }
   
 
 
-export const getReissueTokensMutationOptions = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof reissueTokens>>, TError,void, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof reissueTokens>>, TError,void, TContext> => {
+export const getSignUpMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof signUp>>, TError,{data: BodyType<SignUpReqDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof signUp>>, TError,{data: BodyType<SignUpReqDto>}, TContext> => {
 
-const mutationKey = ['reissueTokens'];
+const mutationKey = ['signUp'];
 const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
@@ -191,10 +254,10 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof reissueTokens>>, void> = () => {
-          
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof signUp>>, {data: BodyType<SignUpReqDto>}> = (props) => {
+          const {data} = props ?? {};
 
-          return  reissueTokens(requestOptions)
+          return  signUp(data,requestOptions)
         }
 
         
@@ -202,86 +265,23 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
   return  { mutationFn, ...mutationOptions }}
 
-    export type ReissueTokensMutationResult = NonNullable<Awaited<ReturnType<typeof reissueTokens>>>
-    
-    export type ReissueTokensMutationError = ErrorType<unknown>
+    export type SignUpMutationResult = NonNullable<Awaited<ReturnType<typeof signUp>>>
+    export type SignUpMutationBody = BodyType<SignUpReqDto>
+    export type SignUpMutationError = ErrorType<unknown>
 
     /**
- * @summary 토큰 재발급
+ * @summary 회원가입
  */
-export const useReissueTokens = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof reissueTokens>>, TError,void, TContext>, request?: SecondParameter<typeof customInstance>}
+export const useSignUp = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof signUp>>, TError,{data: BodyType<SignUpReqDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof reissueTokens>>,
+        Awaited<ReturnType<typeof signUp>>,
         TError,
-        void,
+        {data: BodyType<SignUpReqDto>},
         TContext
       > => {
 
-      const mutationOptions = getReissueTokensMutationOptions(options);
-
-      return useMutation(mutationOptions, queryClient);
-    }
-    /**
- * 로그아웃 API
- * @summary 로그아웃
- */
-export const logout = (
-    
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
-) => {
-      
-      
-      return customInstance<RsDataVoid>(
-      {url: `/api/v1/auth/logout`, method: 'POST', signal
-    },
-      options);
-    }
-  
-
-
-export const getLogoutMutationOptions = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof logout>>, TError,void, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof logout>>, TError,void, TContext> => {
-
-const mutationKey = ['logout'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof logout>>, void> = () => {
-          
-
-          return  logout(requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type LogoutMutationResult = NonNullable<Awaited<ReturnType<typeof logout>>>
-    
-    export type LogoutMutationError = ErrorType<unknown>
-
-    /**
- * @summary 로그아웃
- */
-export const useLogout = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof logout>>, TError,void, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof logout>>,
-        TError,
-        void,
-        TContext
-      > => {
-
-      const mutationOptions = getLogoutMutationOptions(options);
+      const mutationOptions = getSignUpMutationOptions(options);
 
       return useMutation(mutationOptions, queryClient);
     }

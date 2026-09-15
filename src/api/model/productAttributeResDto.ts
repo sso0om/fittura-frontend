@@ -7,7 +7,7 @@
 import type { AttributeKey } from './attributeKey';
 
 export interface ProductAttributeResDto {
-  id?: number;
   attributeKey?: AttributeKey;
   attributeValue?: string;
+  id?: number;
 }

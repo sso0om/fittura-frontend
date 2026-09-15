@@ -8,6 +8,6 @@ import type { CompositionResDto } from './compositionResDto';
 
 export interface RsDataListCompositionResDto {
   code?: string;
-  message?: string;
   data?: CompositionResDto[];
+  message?: string;
 }

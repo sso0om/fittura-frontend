@@ -8,6 +8,6 @@ import type { AuthResDto } from './authResDto';
 
 export interface RsDataAuthResDto {
   code?: string;
-  message?: string;
   data?: AuthResDto;
+  message?: string;
 }

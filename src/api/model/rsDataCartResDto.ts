@@ -8,6 +8,6 @@ import type { CartResDto } from './cartResDto';
 
 export interface RsDataCartResDto {
   code?: string;
-  message?: string;
   data?: CartResDto;
+  message?: string;
 }

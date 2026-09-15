@@ -5,9 +5,7 @@
  * OpenAPI spec version: v0
  */
 
-export interface AuthResDto {
-  accessToken?: string;
-  email?: string;
+export interface MaterialResDto {
   id?: number;
-  nickname?: string;
+  name?: string;
 }

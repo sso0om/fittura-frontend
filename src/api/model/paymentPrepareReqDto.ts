@@ -4,14 +4,14 @@
  * OpenAPI definition
  * OpenAPI spec version: v0
  */
-import type { PgProvider } from './pgProvider';
 import type { PaymentMethod } from './paymentMethod';
+import type { PgProvider } from './pgProvider';
 
 /**
  * 결제 준비 요청 DTO
  */
 export interface PaymentPrepareReqDto {
   orderId: number;
-  pgProvider: PgProvider;
   paymentMethod: PaymentMethod;
+  pgProvider: PgProvider;
 }

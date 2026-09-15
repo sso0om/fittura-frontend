@@ -7,10 +7,10 @@
 import type { CategoryStatus } from './categoryStatus';
 
 export interface CategoryResDto {
+  depth?: number;
   id?: number;
   name?: string;
   parentId?: number;
-  depth?: number;
   sortOrder?: number;
   status?: CategoryStatus;
 }

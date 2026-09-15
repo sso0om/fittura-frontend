@@ -4,17 +4,17 @@
  * OpenAPI definition
  * OpenAPI spec version: v0
  */
-import type { OrderStatus } from './orderStatus';
 import type { DeliveryResDto } from './deliveryResDto';
+import type { OrderStatus } from './orderStatus';
 
 /**
  * 주문 정보 및 배송 상태 DTO
  */
 export interface OrderWithDeliveryResDto {
+  deliveries?: DeliveryResDto[];
+  finalAmount?: number;
+  orderDate?: string;
   orderId?: number;
   orderNumber?: string;
   status?: OrderStatus;
-  orderDate?: string;
-  finalAmount?: number;
-  deliveries?: DeliveryResDto[];
 }

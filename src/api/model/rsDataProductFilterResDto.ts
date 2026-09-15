@@ -4,10 +4,10 @@
  * OpenAPI definition
  * OpenAPI spec version: v0
  */
-import type { PageProductResDto } from './pageProductResDto';
+import type { ProductFilterResDto } from './productFilterResDto';
 
-export interface RsDataPageProductResDto {
+export interface RsDataProductFilterResDto {
   code?: string;
-  data?: PageProductResDto;
+  data?: ProductFilterResDto;
   message?: string;
 }

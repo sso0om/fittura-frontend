@@ -8,6 +8,6 @@ import type { CategoryResDto } from './categoryResDto';
 
 export interface RsDataCategoryResDto {
   code?: string;
-  message?: string;
   data?: CategoryResDto;
+  message?: string;
 }

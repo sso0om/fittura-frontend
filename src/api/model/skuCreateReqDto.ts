@@ -9,8 +9,8 @@
  * SKU 생성 요청 DTO
  */
 export interface SkuCreateReqDto {
-  price: number;
-  stockQuantity: number;
   colorId?: number;
   materialId?: number;
+  price: number;
+  stockQuantity: number;
 }

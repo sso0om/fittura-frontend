@@ -4,34 +4,34 @@
  * OpenAPI definition
  * OpenAPI spec version: v0
  */
-import type { ProductType } from './productType';
-import type { DeliveryType } from './deliveryType';
-import type { SkuCreateReqDto } from './skuCreateReqDto';
 import type { AttributeCreateReqDto } from './attributeCreateReqDto';
 import type { CompositionCreateReqDto } from './compositionCreateReqDto';
+import type { DeliveryType } from './deliveryType';
+import type { ProductType } from './productType';
+import type { SkuCreateReqDto } from './skuCreateReqDto';
 
 /**
  * 상품 생성 요청 DTO
  */
 export interface ProductCreateReqDto {
+  attributes?: AttributeCreateReqDto[];
   categoryId: number;
+  compositions?: CompositionCreateReqDto[];
+  deliveryType: DeliveryType;
+  depth: number;
+  description?: string;
+  height: number;
   /**
    * @minLength 0
    * @maxLength 255
    */
   name: string;
-  description?: string;
   productType: ProductType;
-  deliveryType: DeliveryType;
-  weight: number;
-  width: number;
-  height: number;
-  depth: number;
   /**
    * @minItems 1
    * @maxItems 2147483647
    */
   skus: SkuCreateReqDto[];
-  attributes?: AttributeCreateReqDto[];
-  compositions?: CompositionCreateReqDto[];
+  weight: number;
+  width: number;
 }

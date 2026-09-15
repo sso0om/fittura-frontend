@@ -8,6 +8,6 @@ import type { ProductWithSkuResDto } from './productWithSkuResDto';
 
 export interface RsDataProductWithSkuResDto {
   code?: string;
-  message?: string;
   data?: ProductWithSkuResDto;
+  message?: string;
 }

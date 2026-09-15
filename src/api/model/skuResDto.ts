@@ -10,9 +10,9 @@ import type { SkuStatus } from './skuStatus';
  * SKU 응답 DTO
  */
 export interface SkuResDto {
+  color?: string;
   id?: number;
+  material?: string;
   price?: number;
   status?: SkuStatus;
-  color?: string;
-  material?: string;
 }

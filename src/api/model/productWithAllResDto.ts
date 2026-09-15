@@ -4,30 +4,30 @@
  * OpenAPI definition
  * OpenAPI spec version: v0
  */
-import type { ProductType } from './productType';
-import type { DeliveryType } from './deliveryType';
-import type { ProductStatus } from './productStatus';
-import type { SkuWithStockResDto } from './skuWithStockResDto';
 import type { ProductAttributeResDto } from './productAttributeResDto';
 import type { CompositionResDto } from './compositionResDto';
+import type { DeliveryType } from './deliveryType';
+import type { ProductType } from './productType';
+import type { SkuWithStockResDto } from './skuWithStockResDto';
+import type { ProductStatus } from './productStatus';
 
 /**
  * 제품 응답 DTO (관리자용)
  */
 export interface ProductWithAllResDto {
-  id?: number;
-  name?: string;
-  description?: string;
-  productType?: ProductType;
-  deliveryType?: DeliveryType;
-  status?: ProductStatus;
+  attributes?: ProductAttributeResDto[];
   basePrice?: number;
+  compositions?: CompositionResDto[];
+  deliveryType?: DeliveryType;
+  depth?: number;
+  description?: string;
+  height?: number;
+  id?: number;
+  isSoldOut?: boolean;
+  name?: string;
+  productType?: ProductType;
+  skus?: SkuWithStockResDto[];
+  status?: ProductStatus;
   weight?: number;
   width?: number;
-  height?: number;
-  depth?: number;
-  isSoldOut?: boolean;
-  skus?: SkuWithStockResDto[];
-  attributes?: ProductAttributeResDto[];
-  compositions?: CompositionResDto[];
 }

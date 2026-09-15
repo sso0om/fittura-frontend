@@ -10,11 +10,11 @@ import type { AttributeKey } from './attributeKey';
  * Product 요소 수정 요청 DTO
  */
 export interface AttributeUpdateReqDto {
-  id?: number;
   attributeKey: AttributeKey;
   /**
    * @minLength 0
    * @maxLength 255
    */
   attributeValue: string;
+  id?: number;
 }

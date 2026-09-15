@@ -10,11 +10,11 @@ import type { SkuStatus } from './skuStatus';
  * SKU 응답 DTO (관리자용)
  */
 export interface SkuWithStockResDto {
+  color?: string;
   id?: number;
+  material?: string;
   price?: number;
-  stockQuantity?: number;
   reservedQuantity?: number;
   status?: SkuStatus;
-  color?: string;
-  material?: string;
+  stockQuantity?: number;
 }

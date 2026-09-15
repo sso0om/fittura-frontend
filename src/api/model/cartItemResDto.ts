@@ -9,14 +9,14 @@ import type { SkuStatus } from './skuStatus';
 
 export interface CartItemResDto {
   cartItemId?: number;
+  color?: string;
+  itemTotalPrice?: number;
+  material?: string;
   productId?: number;
   productName?: string;
-  skuId?: number;
-  color?: string;
-  material?: string;
-  unitPrice?: number;
-  quantity?: number;
-  itemTotalPrice?: number;
   productStatus?: ProductStatus;
+  quantity?: number;
+  skuId?: number;
   skuStatus?: SkuStatus;
+  unitPrice?: number;
 }

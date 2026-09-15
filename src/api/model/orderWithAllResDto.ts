@@ -4,23 +4,23 @@
  * OpenAPI definition
  * OpenAPI spec version: v0
  */
-import type { OrderStatus } from './orderStatus';
 import type { OrderAddressResDto } from './orderAddressResDto';
 import type { OrderItemResDto } from './orderItemResDto';
+import type { OrderStatus } from './orderStatus';
 
 /**
  * 주문 응답 DTO
  */
 export interface OrderWithAllResDto {
+  address?: OrderAddressResDto;
+  deliveryFee?: number;
+  discountAmount?: number;
+  finalAmount?: number;
+  items?: OrderItemResDto[];
+  orderDate?: string;
   orderId?: number;
   orderNumber?: string;
-  status?: OrderStatus;
-  orderDate?: string;
-  totalAmount?: number;
-  discountAmount?: number;
   pointUsedAmount?: number;
-  deliveryFee?: number;
-  finalAmount?: number;
-  address?: OrderAddressResDto;
-  items?: OrderItemResDto[];
+  status?: OrderStatus;
+  totalAmount?: number;
 }

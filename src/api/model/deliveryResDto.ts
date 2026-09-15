@@ -12,11 +12,11 @@ import type { DeliveryStatus } from './deliveryStatus';
  */
 export interface DeliveryResDto {
   deliveryId?: number;
-  orderId?: number;
   deliveryType?: DeliveryType;
-  status?: DeliveryStatus;
-  /** 대표 상품명 */
-  repProductName?: string;
   /** 상품 종류 수 */
   itemCnt?: number;
+  orderId?: number;
+  /** 대표 상품명 */
+  repProductName?: string;
+  status?: DeliveryStatus;
 }
