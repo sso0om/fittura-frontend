@@ -1,14 +1,21 @@
 "use client";
 
+import { useState } from "react";
 import { Heart, Share2, Star, Ticket } from "lucide-react";
+import { toast } from "sonner";
 
 import { formatPrice } from "@/lib/format";
 import { Button } from "@/components/ui/button";
 import { useGetProduct1 } from "@/api/generated/product-v1/product-v1";
-import { DeliveryType } from "@/api/model";
+import { useCreateCartItems } from "@/api/generated/cart-v1/cart-v1";
+import { DeliveryType, type SkuResDto } from "@/api/model";
 import { CategoryTrail } from "@/components/product/category-trail";
 import { ProductGallery } from "@/components/product/product-gallery";
 import { SkuSelect } from "@/components/product/sku-select";
+import {
+  SelectedSkuList,
+  type SelectedSkuItem,
+} from "@/components/product/selected-sku-list";
 
 const DELIVERY_TYPE_LABEL: Record<DeliveryType, string> = {
   [DeliveryType.PARCEL]: "일반 배송",
@@ -26,6 +33,61 @@ export function ProductPageClient({ productId }: ProductPageClientProps) {
   const deliveryTypeLabel = product?.deliveryType
     ? DELIVERY_TYPE_LABEL[product.deliveryType]
     : undefined;
+
+  const [items, setItems] = useState<SelectedSkuItem[]>([]);
+  const { mutate: createCartItems, isPending: isAddingToCart } =
+    useCreateCartItems();
+
+  function handleSelectSku(sku: SkuResDto) {
+    if (sku.id == null) return;
+
+    const alreadySelected = items.some((item) => item.sku.id === sku.id);
+    if (alreadySelected) {
+      toast("이미 선택된 옵션입니다.");
+      return;
+    }
+
+    setItems((prev) => [...prev, { sku, quantity: 1 }]);
+  }
+
+  function handleAddToCart() {
+    if (items.length === 0) return;
+
+    createCartItems(
+      {
+        data: items.map((item) => ({
+          skuId: item.sku.id!,
+          quantity: item.quantity,
+        })),
+      },
+      {
+        onSuccess: () => {
+          toast("장바구니에 담았습니다.");
+          setItems([]);
+        },
+      },
+    );
+  }
+
+  function handleQuantityChange(skuId: number, nextQuantity: number) {
+    setItems((prev) => {
+      if (nextQuantity <= 0) {
+        return prev.filter((item) => item.sku.id !== skuId);
+      }
+      return prev.map((item) =>
+        item.sku.id === skuId ? { ...item, quantity: nextQuantity } : item,
+      );
+    });
+  }
+
+  function handleRemove(skuId: number) {
+    setItems((prev) => prev.filter((item) => item.sku.id !== skuId));
+  }
+
+  const orderTotal = items.reduce(
+    (sum, item) => sum + (item.sku.price ?? 0) * item.quantity,
+    0,
+  );
 
   return (
     <div className="mx-auto w-full max-w-[1600px] px-6 py-8 sm:px-8 lg:px-12">
@@ -59,18 +121,11 @@ export function ProductPageClient({ productId }: ProductPageClientProps) {
 
           <hr className="border-border" />
 
-          {/* 할인율 · 할인 전/후 가격 */}
-          <div className="flex flex-col gap-1.5">
-            <span className="text-muted-foreground text-sm line-through">
-              {formatPrice(189000)}
+          {/* 판매가 - 할인가: 추후 기능 추가 예정*/}
+          <div className="flex items-baseline gap-2.5">
+            <span className="text-foreground text-[28px] font-extrabold">
+              {formatPrice(product?.basePrice ?? 0)}
             </span>
-            <div className="flex items-baseline gap-2.5">
-              <span className="text-destructive text-2xl font-extrabold">
-              </span>
-              <span className="text-foreground text-[28px] font-extrabold">
-                {formatPrice(117000)}
-              </span>
-            </div>
           </div>
 
           {/* 쿠폰 받기: 추후 기능 추가 예정*/}
@@ -97,15 +152,24 @@ export function ProductPageClient({ productId }: ProductPageClientProps) {
           <hr className="border-border" />
 
           {/* SKU 셀렉트 박스 */}
-          <SkuSelect skus={product?.skus ?? []} />
+          <div className="flex flex-col gap-1.5">
+            <SkuSelect skus={product?.skus ?? []} onSelect={handleSelectSku} />
+          </div>
 
-          {/* 주문 금액 */}
+          {/* 선택한 SKU 목록 */}
+          <SelectedSkuList
+            items={items}
+            onQuantityChange={handleQuantityChange}
+            onRemove={handleRemove}
+          />
+
+          {/* 주문 금액 — 선택 목록의 (단가 × 수량) 합계 */}
           <div className="flex items-center justify-between">
             <span className="text-muted-foreground text-sm font-medium">
               주문금액
             </span>
             <span className="text-foreground text-xl font-extrabold">
-              {formatPrice(0)}
+              {formatPrice(orderTotal)}
             </span>
           </div>
 
@@ -113,7 +177,9 @@ export function ProductPageClient({ productId }: ProductPageClientProps) {
           <div className="mt-1 flex gap-2.5">
             <button
               type="button"
-              className="border-border hover:bg-muted h-[52px] flex-1 rounded-lg border text-[15px] font-semibold"
+              onClick={handleAddToCart}
+              disabled={items.length === 0 || isAddingToCart}
+              className="border-border hover:bg-muted disabled:pointer-events-none disabled:opacity-50 h-[52px] flex-1 rounded-lg border text-[15px] font-semibold"
             >
               장바구니
             </button>
