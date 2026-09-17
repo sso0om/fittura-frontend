@@ -1,11 +1,9 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { Fragment, useState } from "react";
+import { useState } from "react";
 
-import { useCategoryTree } from "@/components/layout/use-category-tree";
 import { useGetProducts1 } from "@/api/generated/product-v1/product-v1";
-import type { CategoryResDto } from "@/api/model";
 import {
   ProductToolbar,
   type ProductSort,
@@ -13,6 +11,7 @@ import {
 import { ProductGrid } from "@/components/product/product-grid";
 import { ProductFilterSidebar } from "@/components/product/product-filter-sidebar";
 import { CategorySubNav } from "@/components/product/category-sub-nav";
+import { CategoryTrail } from "@/components/product/category-trail";
 import { Pagination } from "@/components/ui/pagination";
 
 const DEFAULT_SORT: ProductSort = "createdDate,desc";
@@ -56,18 +55,6 @@ export function ProductsPageClient() {
     updateFilterParam("materials", materialIds);
   }
 
-  const { data: categoryTree } = useCategoryTree();
-
-  const categoryTrail: CategoryResDto[] = [];
-  if (categoryTree && categoryId != null) {
-    let node: CategoryResDto | undefined = categoryTree.byId.get(categoryId);
-    while (node) {
-      categoryTrail.unshift(node);
-      node =
-        node.parentId != null ? categoryTree.byId.get(node.parentId) : undefined;
-    }
-  }
-
   const { data, isPending, isError } = useGetProducts1({
     categoryId,
     inStockOnly: activeOnly,
@@ -100,27 +87,7 @@ export function ProductsPageClient() {
 
   return (
     <div className="mx-auto w-full max-w-[1600px] px-6 py-8 sm:px-8 lg:px-12">
-      {categoryTrail.length > 0 && (
-        <nav
-          aria-label="현재 위치"
-          className="text-muted-foreground mb-5 flex items-center gap-1.5 text-[13px]"
-        >
-          {categoryTrail.map((category, index) => (
-            <Fragment key={category.id}>
-              {index > 0 && <span aria-hidden>&gt;</span>}
-              <span
-                className={
-                  index === categoryTrail.length - 1
-                    ? "text-foreground font-semibold"
-                    : undefined
-                }
-              >
-                {category.name}
-              </span>
-            </Fragment>
-          ))}
-        </nav>
-      )}
+      <CategoryTrail categoryId={categoryId} />
 
       <div className="flex gap-8">
         <ProductFilterSidebar
