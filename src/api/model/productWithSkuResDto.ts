@@ -14,6 +14,8 @@ import type { ProductStatus } from './productStatus';
  */
 export interface ProductWithSkuResDto {
   basePrice?: number;
+  categoryId?: number;
+  deliveryFee?: number;
   deliveryType?: DeliveryType;
   depth?: number;
   description?: string;

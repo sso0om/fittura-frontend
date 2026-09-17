@@ -134,8 +134,8 @@ export function useGetCart<TData = Awaited<ReturnType<typeof getCart>>, TError =
  * 장바구니 제품 담기 API
  * @summary 장바구니 담기
  */
-export const createCartItem = (
-    cartItemCreateReqDto: BodyType<CartItemCreateReqDto>,
+export const createCartItems = (
+    cartItemCreateReqDto: BodyType<CartItemCreateReqDto[]>,
  options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
       
@@ -150,11 +150,11 @@ export const createCartItem = (
   
 
 
-export const getCreateCartItemMutationOptions = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createCartItem>>, TError,{data: BodyType<CartItemCreateReqDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof createCartItem>>, TError,{data: BodyType<CartItemCreateReqDto>}, TContext> => {
+export const getCreateCartItemsMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createCartItems>>, TError,{data: BodyType<CartItemCreateReqDto[]>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof createCartItems>>, TError,{data: BodyType<CartItemCreateReqDto[]>}, TContext> => {
 
-const mutationKey = ['createCartItem'];
+const mutationKey = ['createCartItems'];
 const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
@@ -164,10 +164,10 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createCartItem>>, {data: BodyType<CartItemCreateReqDto>}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createCartItems>>, {data: BodyType<CartItemCreateReqDto[]>}> = (props) => {
           const {data} = props ?? {};
 
-          return  createCartItem(data,requestOptions)
+          return  createCartItems(data,requestOptions)
         }
 
         
@@ -175,23 +175,23 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
   return  { mutationFn, ...mutationOptions }}
 
-    export type CreateCartItemMutationResult = NonNullable<Awaited<ReturnType<typeof createCartItem>>>
-    export type CreateCartItemMutationBody = BodyType<CartItemCreateReqDto>
-    export type CreateCartItemMutationError = ErrorType<unknown>
+    export type CreateCartItemsMutationResult = NonNullable<Awaited<ReturnType<typeof createCartItems>>>
+    export type CreateCartItemsMutationBody = BodyType<CartItemCreateReqDto[]>
+    export type CreateCartItemsMutationError = ErrorType<unknown>
 
     /**
  * @summary 장바구니 담기
  */
-export const useCreateCartItem = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createCartItem>>, TError,{data: BodyType<CartItemCreateReqDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+export const useCreateCartItems = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createCartItems>>, TError,{data: BodyType<CartItemCreateReqDto[]>}, TContext>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof createCartItem>>,
+        Awaited<ReturnType<typeof createCartItems>>,
         TError,
-        {data: BodyType<CartItemCreateReqDto>},
+        {data: BodyType<CartItemCreateReqDto[]>},
         TContext
       > => {
 
-      const mutationOptions = getCreateCartItemMutationOptions(options);
+      const mutationOptions = getCreateCartItemsMutationOptions(options);
 
       return useMutation(mutationOptions, queryClient);
     }

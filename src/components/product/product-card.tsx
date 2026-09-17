@@ -49,7 +49,7 @@ export function ProductCard({
         href={href}
         tabIndex={-1}
         aria-hidden="true"
-        className="absolute inset-0 z-0 rounded-2xl"
+        className="absolute inset-0 z-[1] rounded-2xl"
       />
 
       <div className="bg-muted relative aspect-square w-full overflow-hidden rounded-2xl">
