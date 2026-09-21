@@ -18,7 +18,9 @@ export interface SkuSelectProps {
 }
 
 /** color/material 라벨 */
-export function getSkuVariantLabel(sku: SkuResDto): string {
+export function getSkuVariantLabel(
+  sku: Pick<SkuResDto, "color" | "material">,
+): string {
   return [sku.color, sku.material].filter(Boolean).join(" / ");
 }
 
