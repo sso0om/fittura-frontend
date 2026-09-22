@@ -12,6 +12,7 @@ import type { SkuStatus } from './skuStatus';
 export interface SkuResDto {
   color?: string;
   id?: number;
+  isSoldOut?: boolean;
   material?: string;
   price?: number;
   status?: SkuStatus;

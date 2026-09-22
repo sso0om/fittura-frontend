@@ -4,11 +4,13 @@ import { useState } from "react";
 import { Heart, Share2, Star, Ticket } from "lucide-react";
 import { toast } from "sonner";
 
+import { deliveryTypeLabel } from "@/lib/enum-labels";
 import { formatPrice } from "@/lib/format";
+import { getUnavailableSaleStatus } from "@/lib/sale-status";
 import { Button } from "@/components/ui/button";
 import { useGetProduct1 } from "@/api/generated/product-v1/product-v1";
 import { useCreateCartItems } from "@/api/generated/cart-v1/cart-v1";
-import { DeliveryType, type SkuResDto } from "@/api/model";
+import type { SkuResDto } from "@/api/model";
 import { CategoryTrail } from "@/components/product/category-trail";
 import { ProductGallery } from "@/components/product/product-gallery";
 import { SkuSelect } from "@/components/product/sku-select";
@@ -16,11 +18,6 @@ import {
   SelectedSkuList,
   type SelectedSkuItem,
 } from "@/components/product/selected-sku-list";
-
-const DELIVERY_TYPE_LABEL: Record<DeliveryType, string> = {
-  [DeliveryType.PARCEL]: "일반 배송",
-  [DeliveryType.INSTALLATION]: "기사 배송",
-};
 
 export interface ProductPageClientProps {
   productId: number;
@@ -30,8 +27,8 @@ export function ProductPageClient({ productId }: ProductPageClientProps) {
   const { data: productRes } = useGetProduct1(productId);
   const product = productRes?.data;
 
-  const deliveryTypeLabel = product?.deliveryType
-    ? DELIVERY_TYPE_LABEL[product.deliveryType]
+  const deliveryLabel = product?.deliveryType
+    ? deliveryTypeLabel[product.deliveryType]
     : undefined;
 
   const [items, setItems] = useState<SelectedSkuItem[]>([]);
@@ -83,6 +80,18 @@ export function ProductPageClient({ productId }: ProductPageClientProps) {
   function handleRemove(skuId: number) {
     setItems((prev) => prev.filter((item) => item.sku.id !== skuId));
   }
+
+  // 바로구매는 선택한 SKU가 모두 판매 가능할 때만 (일시품절은 장바구니 담기만 가능)
+  const canBuyNow =
+    items.length > 0 &&
+    items.every(
+      (item) =>
+        getUnavailableSaleStatus({
+          productStatus: product?.status,
+          skuStatus: item.sku.status,
+          isSoldOut: item.sku.isSoldOut,
+        }) === null,
+    );
 
   const orderTotal = items.reduce(
     (sum, item) => sum + (item.sku.price ?? 0) * item.quantity,
@@ -140,7 +149,7 @@ export function ProductPageClient({ productId }: ProductPageClientProps) {
           <div className="flex gap-4 text-[13px]">
             <span className="text-muted-foreground w-10 shrink-0">배송</span>
             <div className="flex items-center gap-1.5">
-              <span>{deliveryTypeLabel}</span>
+              <span>{deliveryLabel}</span>
               {product?.deliveryFee != null && (
                 <span className="text-foreground font-semibold">
                   {formatPrice(product.deliveryFee)}
@@ -153,7 +162,11 @@ export function ProductPageClient({ productId }: ProductPageClientProps) {
 
           {/* SKU 셀렉트 박스 */}
           <div className="flex flex-col gap-1.5">
-            <SkuSelect skus={product?.skus ?? []} onSelect={handleSelectSku} />
+            <SkuSelect
+              skus={product?.skus ?? []}
+              productStatus={product?.status}
+              onSelect={handleSelectSku}
+            />
           </div>
 
           {/* 선택한 SKU 목록 */}
@@ -185,7 +198,8 @@ export function ProductPageClient({ productId }: ProductPageClientProps) {
             </button>
             <button
               type="button"
-              className="bg-primary text-primary-foreground hover:bg-primary/90 h-[52px] flex-1 rounded-lg text-[15px] font-bold"
+              disabled={!canBuyNow}
+              className="bg-primary text-primary-foreground hover:bg-primary/90 disabled:pointer-events-none disabled:opacity-50 h-[52px] flex-1 rounded-lg text-[15px] font-bold"
             >
               바로구매
             </button>

@@ -11,9 +11,11 @@ import {
   useUpdateCartItem,
 } from "@/api/generated/cart-v1/cart-v1";
 import { SkuStatus, type CartItemResDto } from "@/api/model";
-import { skuStatusLabel } from "@/lib/enum-labels";
 import { formatPrice } from "@/lib/format";
-import { getUnavailableSaleStatus } from "@/lib/sale-status";
+import {
+  getUnavailableSaleStatus,
+  unavailableSaleStatusLabel,
+} from "@/lib/sale-status";
 import { Button } from "@/components/ui/button";
 import { getSkuVariantLabel } from "@/components/product/sku-select";
 
@@ -54,10 +56,11 @@ export function CartItemCard({
     mutation: { onSuccess: invalidateCart },
   });
 
-  const unavailableStatus = getUnavailableSaleStatus(
-    item.productStatus,
-    item.skuStatus,
-  );
+  const unavailableStatus = getUnavailableSaleStatus({
+    productStatus: item.productStatus,
+    skuStatus: item.skuStatus,
+    isSoldOut: item.isSoldOut,
+  });
   const isAvailable = unavailableStatus === null;
   const canLinkToProduct =
     productId != null &&
@@ -134,7 +137,7 @@ export function CartItemCard({
               )}
               {unavailableStatus && (
                 <span className="text-destructive relative z-[2] shrink-0 text-xs font-semibold">
-                  {skuStatusLabel[unavailableStatus]}
+                  {unavailableSaleStatusLabel[unavailableStatus]}
                 </span>
               )}
             </div>

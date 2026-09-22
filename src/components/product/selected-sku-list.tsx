@@ -5,6 +5,7 @@ import { Minus, Plus, X } from "lucide-react";
 import { formatPrice } from "@/lib/format";
 import type { SkuResDto } from "@/api/model";
 import { getSkuVariantLabel } from "@/components/product/sku-select";
+import { SOLD_OUT, unavailableSaleStatusLabel } from "@/lib/sale-status";
 
 export interface SelectedSkuItem {
   sku: SkuResDto;
@@ -38,6 +39,11 @@ export function SelectedSkuList({
             <div className="flex items-start justify-between gap-2">
               <span className="text-sm font-medium">
                 {getSkuVariantLabel(item.sku)}
+                {item.sku.isSoldOut && (
+                  <span className="text-destructive ml-1.5 text-xs font-semibold">
+                    {unavailableSaleStatusLabel[SOLD_OUT]}
+                  </span>
+                )}
               </span>
               <button
                 type="button"

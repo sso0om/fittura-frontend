@@ -14,6 +14,7 @@ export interface CartItemResDto {
   deliveryFee?: number;
   deliveryType?: DeliveryType;
   discountRate?: number;
+  isSoldOut?: boolean;
   itemTotalPrice?: number;
   mainImageUrl?: string;
   material?: string;

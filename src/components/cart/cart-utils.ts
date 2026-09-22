@@ -9,7 +9,11 @@ import { getUnavailableSaleStatus } from "@/lib/sale-status";
 export function isCartItemSelectable(item: CartItemResDto): boolean {
   return (
     item.cartItemId != null &&
-    getUnavailableSaleStatus(item.productStatus, item.skuStatus) === null
+    getUnavailableSaleStatus({
+      productStatus: item.productStatus,
+      skuStatus: item.skuStatus,
+      isSoldOut: item.isSoldOut,
+    }) === null
   );
 }
 

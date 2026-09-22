@@ -10,10 +10,17 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { formatPrice } from "@/lib/format";
-import { SkuStatus, type SkuResDto } from "@/api/model";
+import {
+  canAddToCart,
+  getUnavailableSaleStatus,
+  unavailableSaleStatusLabel,
+} from "@/lib/sale-status";
+import type { ProductStatus, SkuResDto } from "@/api/model";
 
 export interface SkuSelectProps {
   skus: SkuResDto[];
+  /** 상품 단위 상태 - 상품이 판매 불가면 모든 SKU 선택 불가 */
+  productStatus?: ProductStatus;
   onSelect: (sku: SkuResDto) => void;
 }
 
@@ -24,13 +31,22 @@ export function getSkuVariantLabel(
   return [sku.color, sku.material].filter(Boolean).join(" / ");
 }
 
-/** 색상 / 마감 (가격) 라벨 */
-function getSkuLabel(sku: SkuResDto): string {
+/** 색상 / 마감 (가격) [판매 불가 상태] 라벨 */
+function getSkuLabel(sku: SkuResDto, productStatus?: ProductStatus): string {
   const variant = getSkuVariantLabel(sku);
   const price = sku.price != null ? formatPrice(sku.price) : "";
+  const label = variant && price ? `${variant} (${price})` : variant || price;
 
-  if (variant && price) return `${variant} (${price})`;
-  return variant || price;
+  const status = getSkuSaleStatus(sku, productStatus);
+  return status ? `${label} - ${unavailableSaleStatusLabel[status]}` : label;
+}
+
+function getSkuSaleStatus(sku: SkuResDto, productStatus?: ProductStatus) {
+  return getUnavailableSaleStatus({
+    productStatus,
+    skuStatus: sku.status,
+    isSoldOut: sku.isSoldOut,
+  });
 }
 
 /**
@@ -38,7 +54,7 @@ function getSkuLabel(sku: SkuResDto): string {
  * 선택 결과가 SelectedSkuList에 쌓이는 구조
  * 셀렉트는 "추가용 입력"으로만 사용
  */
-export function SkuSelect({ skus, onSelect }: SkuSelectProps) {
+export function SkuSelect({ skus, productStatus, onSelect }: SkuSelectProps) {
   const [value, setValue] = useState<number | null>(null);
 
   function handleValueChange(nextValue: number | null) {
@@ -50,7 +66,10 @@ export function SkuSelect({ skus, onSelect }: SkuSelectProps) {
 
   return (
     <Select
-      items={skus.map((sku) => ({ value: sku.id, label: getSkuLabel(sku) }))}
+      items={skus.map((sku) => ({
+        value: sku.id,
+        label: getSkuLabel(sku, productStatus),
+      }))}
       value={value}
       onValueChange={handleValueChange}
     >
@@ -62,9 +81,11 @@ export function SkuSelect({ skus, onSelect }: SkuSelectProps) {
           <SelectItem
             key={sku.id}
             value={sku.id}
-            disabled={sku.status !== SkuStatus.ACTIVE}
+            // 일시품절은 장바구니 담기가 가능하므로 선택 허용
+            disabled={!canAddToCart(getSkuSaleStatus(sku, productStatus))}
+            className="data-disabled:bg-muted"
           >
-            {getSkuLabel(sku)}
+            {getSkuLabel(sku, productStatus)}
           </SelectItem>
         ))}
       </SelectContent>
