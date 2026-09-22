@@ -22,6 +22,9 @@ export function ProductsPageClient() {
   const categoryIdParam = searchParams.get("categoryId");
   const categoryId = categoryIdParam ? Number(categoryIdParam) : undefined;
 
+  // 헤더 검색창(search-form)에서 /products?keyword= 로 이동
+  const keyword = searchParams.get("keyword")?.trim() || undefined;
+
   const selectedColors = searchParams.getAll("colors").map(Number);
   const selectedMaterials = searchParams.getAll("materials").map(Number);
 
@@ -36,6 +39,13 @@ export function ProductsPageClient() {
     setTrackedCategoryId(categoryId);
     setActiveOnly(false);
     setSort(DEFAULT_SORT);
+    setPage(0);
+  }
+
+  // 검색어 변경 시 첫 페이지부터
+  const [trackedKeyword, setTrackedKeyword] = useState(keyword);
+  if (keyword !== trackedKeyword) {
+    setTrackedKeyword(keyword);
     setPage(0);
   }
 
@@ -57,6 +67,7 @@ export function ProductsPageClient() {
 
   const { data, isPending, isError } = useGetProducts1({
     categoryId,
+    keyword,
     inStockOnly: activeOnly,
     colors: selectedColors.length > 0 ? selectedColors : undefined,
     materials: selectedMaterials.length > 0 ? selectedMaterials : undefined,
