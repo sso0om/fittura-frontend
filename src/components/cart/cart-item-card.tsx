@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useQueryClient } from "@tanstack/react-query";
-import { Armchair, Minus, Plus, X } from "lucide-react";
+import { Armchair, X } from "lucide-react";
 
 import {
   getGetCartQueryKey,
@@ -17,6 +17,7 @@ import {
   unavailableSaleStatusLabel,
 } from "@/lib/sale-status";
 import { Button } from "@/components/ui/button";
+import { NumberFieldStepper } from "@/components/ui/number-field";
 import { getSkuVariantLabel } from "@/components/product/sku-select";
 
 const MIN_QUANTITY = 1;
@@ -81,6 +82,14 @@ export function CartItemCard({
 
   const productNameText = productName ?? "상품명 없음";
 
+  const thumbnail = mainImageUrl ? (
+    <Image src={mainImageUrl} alt="" fill sizes="92px" className="object-cover" />
+  ) : (
+    <div className="flex size-full items-center justify-center">
+      <Armchair className="text-muted-foreground/40 size-9" strokeWidth={1.5} />
+    </div>
+  );
+
   return (
     <div className="border-border relative flex gap-3.5 border-b px-5 py-5 last:border-b-0">
       {!isAvailable && (
@@ -99,24 +108,20 @@ export function CartItemCard({
         onChange={(e) => onCheckedChange(e.target.checked)}
       />
 
-      <div className="bg-muted relative size-[92px] shrink-0 overflow-hidden rounded-lg">
-        {mainImageUrl ? (
-          <Image
-            src={mainImageUrl}
-            alt=""
-            fill
-            sizes="92px"
-            className="object-cover"
-          />
-        ) : (
-          <div className="flex size-full items-center justify-center">
-            <Armchair
-              className="text-muted-foreground/40 size-9"
-              strokeWidth={1.5}
-            />
-          </div>
-        )}
-      </div>
+      {/* 이미지 - 상품명과 같은 조건으로 상품 페이지 이동 */}
+      {canLinkToProduct ? (
+        <Link
+          href={`/products/${productId}`}
+          aria-label={`${productNameText} 상세 보기`}
+          className="bg-muted relative size-[92px] shrink-0 overflow-hidden rounded-lg"
+        >
+          {thumbnail}
+        </Link>
+      ) : (
+        <div className="bg-muted relative size-[92px] shrink-0 overflow-hidden rounded-lg">
+          {thumbnail}
+        </div>
+      )}
 
       <div className="flex min-w-0 flex-1 flex-col gap-3">
         {/* 상품명 + 상태 / 삭제 */}
@@ -179,27 +184,13 @@ export function CartItemCard({
             </span>
           </div>
 
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={() => handleQuantityChange(quantity - 1)}
-              disabled={!isAvailable || isUpdating || quantity <= MIN_QUANTITY}
-              aria-label="수량 감소"
-              className="border-border hover:bg-muted flex size-7 items-center justify-center rounded-md border disabled:pointer-events-none disabled:opacity-50"
-            >
-              <Minus className="size-3.5" />
-            </button>
-            <span className="w-6 text-center text-sm">{quantity}</span>
-            <button
-              type="button"
-              onClick={() => handleQuantityChange(quantity + 1)}
-              disabled={!isAvailable || isUpdating}
-              aria-label="수량 증가"
-              className="border-border hover:bg-muted flex size-7 items-center justify-center rounded-md border disabled:pointer-events-none disabled:opacity-50"
-            >
-              <Plus className="size-3.5" />
-            </button>
-          </div>
+          <NumberFieldStepper
+            aria-label="수량"
+            value={quantity}
+            min={MIN_QUANTITY}
+            disabled={!isAvailable || isUpdating}
+            onValueCommit={handleQuantityChange}
+          />
         </div>
 
         {/* 옵션 선택 / 최종 금액 */}

@@ -1,8 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 
-import { useGetCart } from "@/api/generated/cart-v1/cart-v1";
+import {
+  deleteCartItem,
+  getGetCartQueryKey,
+  useGetCart,
+} from "@/api/generated/cart-v1/cart-v1";
 import { useGetDeliveryPolicy } from "@/api/generated/delivery-v1/delivery-v1";
 import { DeliveryType, type CartItemResDto } from "@/api/model";
 import { deliveryTypeLabel } from "@/lib/enum-labels";
@@ -13,6 +18,8 @@ import {
   calcDeliveryFee,
   getDeliveryNotice,
   isCartItemSelectable,
+  loadCartUncheckedIds,
+  saveCartUncheckedIds,
   sumCartItems,
 } from "@/components/cart/cart-utils";
 
@@ -30,10 +37,18 @@ export function CartPageClient() {
   /**
    * 선택 해제한 아이템 id만 보관 -> 기본은 선택 가능한 아이템 전체 선택
    * 재조회로 아이템이 추가/삭제돼도 별도 동기화 없이 선택 상태가 유지됨
+   * 새로고침/페이지 이동 후에도 유지되도록 sessionStorage에 저장
    */
   const [uncheckedIds, setUncheckedIds] = useState<Set<number>>(
-    () => new Set(),
+    loadCartUncheckedIds,
   );
+
+  useEffect(() => {
+    saveCartUncheckedIds(uncheckedIds);
+  }, [uncheckedIds]);
+
+  const queryClient = useQueryClient();
+  const [isDeletingSelected, setIsDeletingSelected] = useState(false);
 
   function isItemChecked(item: CartItemResDto): boolean {
     return (
@@ -102,6 +117,25 @@ export function CartPageClient() {
   const totalPaymentAmount = orderAmount - discountAmount + deliveryFee;
 
   const allSelectableItems = items.filter(isCartItemSelectable);
+  const checkedItems = allSelectableItems.filter(isItemChecked);
+
+  /** 선택 삭제
+   * 일부 실패해도 나머지는 삭제되도록 allSettled 사용 (실패 메시지는 axios 인터셉터가 토스트로 노출)
+   * 완료 후 장바구니 1회 재조회
+   */
+  async function handleDeleteSelected() {
+    if (checkedItems.length === 0 || isDeletingSelected) return;
+
+    setIsDeletingSelected(true);
+    try {
+      await Promise.allSettled(
+        checkedItems.map((item) => deleteCartItem(item.cartItemId as number)),
+      );
+    } finally {
+      await queryClient.invalidateQueries({ queryKey: getGetCartQueryKey() });
+      setIsDeletingSelected(false);
+    }
+  }
   const isAllChecked =
     allSelectableItems.length > 0 && allSelectableItems.every(isItemChecked);
 
@@ -162,7 +196,9 @@ export function CartPageClient() {
               </label>
               <button
                 type="button"
-                className="text-muted-foreground text-sm underline underline-offset-2"
+                onClick={handleDeleteSelected}
+                disabled={checkedItems.length === 0 || isDeletingSelected}
+                className="text-muted-foreground text-sm underline underline-offset-2 disabled:pointer-events-none disabled:opacity-50"
               >
                 선택 삭제
               </button>
