@@ -1,11 +1,14 @@
 "use client";
 
-import { Minus, Plus, X } from "lucide-react";
+import { X } from "lucide-react";
 
 import { formatPrice } from "@/lib/format";
+import { NumberFieldStepper } from "@/components/ui/number-field";
 import type { SkuResDto } from "@/api/model";
 import { getSkuVariantLabel } from "@/components/product/sku-select";
 import { SOLD_OUT, unavailableSaleStatusLabel } from "@/lib/sale-status";
+
+const MIN_QUANTITY = 1;
 
 export interface SelectedSkuItem {
   sku: SkuResDto;
@@ -56,27 +59,12 @@ export function SelectedSkuList({
             </div>
 
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => onQuantityChange(skuId, item.quantity - 1)}
-                  aria-label="수량 감소"
-                  className="border-border hover:bg-muted flex size-7 items-center justify-center rounded-md border"
-                >
-                  <Minus className="size-3.5" />
-                </button>
-                <span className="w-5 text-center text-sm">
-                  {item.quantity}
-                </span>
-                <button
-                  type="button"
-                  onClick={() => onQuantityChange(skuId, item.quantity + 1)}
-                  aria-label="수량 증가"
-                  className="border-border hover:bg-muted flex size-7 items-center justify-center rounded-md border"
-                >
-                  <Plus className="size-3.5" />
-                </button>
-              </div>
+              <NumberFieldStepper
+                aria-label="수량"
+                value={item.quantity}
+                min={MIN_QUANTITY}
+                onValueCommit={(next) => onQuantityChange(skuId, next)}
+              />
 
               <span className="text-foreground text-sm font-semibold">
                 {formatPrice((item.sku.price ?? 0) * item.quantity)}

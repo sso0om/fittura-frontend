@@ -1,12 +1,16 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Heart, Share2, Star, Ticket } from "lucide-react";
 import { toast } from "sonner";
 
 import { deliveryTypeLabel } from "@/lib/enum-labels";
 import { formatPrice } from "@/lib/format";
-import { getUnavailableSaleStatus } from "@/lib/sale-status";
+import {
+  getUnavailableSaleStatus,
+  unavailableSaleStatusLabel,
+} from "@/lib/sale-status";
 import { Button } from "@/components/ui/button";
 import { useGetProduct1 } from "@/api/generated/product-v1/product-v1";
 import { useCreateCartItems } from "@/api/generated/cart-v1/cart-v1";
@@ -18,6 +22,12 @@ import {
   SelectedSkuList,
   type SelectedSkuItem,
 } from "@/components/product/selected-sku-list";
+import { getSkuVariantLabel } from "@/components/product/sku-select";
+import { CartAddedDialog } from "@/components/product/cart-added-dialog";
+import {
+  UnavailableOptionsDialog,
+  type UnavailableOption,
+} from "@/components/product/unavailable-options-dialog";
 
 export interface ProductPageClientProps {
   productId: number;
@@ -32,6 +42,12 @@ export function ProductPageClient({ productId }: ProductPageClientProps) {
     : undefined;
 
   const [items, setItems] = useState<SelectedSkuItem[]>([]);
+  const router = useRouter();
+  const [isCartAddedDialogOpen, setIsCartAddedDialogOpen] = useState(false);
+  /** 바로구매 시 구매 불가 옵션 안내 목록 (비어 있으면 팝업 닫힘) */
+  const [unavailableOptions, setUnavailableOptions] = useState<
+    UnavailableOption[]
+  >([]);
   const { mutate: createCartItems, isPending: isAddingToCart } =
     useCreateCartItems();
 
@@ -58,10 +74,7 @@ export function ProductPageClient({ productId }: ProductPageClientProps) {
         })),
       },
       {
-        onSuccess: () => {
-          toast("장바구니에 담았습니다.");
-          setItems([]);
-        },
+        onSuccess: () => setIsCartAddedDialogOpen(true),
       },
     );
   }
@@ -81,17 +94,35 @@ export function ProductPageClient({ productId }: ProductPageClientProps) {
     setItems((prev) => prev.filter((item) => item.sku.id !== skuId));
   }
 
-  // 바로구매는 선택한 SKU가 모두 판매 가능할 때만 (일시품절은 장바구니 담기만 가능)
-  const canBuyNow =
-    items.length > 0 &&
-    items.every(
-      (item) =>
-        getUnavailableSaleStatus({
-          productStatus: product?.status,
-          skuStatus: item.sku.status,
-          isSoldOut: item.sku.isSoldOut,
-        }) === null,
-    );
+  /**
+   * 바로구매 - 선택한 SKU 중 구매 불가(일시품절 등)가 있으면 팝업으로 안내
+   * 일시품절은 장바구니 담기만 가능하고 바로구매는 불가
+   */
+  function handleBuyNow() {
+    if (items.length === 0) return;
+
+    const blocked = items.flatMap((item) => {
+      const status = getUnavailableSaleStatus({
+        productStatus: product?.status,
+        skuStatus: item.sku.status,
+        isSoldOut: item.sku.isSoldOut,
+      });
+      if (status === null || item.sku.id == null) return [];
+      return [
+        {
+          skuId: item.sku.id,
+          label: `${getSkuVariantLabel(item.sku) || "옵션"} - ${unavailableSaleStatusLabel[status]}`,
+        },
+      ];
+    });
+
+    if (blocked.length > 0) {
+      setUnavailableOptions(blocked);
+      return;
+    }
+
+    // TODO: 주문 기능 연동
+  }
 
   const orderTotal = items.reduce(
     (sum, item) => sum + (item.sku.price ?? 0) * item.quantity,
@@ -130,7 +161,7 @@ export function ProductPageClient({ productId }: ProductPageClientProps) {
 
           <hr className="border-border" />
 
-          {/* 판매가 - 할인가: 추후 기능 추가 예정*/}
+          {/* 판매가 */}
           <div className="flex items-baseline gap-2.5">
             <span className="text-foreground text-[28px] font-extrabold">
               {formatPrice(product?.basePrice ?? 0)}
@@ -145,7 +176,7 @@ export function ProductPageClient({ productId }: ProductPageClientProps) {
 
           <hr className="border-border" />
 
-          {/* 배송 정보 — deliveryType 한글 라벨 + deliveryFee */}
+          {/* 배송 정보 */}
           <div className="flex gap-4 text-[13px]">
             <span className="text-muted-foreground w-10 shrink-0">배송</span>
             <div className="flex items-center gap-1.5">
@@ -176,7 +207,7 @@ export function ProductPageClient({ productId }: ProductPageClientProps) {
             onRemove={handleRemove}
           />
 
-          {/* 주문 금액 — 선택 목록의 (단가 × 수량) 합계 */}
+          {/* 주문 금액 */}
           <div className="flex items-center justify-between">
             <span className="text-muted-foreground text-sm font-medium">
               주문금액
@@ -198,7 +229,8 @@ export function ProductPageClient({ productId }: ProductPageClientProps) {
             </button>
             <button
               type="button"
-              disabled={!canBuyNow}
+              onClick={handleBuyNow}
+              disabled={items.length === 0}
               className="bg-primary text-primary-foreground hover:bg-primary/90 disabled:pointer-events-none disabled:opacity-50 h-[52px] flex-1 rounded-lg text-[15px] font-bold"
             >
               바로구매
@@ -206,6 +238,17 @@ export function ProductPageClient({ productId }: ProductPageClientProps) {
           </div>
         </div>
       </div>
+
+      <CartAddedDialog
+        open={isCartAddedDialogOpen}
+        onOpenChange={setIsCartAddedDialogOpen}
+        onGoToCart={() => router.push("/cart")}
+      />
+
+      <UnavailableOptionsDialog
+        options={unavailableOptions}
+        onClose={() => setUnavailableOptions([])}
+      />
     </div>
   );
 }
