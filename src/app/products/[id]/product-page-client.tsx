@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Heart, Share2, Star, Ticket } from "lucide-react";
-import { toast } from "sonner";
 
 import { deliveryTypeLabel } from "@/lib/enum-labels";
 import { formatPrice } from "@/lib/format";
@@ -23,6 +22,7 @@ import {
   type SelectedSkuItem,
 } from "@/components/product/selected-sku-list";
 import { getSkuVariantLabel } from "@/components/product/sku-select";
+import { NoticeDialog } from "@/components/ui/notice-dialog";
 import { CartAddedDialog } from "@/components/product/cart-added-dialog";
 import {
   UnavailableOptionsDialog,
@@ -46,6 +46,8 @@ export function ProductPageClient({ productId }: ProductPageClientProps) {
   const [items, setItems] = useState<SelectedSkuItem[]>([]);
   const router = useRouter();
   const [isCartAddedDialogOpen, setIsCartAddedDialogOpen] = useState(false);
+  /** 사용자 안내 문구 (null이면 닫힘) */
+  const [notice, setNotice] = useState<string | null>(null);
   /** 바로구매 시 구매 불가 옵션 안내 목록 (비어 있으면 팝업 닫힘) */
   const [unavailableOptions, setUnavailableOptions] = useState<
     UnavailableOption[]
@@ -58,7 +60,7 @@ export function ProductPageClient({ productId }: ProductPageClientProps) {
 
     const alreadySelected = items.some((item) => item.sku.id === sku.id);
     if (alreadySelected) {
-      toast("이미 선택된 옵션입니다.");
+      setNotice("이미 선택된 옵션입니다.");
       return;
     }
 
@@ -252,6 +254,8 @@ export function ProductPageClient({ productId }: ProductPageClientProps) {
           </div>
         </div>
       </div>
+
+      <NoticeDialog message={notice} onClose={() => setNotice(null)} />
 
       <CartAddedDialog
         open={isCartAddedDialogOpen}
