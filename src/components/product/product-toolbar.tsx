@@ -1,5 +1,7 @@
 export type ProductSort =
-  "createdDate,desc" | "basePrice,asc" | "basePrice,desc";
+  | "createdDate,desc"
+  | "baseSalePrice,asc"
+  | "baseSalePrice,desc";
 
 export interface ProductToolbarProps {
   totalCount: number;
@@ -13,8 +15,8 @@ export interface ProductToolbarProps {
 
 const SORT_OPTIONS: { value: ProductSort; label: string }[] = [
   { value: "createdDate,desc", label: "신상품순" },
-  { value: "basePrice,asc", label: "낮은 가격순" },
-  { value: "basePrice,desc", label: "높은 가격순" },
+  { value: "baseSalePrice,asc", label: "낮은 가격순" },
+  { value: "baseSalePrice,desc", label: "높은 가격순" },
 ];
 
 const PAGE_SIZE_OPTIONS = [20, 40, 60, 80];

@@ -34,7 +34,8 @@ export function getSkuVariantLabel(
 /** 색상 / 마감 (가격) [판매 불가 상태] 라벨 */
 function getSkuLabel(sku: SkuResDto, productStatus?: ProductStatus): string {
   const variant = getSkuVariantLabel(sku);
-  const price = sku.price != null ? formatPrice(sku.price) : "";
+  // 드롭다운은 비교용이라 할인 후 가격만 표시 (정가·할인율은 선택 목록에서)
+  const price = sku.salePrice != null ? formatPrice(sku.salePrice) : "";
   const label = variant && price ? `${variant} (${price})` : variant || price;
 
   const status = getSkuSaleStatus(sku, productStatus);

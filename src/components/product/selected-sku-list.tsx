@@ -34,6 +34,9 @@ export function SelectedSkuList({
         const skuId = item.sku.id;
         if (skuId == null) return null;
 
+        const { originalPrice, salePrice, discountRate } = item.sku;
+        const hasDiscount = (discountRate ?? 0) > 0;
+
         return (
           <div
             key={skuId}
@@ -66,9 +69,21 @@ export function SelectedSkuList({
                 onValueCommit={(next) => onQuantityChange(skuId, next)}
               />
 
-              <span className="text-foreground text-sm font-semibold">
-                {formatPrice((item.sku.price ?? 0) * item.quantity)}
-              </span>
+              <div className="flex items-baseline gap-1.5">
+                {hasDiscount && (
+                  <>
+                    <span className="text-muted-foreground text-xs line-through">
+                      {formatPrice((originalPrice ?? 0) * item.quantity)}
+                    </span>
+                    <span className="text-destructive text-xs font-bold">
+                      {discountRate}%
+                    </span>
+                  </>
+                )}
+                <span className="text-foreground text-sm font-semibold">
+                  {formatPrice((salePrice ?? 0) * item.quantity)}
+                </span>
+              </div>
             </div>
           </div>
         );

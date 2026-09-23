@@ -41,6 +41,8 @@ export function ProductPageClient({ productId }: ProductPageClientProps) {
     ? deliveryTypeLabel[product.deliveryType]
     : undefined;
 
+  const hasDiscount = (product?.discountRate ?? 0) > 0;
+
   const [items, setItems] = useState<SelectedSkuItem[]>([]);
   const router = useRouter();
   const [isCartAddedDialogOpen, setIsCartAddedDialogOpen] = useState(false);
@@ -125,7 +127,7 @@ export function ProductPageClient({ productId }: ProductPageClientProps) {
   }
 
   const orderTotal = items.reduce(
-    (sum, item) => sum + (item.sku.price ?? 0) * item.quantity,
+    (sum, item) => sum + (item.sku.salePrice ?? 0) * item.quantity,
     0,
   );
 
@@ -161,11 +163,23 @@ export function ProductPageClient({ productId }: ProductPageClientProps) {
 
           <hr className="border-border" />
 
-          {/* 판매가 */}
-          <div className="flex items-baseline gap-2.5">
-            <span className="text-foreground text-[28px] font-extrabold">
-              {formatPrice(product?.basePrice ?? 0)}
-            </span>
+          {/* 가격 */}
+          <div className="flex flex-col gap-1">
+            {hasDiscount && (
+              <span className="text-muted-foreground text-sm line-through">
+                {formatPrice(product?.basePrice ?? 0)}
+              </span>
+            )}
+            <div className="flex items-baseline gap-2.5">
+              {hasDiscount && (
+                <span className="text-destructive text-[28px] font-extrabold">
+                  {product?.discountRate}%
+                </span>
+              )}
+              <span className="text-foreground text-[28px] font-extrabold">
+                {formatPrice(product?.baseSalePrice ?? product?.basePrice ?? 0)}
+              </span>
+            </div>
           </div>
 
           {/* 쿠폰 받기: 추후 기능 추가 예정*/}

@@ -14,11 +14,13 @@ import type { ProductStatus } from './productStatus';
  */
 export interface ProductWithSkuResDto {
   basePrice?: number;
+  baseSalePrice?: number;
   categoryId?: number;
   deliveryFee?: number;
   deliveryType?: DeliveryType;
   depth?: number;
   description?: string;
+  discountRate?: number;
   height?: number;
   id?: number;
   isSoldOut?: boolean;
