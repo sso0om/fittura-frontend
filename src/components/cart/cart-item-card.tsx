@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useQueryClient } from "@tanstack/react-query";
@@ -18,7 +19,8 @@ import {
 } from "@/lib/sale-status";
 import { Button } from "@/components/ui/button";
 import { NumberFieldStepper } from "@/components/ui/number-field";
-import { getSkuVariantLabel } from "@/components/product/sku-select";
+import { getSkuVariantLabel } from "@/lib/sku-label";
+import { OptionChangeDialog } from "@/components/cart/option-change-dialog";
 
 const MIN_QUANTITY = 1;
 
@@ -46,6 +48,8 @@ export function CartItemCard({
     itemTotalPrice,
   } = item;
 
+  const [isOptionDialogOpen, setIsOptionDialogOpen] = useState(false);
+
   const queryClient = useQueryClient();
   const invalidateCart = () =>
     queryClient.invalidateQueries({ queryKey: getGetCartQueryKey() });
@@ -64,8 +68,7 @@ export function CartItemCard({
   });
   const isAvailable = unavailableStatus === null;
   const canLinkToProduct =
-    productId != null &&
-    unavailableStatus !== SkuStatus.PAUSED;
+    productId != null && unavailableStatus !== SkuStatus.PAUSED;
   const hasDiscount =
     originalPrice != null && salePrice != null && originalPrice !== salePrice;
   const variantLabel = getSkuVariantLabel(item);
@@ -83,7 +86,13 @@ export function CartItemCard({
   const productNameText = productName ?? "상품명 없음";
 
   const thumbnail = mainImageUrl ? (
-    <Image src={mainImageUrl} alt="" fill sizes="92px" className="object-cover" />
+    <Image
+      src={mainImageUrl}
+      alt=""
+      fill
+      sizes="92px"
+      className="object-cover"
+    />
   ) : (
     <div className="flex size-full items-center justify-center">
       <Armchair className="text-muted-foreground/40 size-9" strokeWidth={1.5} />
@@ -201,6 +210,7 @@ export function CartItemCard({
             size="sm"
             className="w-fit"
             disabled={!isAvailable}
+            onClick={() => setIsOptionDialogOpen(true)}
           >
             옵션 선택
           </Button>
@@ -209,6 +219,15 @@ export function CartItemCard({
           </span>
         </div>
       </div>
+
+      {/* 열 때마다 새로 마운트해서 선택 상태를 현재 아이템 기준으로 초기화 */}
+      {isOptionDialogOpen && (
+        <OptionChangeDialog
+          open
+          onOpenChange={setIsOptionDialogOpen}
+          item={item}
+        />
+      )}
     </div>
   );
 }
