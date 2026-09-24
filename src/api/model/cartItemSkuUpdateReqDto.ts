@@ -6,9 +6,9 @@
  */
 
 /**
- * 장바구니 상품 추가 요청 DTO
+ * 장바구니 SKU 수정 요청 DTO
  */
-export interface CartItemCreateReqDto {
+export interface CartItemSkuUpdateReqDto {
   /**
    * @minimum 1
    * @maximum 999

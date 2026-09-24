@@ -5,7 +5,7 @@ import { X } from "lucide-react";
 import { formatPrice } from "@/lib/format";
 import { NumberFieldStepper } from "@/components/ui/number-field";
 import type { SkuResDto } from "@/api/model";
-import { getSkuVariantLabel } from "@/components/product/sku-select";
+import { getSkuVariantLabel } from "@/lib/sku-label";
 import { SOLD_OUT, unavailableSaleStatusLabel } from "@/lib/sale-status";
 
 const MIN_QUANTITY = 1;

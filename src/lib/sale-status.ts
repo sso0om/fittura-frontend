@@ -1,4 +1,4 @@
-import { ProductStatus, SkuStatus } from "@/api/model";
+import { ProductStatus, SkuStatus, type SkuResDto } from "@/api/model";
 import { skuStatusLabel } from "@/lib/enum-labels";
 
 /**
@@ -56,6 +56,18 @@ export function getUnavailableSaleStatus({
   }
 
   return null;
+}
+
+/** SKU 응답 기준 판매 불가 상태 - 상품 상태와 SKU 상태를 합쳐 판단 (null = 판매 가능) */
+export function getSkuSaleStatus(
+  sku: SkuResDto,
+  productStatus?: ProductStatus,
+): UnavailableSaleStatus | null {
+  return getUnavailableSaleStatus({
+    productStatus,
+    skuStatus: sku.status,
+    isSoldOut: sku.isSoldOut,
+  });
 }
 
 /** 장바구니 담기 가능 여부 - 일시품절은 담기 허용 (구매만 불가) */

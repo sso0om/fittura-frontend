@@ -21,7 +21,7 @@ import {
   SelectedSkuList,
   type SelectedSkuItem,
 } from "@/components/product/selected-sku-list";
-import { getSkuVariantLabel } from "@/components/product/sku-select";
+import { getSkuVariantLabel } from "@/lib/sku-label";
 import { NoticeDialog } from "@/components/ui/notice-dialog";
 import { CartAddedDialog } from "@/components/product/cart-added-dialog";
 import {
