@@ -13,6 +13,7 @@ import { DeliveryType, type CartItemResDto } from "@/api/model";
 import { deliveryTypeLabel } from "@/lib/enum-labels";
 import { formatPrice } from "@/lib/format";
 import { Button } from "@/components/ui/button";
+import { useSelectedAddress } from "@/components/address/use-selected-address";
 import { CartDeliverySection } from "@/components/cart/cart-delivery-section";
 import {
   calcDeliveryFee,
@@ -30,6 +31,9 @@ export function CartPageClient() {
   const { data: policyRes } = useGetDeliveryPolicy({
     query: { staleTime: Infinity, gcTime: Infinity },
   });
+
+  // 배송지: 선택한 배송지 우선, 없으면 기본 배송지
+  const { address, isPending: isAddressPending } = useSelectedAddress();
 
   const items = data?.data?.items ?? [];
   const policies = policyRes?.data ?? [];
@@ -163,15 +167,30 @@ export function CartPageClient() {
 
       {/* 주소 정보 */}
       <div className="border-border mb-5 flex flex-col gap-1.5 rounded-xl border p-5">
-        <div className="flex items-center gap-2">
-          <span className="text-[15px] font-semibold">집</span>
-          <Button type="button" variant="outline" size="sm">
-            변경
-          </Button>
-        </div>
-        <span className="text-muted-foreground text-sm">
-          배송 주소
-        </span>
+        {isAddressPending ? (
+          <div className="bg-muted h-5 w-48 animate-pulse rounded" />
+        ) : address ? (
+          <>
+            <div className="flex items-center gap-2">
+              <span className="text-[15px] font-semibold">
+                {address.addressName}
+              </span>
+              <Button type="button" variant="outline" size="sm">
+                변경
+              </Button>
+            </div>
+            <span className="text-muted-foreground text-sm">
+              [{address.zipCode}] {address.address}
+              {address.addressDetail ? ` ${address.addressDetail}` : ""}
+            </span>
+          </>
+        ) : (
+          <div>
+            <Button type="button" variant="outline" size="sm">
+              배송지 추가하기
+            </Button>
+          </div>
+        )}
       </div>
 
       {items.length === 0 ? (
