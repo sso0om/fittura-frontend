@@ -4,19 +4,26 @@
  * OpenAPI definition
  * OpenAPI spec version: v0
  */
+import type { DeliveryType } from './deliveryType';
 import type { ProductStatus } from './productStatus';
 import type { SkuStatus } from './skuStatus';
 
 export interface CartItemResDto {
   cartItemId?: number;
   color?: string;
+  deliveryFee?: number;
+  deliveryType?: DeliveryType;
+  discountRate?: number;
+  isSoldOut?: boolean;
   itemTotalPrice?: number;
+  mainImageUrl?: string;
   material?: string;
+  originalPrice?: number;
   productId?: number;
   productName?: string;
   productStatus?: ProductStatus;
   quantity?: number;
+  salePrice?: number;
   skuId?: number;
   skuStatus?: SkuStatus;
-  unitPrice?: number;
 }

@@ -12,6 +12,9 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // orval 생성 코드 - 수동 수정 시 재생성에서 덮어써짐
+    "src/api/generated/**",
+    "src/api/model/**",
   ]),
 ]);
 

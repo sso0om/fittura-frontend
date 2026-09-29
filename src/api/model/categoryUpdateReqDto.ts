@@ -15,5 +15,5 @@ export interface CategoryUpdateReqDto {
    */
   name: string;
   parentId?: number;
-  sortOrder?: number;
+  sortOrder: number;
 }

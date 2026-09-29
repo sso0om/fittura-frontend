@@ -63,7 +63,7 @@ export const customInstance = <T>(
     cancelToken: source.token,
   }).then(({ data }) => data);
 
-  // @ts-ignore
+  // @ts-expect-error orval 취소 연동용으로 Promise에 cancel을 붙임
   promise.cancel = () => source.cancel('Query was cancelled');
   return promise;
 };

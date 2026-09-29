@@ -12,5 +12,6 @@ export interface SkuCreateReqDto {
   colorId?: number;
   materialId?: number;
   price: number;
+  salePrice?: number;
   stockQuantity: number;
 }

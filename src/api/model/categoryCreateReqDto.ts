@@ -15,5 +15,5 @@ export interface CategoryCreateReqDto {
    */
   name: string;
   parentId?: number;
-  sortOrder?: number;
+  sortOrder: number;
 }

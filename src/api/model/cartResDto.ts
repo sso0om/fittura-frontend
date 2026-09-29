@@ -9,5 +9,4 @@ import type { CartItemResDto } from './cartItemResDto';
 export interface CartResDto {
   cartId?: number;
   items?: CartItemResDto[];
-  totalPrice?: number;
 }

@@ -1,10 +1,14 @@
 "use client";
 
-import { Minus, Plus, X } from "lucide-react";
+import { X } from "lucide-react";
 
 import { formatPrice } from "@/lib/format";
+import { NumberFieldStepper } from "@/components/ui/number-field";
 import type { SkuResDto } from "@/api/model";
-import { getSkuVariantLabel } from "@/components/product/sku-select";
+import { getSkuVariantLabel } from "@/lib/sku-label";
+import { SOLD_OUT, unavailableSaleStatusLabel } from "@/lib/sale-status";
+
+const MIN_QUANTITY = 1;
 
 export interface SelectedSkuItem {
   sku: SkuResDto;
@@ -30,6 +34,9 @@ export function SelectedSkuList({
         const skuId = item.sku.id;
         if (skuId == null) return null;
 
+        const { originalPrice, salePrice, discountRate } = item.sku;
+        const hasDiscount = (discountRate ?? 0) > 0;
+
         return (
           <div
             key={skuId}
@@ -38,6 +45,11 @@ export function SelectedSkuList({
             <div className="flex items-start justify-between gap-2">
               <span className="text-sm font-medium">
                 {getSkuVariantLabel(item.sku)}
+                {item.sku.isSoldOut && (
+                  <span className="text-destructive ml-1.5 text-xs font-semibold">
+                    {unavailableSaleStatusLabel[SOLD_OUT]}
+                  </span>
+                )}
               </span>
               <button
                 type="button"
@@ -50,31 +62,28 @@ export function SelectedSkuList({
             </div>
 
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => onQuantityChange(skuId, item.quantity - 1)}
-                  aria-label="수량 감소"
-                  className="border-border hover:bg-muted flex size-7 items-center justify-center rounded-md border"
-                >
-                  <Minus className="size-3.5" />
-                </button>
-                <span className="w-5 text-center text-sm">
-                  {item.quantity}
-                </span>
-                <button
-                  type="button"
-                  onClick={() => onQuantityChange(skuId, item.quantity + 1)}
-                  aria-label="수량 증가"
-                  className="border-border hover:bg-muted flex size-7 items-center justify-center rounded-md border"
-                >
-                  <Plus className="size-3.5" />
-                </button>
-              </div>
+              <NumberFieldStepper
+                aria-label="수량"
+                value={item.quantity}
+                min={MIN_QUANTITY}
+                onValueCommit={(next) => onQuantityChange(skuId, next)}
+              />
 
-              <span className="text-foreground text-sm font-semibold">
-                {formatPrice((item.sku.price ?? 0) * item.quantity)}
-              </span>
+              <div className="flex items-baseline gap-1.5">
+                {hasDiscount && (
+                  <>
+                    <span className="text-muted-foreground text-xs line-through">
+                      {formatPrice((originalPrice ?? 0) * item.quantity)}
+                    </span>
+                    <span className="text-destructive text-xs font-bold">
+                      {discountRate}%
+                    </span>
+                  </>
+                )}
+                <span className="text-foreground text-sm font-semibold">
+                  {formatPrice((salePrice ?? 0) * item.quantity)}
+                </span>
+              </div>
             </div>
           </div>
         );

@@ -17,10 +17,13 @@ import type { ProductStatus } from './productStatus';
 export interface ProductWithAllResDto {
   attributes?: ProductAttributeResDto[];
   basePrice?: number;
+  baseSalePrice?: number;
   compositions?: CompositionResDto[];
+  deliveryFee?: number;
   deliveryType?: DeliveryType;
   depth?: number;
   description?: string;
+  discountRate?: number;
   height?: number;
   id?: number;
   isSoldOut?: boolean;
