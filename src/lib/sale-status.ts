@@ -9,9 +9,7 @@ export const SOLD_OUT = "SOLD_OUT";
 
 /** 판매 불가 상태 */
 export type UnavailableSaleStatus =
-  | typeof SkuStatus.PAUSED
-  | typeof SkuStatus.DISCONTINUED
-  | typeof SOLD_OUT;
+  typeof SkuStatus.PAUSED | typeof SkuStatus.DISCONTINUED | typeof SOLD_OUT;
 
 export const unavailableSaleStatusLabel = {
   [SkuStatus.PAUSED]: skuStatusLabel[SkuStatus.PAUSED],
