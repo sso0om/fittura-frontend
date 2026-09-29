@@ -13,6 +13,7 @@ import { DeliveryType, type CartItemResDto } from "@/api/model";
 import { deliveryTypeLabel } from "@/lib/enum-labels";
 import { formatPrice } from "@/lib/format";
 import { Button } from "@/components/ui/button";
+import { AddressDialog } from "@/components/address/address-dialog";
 import { useSelectedAddress } from "@/components/address/use-selected-address";
 import { CartDeliverySection } from "@/components/cart/cart-delivery-section";
 import {
@@ -33,7 +34,22 @@ export function CartPageClient() {
   });
 
   // 배송지: 선택한 배송지 우선, 없으면 기본 배송지
-  const { address, isPending: isAddressPending } = useSelectedAddress();
+  const {
+    address,
+    isPending: isAddressPending,
+    selectAddress,
+    unselectIfSelected,
+  } = useSelectedAddress();
+
+  // 배송지 팝업 - 배송지가 없으면 등록 화면, 있으면 목록 화면부터 시작
+  const [addressDialog, setAddressDialog] = useState<{
+    view: "list" | "create";
+    open: boolean;
+  }>({ view: "list", open: false });
+
+  function openAddressDialog(view: "list" | "create") {
+    setAddressDialog({ view, open: true });
+  }
 
   const items = data?.data?.items ?? [];
   const policies = policyRes?.data ?? [];
@@ -43,9 +59,8 @@ export function CartPageClient() {
    * 재조회로 아이템이 추가/삭제돼도 별도 동기화 없이 선택 상태가 유지됨
    * 새로고침/페이지 이동 후에도 유지되도록 sessionStorage에 저장
    */
-  const [uncheckedIds, setUncheckedIds] = useState<Set<number>>(
-    loadCartUncheckedIds,
-  );
+  const [uncheckedIds, setUncheckedIds] =
+    useState<Set<number>>(loadCartUncheckedIds);
 
   useEffect(() => {
     saveCartUncheckedIds(uncheckedIds);
@@ -79,9 +94,7 @@ export function CartPageClient() {
     );
     const selectableItems = sectionItems.filter(isCartItemSelectable);
     const selectedItems = selectableItems.filter(isItemChecked);
-    const policy = policies.find(
-      (p) => p.deliveryType === deliveryType,
-    );
+    const policy = policies.find((p) => p.deliveryType === deliveryType);
     const amount = sumCartItems(selectedItems);
 
     return {
@@ -175,7 +188,12 @@ export function CartPageClient() {
               <span className="text-[15px] font-semibold">
                 {address.addressName}
               </span>
-              <Button type="button" variant="outline" size="sm">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={() => openAddressDialog("list")}
+              >
                 변경
               </Button>
             </div>
@@ -186,12 +204,26 @@ export function CartPageClient() {
           </>
         ) : (
           <div>
-            <Button type="button" variant="outline" size="sm">
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => openAddressDialog("create")}
+            >
               배송지 추가하기
             </Button>
           </div>
         )}
       </div>
+
+      <AddressDialog
+        open={addressDialog.open}
+        onOpenChange={(open) => setAddressDialog((prev) => ({ ...prev, open }))}
+        initialView={addressDialog.view}
+        currentAddressId={address?.addressId ?? null}
+        onSelectOnce={selectAddress}
+        onAddressDeleted={unselectIfSelected}
+      />
 
       {items.length === 0 ? (
         <div className="border-border rounded-xl border py-20 text-center">

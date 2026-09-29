@@ -13,5 +13,7 @@ export interface MemberAddressResDto {
   defaultAddress?: boolean;
   phoneNumber?: string;
   receiverName?: string;
+  sido?: string;
+  sigungu?: string;
   zipCode?: string;
 }

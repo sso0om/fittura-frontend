@@ -50,8 +50,25 @@ export function clearSelectedAddressId(): void {
 export function useSelectedAddress(): {
   address: MemberAddressResDto | null;
   isPending: boolean;
+  /** 이번 주문에만 사용할 배송지로 지정 (기본 배송지는 바꾸지 않음) */
+  selectAddress: (addressId: number) => void;
+  /** 배송지 삭제 시 - 선택한 배송지였다면 선택 해제 (기본 배송지로 전환) */
+  unselectIfSelected: (addressId: number) => void;
 } {
-  const [selectedId] = useState<number | null>(loadSelectedAddressId);
+  const [selectedId, setSelectedId] = useState<number | null>(
+    loadSelectedAddressId,
+  );
+
+  function selectAddress(addressId: number) {
+    saveSelectedAddressId(addressId);
+    setSelectedId(addressId);
+  }
+
+  function unselectIfSelected(addressId: number) {
+    if (selectedId !== addressId) return;
+    clearSelectedAddressId();
+    setSelectedId(null);
+  }
 
   const selectedQuery = useGetAddress(selectedId ?? 0, {
     query: { enabled: selectedId != null, retry: false },
@@ -72,5 +89,7 @@ export function useSelectedAddress(): {
   return {
     address: query.data?.data ?? null,
     isPending: query.isPending,
+    selectAddress,
+    unselectIfSelected,
   };
 }
