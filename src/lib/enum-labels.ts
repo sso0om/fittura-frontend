@@ -1,6 +1,7 @@
 import {
   AttributeKey,
   CategoryStatus,
+  DeliveryType,
   ProductStatus,
   ProductType,
   SkuStatus,
@@ -30,10 +31,15 @@ export const productTypeLabel = {
 
 export const skuStatusLabel = {
   [SkuStatus.ACTIVE]: "판매 중",
-  [SkuStatus.SOLDOUT]: "일시 품절",
+  [SkuStatus.PAUSED]: "판매 중지",
   [SkuStatus.DISCONTINUED]: "품절",
   [SkuStatus.ARCHIVED]: "삭제",
 } satisfies Record<SkuStatus, string>;
+
+export const deliveryTypeLabel = {
+  [DeliveryType.PARCEL]: "일반 배송",
+  [DeliveryType.INSTALLATION]: "기사 배송",
+} satisfies Record<DeliveryType, string>;
 
 export const attributeKeyLabel = {
   [AttributeKey.SIZE_LABEL]: "SIZE",

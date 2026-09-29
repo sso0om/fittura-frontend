@@ -9,6 +9,10 @@
  * 장바구니 상품 추가 요청 DTO
  */
 export interface CartItemCreateReqDto {
+  /**
+   * @minimum 1
+   * @maximum 999
+   */
   quantity: number;
   skuId: number;
 }

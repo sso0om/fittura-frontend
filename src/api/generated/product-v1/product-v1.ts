@@ -23,6 +23,7 @@ import type {
   GetProducts1Params,
   RsDataListCompositionResDto,
   RsDataListProductAttributeResDto,
+  RsDataListSkuResDto,
   RsDataPageProductResDto,
   RsDataProductFilterResDto,
   RsDataProductWithSkuResDto
@@ -487,6 +488,98 @@ export function useGetProductCompositions<TData = Awaited<ReturnType<typeof getP
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
   const queryOptions = getGetProductCompositionsQueryOptions(productId,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+/**
+ * 제품의 SKU 목록 조회 API
+ * @summary SKU 목록 조회
+ */
+export const getProductSkus = (
+    productId: number,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<RsDataListSkuResDto>(
+      {url: `/api/v1/products/${productId}/skus`, method: 'GET', signal
+    },
+      options);
+    }
+  
+
+
+
+export const getGetProductSkusQueryKey = (productId?: number,) => {
+    return [
+    `/api/v1/products/${productId}/skus`
+    ] as const;
+    }
+
+    
+export const getGetProductSkusQueryOptions = <TData = Awaited<ReturnType<typeof getProductSkus>>, TError = ErrorType<unknown>>(productId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getProductSkus>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetProductSkusQueryKey(productId);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getProductSkus>>> = ({ signal }) => getProductSkus(productId, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(productId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getProductSkus>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetProductSkusQueryResult = NonNullable<Awaited<ReturnType<typeof getProductSkus>>>
+export type GetProductSkusQueryError = ErrorType<unknown>
+
+
+export function useGetProductSkus<TData = Awaited<ReturnType<typeof getProductSkus>>, TError = ErrorType<unknown>>(
+ productId: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getProductSkus>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getProductSkus>>,
+          TError,
+          Awaited<ReturnType<typeof getProductSkus>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetProductSkus<TData = Awaited<ReturnType<typeof getProductSkus>>, TError = ErrorType<unknown>>(
+ productId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getProductSkus>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getProductSkus>>,
+          TError,
+          Awaited<ReturnType<typeof getProductSkus>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetProductSkus<TData = Awaited<ReturnType<typeof getProductSkus>>, TError = ErrorType<unknown>>(
+ productId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getProductSkus>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary SKU 목록 조회
+ */
+
+export function useGetProductSkus<TData = Awaited<ReturnType<typeof getProductSkus>>, TError = ErrorType<unknown>>(
+ productId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getProductSkus>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetProductSkusQueryOptions(productId,options)
 
   const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 

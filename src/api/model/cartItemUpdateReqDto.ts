@@ -9,5 +9,9 @@
  * 장바구니 수정 요청 DTO
  */
 export interface CartItemUpdateReqDto {
-  quantity?: number;
+  /**
+   * @minimum 1
+   * @maximum 999
+   */
+  quantity: number;
 }

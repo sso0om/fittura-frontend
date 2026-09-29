@@ -25,6 +25,7 @@ import type {
 
 import type {
   CartItemCreateReqDto,
+  CartItemSkuUpdateReqDto,
   CartItemUpdateReqDto,
   RsDataCartResDto,
   RsDataVoid
@@ -319,6 +320,71 @@ export const useUpdateCartItem = <TError = ErrorType<unknown>,
       > => {
 
       const mutationOptions = getUpdateCartItemMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    /**
+ * 장바구니 제품의 SKU 변경 API
+ * @summary 장바구니 제품 옵션 변경
+ */
+export const updateCartItemSku = (
+    itemId: number,
+    cartItemSkuUpdateReqDto: BodyType<CartItemSkuUpdateReqDto>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<RsDataVoid>(
+      {url: `/api/v1/cart/items/${itemId}/sku`, method: 'PATCH',
+      headers: {'Content-Type': 'application/json', },
+      data: cartItemSkuUpdateReqDto
+    },
+      options);
+    }
+  
+
+
+export const getUpdateCartItemSkuMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateCartItemSku>>, TError,{itemId: number;data: BodyType<CartItemSkuUpdateReqDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof updateCartItemSku>>, TError,{itemId: number;data: BodyType<CartItemSkuUpdateReqDto>}, TContext> => {
+
+const mutationKey = ['updateCartItemSku'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateCartItemSku>>, {itemId: number;data: BodyType<CartItemSkuUpdateReqDto>}> = (props) => {
+          const {itemId,data} = props ?? {};
+
+          return  updateCartItemSku(itemId,data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpdateCartItemSkuMutationResult = NonNullable<Awaited<ReturnType<typeof updateCartItemSku>>>
+    export type UpdateCartItemSkuMutationBody = BodyType<CartItemSkuUpdateReqDto>
+    export type UpdateCartItemSkuMutationError = ErrorType<unknown>
+
+    /**
+ * @summary 장바구니 제품 옵션 변경
+ */
+export const useUpdateCartItemSku = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateCartItemSku>>, TError,{itemId: number;data: BodyType<CartItemSkuUpdateReqDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof updateCartItemSku>>,
+        TError,
+        {itemId: number;data: BodyType<CartItemSkuUpdateReqDto>},
+        TContext
+      > => {
+
+      const mutationOptions = getUpdateCartItemSkuMutationOptions(options);
 
       return useMutation(mutationOptions, queryClient);
     }

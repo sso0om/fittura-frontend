@@ -90,28 +90,28 @@ export const useDiscontinueSku = <TError = ErrorType<unknown>,
       return useMutation(mutationOptions, queryClient);
     }
     /**
- * SKU 일시품절 직접 처리
- * @summary SKU 일시품절
+ * SKU 일시 중단 API
+ * @summary SKU 일시 중단
  */
-export const soldOutSku = (
+export const pauseSku = (
     productId: number,
     skuId: number,
  options?: SecondParameter<typeof customInstance>,) => {
       
       
       return customInstance<RsDataVoid>(
-      {url: `/api/admin/v1/products/${productId}/skus/${skuId}/soldout`, method: 'PATCH'
+      {url: `/api/admin/v1/products/${productId}/skus/${skuId}/pause`, method: 'PATCH'
     },
       options);
     }
   
 
 
-export const getSoldOutSkuMutationOptions = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof soldOutSku>>, TError,{productId: number;skuId: number}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof soldOutSku>>, TError,{productId: number;skuId: number}, TContext> => {
+export const getPauseSkuMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof pauseSku>>, TError,{productId: number;skuId: number}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof pauseSku>>, TError,{productId: number;skuId: number}, TContext> => {
 
-const mutationKey = ['soldOutSku'];
+const mutationKey = ['pauseSku'];
 const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
@@ -121,10 +121,10 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof soldOutSku>>, {productId: number;skuId: number}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof pauseSku>>, {productId: number;skuId: number}> = (props) => {
           const {productId,skuId} = props ?? {};
 
-          return  soldOutSku(productId,skuId,requestOptions)
+          return  pauseSku(productId,skuId,requestOptions)
         }
 
         
@@ -132,23 +132,23 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
   return  { mutationFn, ...mutationOptions }}
 
-    export type SoldOutSkuMutationResult = NonNullable<Awaited<ReturnType<typeof soldOutSku>>>
+    export type PauseSkuMutationResult = NonNullable<Awaited<ReturnType<typeof pauseSku>>>
     
-    export type SoldOutSkuMutationError = ErrorType<unknown>
+    export type PauseSkuMutationError = ErrorType<unknown>
 
     /**
- * @summary SKU 일시품절
+ * @summary SKU 일시 중단
  */
-export const useSoldOutSku = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof soldOutSku>>, TError,{productId: number;skuId: number}, TContext>, request?: SecondParameter<typeof customInstance>}
+export const usePauseSku = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof pauseSku>>, TError,{productId: number;skuId: number}, TContext>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof soldOutSku>>,
+        Awaited<ReturnType<typeof pauseSku>>,
         TError,
         {productId: number;skuId: number},
         TContext
       > => {
 
-      const mutationOptions = getSoldOutSkuMutationOptions(options);
+      const mutationOptions = getPauseSkuMutationOptions(options);
 
       return useMutation(mutationOptions, queryClient);
     }
