@@ -15,7 +15,7 @@ export interface SkuWithStockResDto {
   id?: number;
   isSoldOut?: boolean;
   material?: string;
-  price?: number;
+  originalPrice?: number;
   reservedQuantity?: number;
   salePrice?: number;
   status?: SkuStatus;

@@ -7,7 +7,7 @@ import { cn } from "cn";
 import {
   useChangeDefaultMemberAddress,
   useGetMemberAddresses,
-} from "@/api/generated/auth-v1/auth-v1";
+} from "@/api/generated/memberaddress-v1/memberaddress-v1";
 import type { MemberAddressResDto } from "@/api/model";
 import { useInvalidateAddresses } from "@/components/address/use-invalidate-addresses";
 import { formatPhoneNumber } from "@/lib/format";

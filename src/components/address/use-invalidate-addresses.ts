@@ -1,6 +1,6 @@
 import { useQueryClient } from "@tanstack/react-query";
 
-import { getGetMemberAddressesQueryKey } from "@/api/generated/auth-v1/auth-v1";
+import { getGetMemberAddressesQueryKey } from "@/api/generated/memberaddress-v1/memberaddress-v1";
 
 /** 배송지 API 쿼리 키 공통 접두사 (/api/v1/memberAddress) */
 const ADDRESS_KEY_PREFIX = getGetMemberAddressesQueryKey()[0];

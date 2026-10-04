@@ -14,7 +14,7 @@ export interface OrderCreateReqDto {
    * @minItems 1
    * @maxItems 2147483647
    */
-  cartItems: number[];
+  cartItemIds: number[];
   orderAddress: AddressCreateReqDto;
   pointUsedAmount: number;
 }

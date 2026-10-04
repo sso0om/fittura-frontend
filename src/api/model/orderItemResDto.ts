@@ -13,10 +13,11 @@ export interface OrderItemResDto {
   discountAmount?: number;
   id?: number;
   itemTotalAmount?: number;
+  originalPrice?: number;
   productName?: string;
   quantity?: number;
+  salePrice?: number;
   skuId?: number;
   skuIdentifier?: string;
   status?: OrderItemStatus;
-  unitPrice?: number;
 }

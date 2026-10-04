@@ -16,7 +16,7 @@ import type { ProductStatus } from './productStatus';
  */
 export interface ProductWithAllResDto {
   attributes?: ProductAttributeResDto[];
-  basePrice?: number;
+  baseOriginalPrice?: number;
   baseSalePrice?: number;
   compositions?: CompositionResDto[];
   deliveryFee?: number;

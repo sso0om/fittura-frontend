@@ -169,7 +169,7 @@ export function ProductPageClient({ productId }: ProductPageClientProps) {
           <div className="flex flex-col gap-1">
             {hasDiscount && (
               <span className="text-muted-foreground text-sm line-through">
-                {formatPrice(product?.basePrice ?? 0)}
+                {formatPrice(product?.baseOriginalPrice ?? 0)}
               </span>
             )}
             <div className="flex items-baseline gap-2.5">
@@ -179,7 +179,7 @@ export function ProductPageClient({ productId }: ProductPageClientProps) {
                 </span>
               )}
               <span className="text-foreground text-[28px] font-extrabold">
-                {formatPrice(product?.baseSalePrice ?? product?.basePrice ?? 0)}
+                {formatPrice(product?.baseSalePrice ?? product?.baseOriginalPrice ?? 0)}
               </span>
             </div>
           </div>

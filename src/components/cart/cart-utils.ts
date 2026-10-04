@@ -22,7 +22,7 @@ export interface CartItemsAmount {
   originalTotal: number;
   /** 상품 할인 합 */
   discountTotal: number;
-  /** 할인 후 상품 금액 합 (itemTotalPrice) - 배송비 제외 */
+  /** 할인 후 상품 금액 합 (itemTotalAmount) - 배송비 제외 */
   itemTotal: number;
 }
 
@@ -32,7 +32,7 @@ export function sumCartItems(items: CartItemResDto[]): CartItemsAmount {
 
   for (const item of items) {
     originalTotal += (item.originalPrice ?? 0) * (item.quantity ?? 0);
-    itemTotal += item.itemTotalPrice ?? 0;
+    itemTotal += item.itemTotalAmount ?? 0;
   }
 
   return {

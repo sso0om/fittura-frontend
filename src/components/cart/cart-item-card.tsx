@@ -45,7 +45,7 @@ export function CartItemCard({
     discountRate,
     salePrice,
     quantity = MIN_QUANTITY,
-    itemTotalPrice,
+    itemTotalAmount,
   } = item;
 
   const [isOptionDialogOpen, setIsOptionDialogOpen] = useState(false);
@@ -215,7 +215,7 @@ export function CartItemCard({
             옵션 선택
           </Button>
           <span className="text-base font-extrabold">
-            {formatPrice(itemTotalPrice ?? 0)}
+            {formatPrice(itemTotalAmount ?? 0)}
           </span>
         </div>
       </div>
