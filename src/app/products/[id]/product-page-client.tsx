@@ -24,6 +24,7 @@ import {
 import { getSkuVariantLabel } from "@/lib/sku-label";
 import { NoticeDialog } from "@/components/ui/notice-dialog";
 import { CartAddedDialog } from "@/components/product/cart-added-dialog";
+import { buildOrderUrl } from "@/components/order/order-source";
 import {
   UnavailableOptionsDialog,
   type UnavailableOption,
@@ -125,7 +126,15 @@ export function ProductPageClient({ productId }: ProductPageClientProps) {
       return;
     }
 
-    // TODO: 주문 기능 연동
+    router.push(
+      buildOrderUrl({
+        type: "direct",
+        orderSkus: items.map((item) => ({
+          skuId: item.sku.id!,
+          quantity: item.quantity,
+        })),
+      }),
+    );
   }
 
   const orderTotal = items.reduce(

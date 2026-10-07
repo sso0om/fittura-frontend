@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
 
 import {
@@ -16,6 +17,7 @@ import { Button } from "@/components/ui/button";
 import { AddressDialog } from "@/components/address/address-dialog";
 import { useSelectedAddress } from "@/components/address/use-selected-address";
 import { CartDeliverySection } from "@/components/cart/cart-delivery-section";
+import { buildOrderUrl } from "@/components/order/order-source";
 import {
   calcDeliveryFee,
   getDeliveryNotice,
@@ -67,6 +69,7 @@ export function CartPageClient() {
   }, [uncheckedIds]);
 
   const queryClient = useQueryClient();
+  const router = useRouter();
   const [isDeletingSelected, setIsDeletingSelected] = useState(false);
 
   function isItemChecked(item: CartItemResDto): boolean {
@@ -155,6 +158,17 @@ export function CartPageClient() {
   }
   const isAllChecked =
     allSelectableItems.length > 0 && allSelectableItems.every(isItemChecked);
+
+  function handleOrder() {
+    if (checkedItems.length === 0) return;
+
+    router.push(
+      buildOrderUrl({
+        type: "cart",
+        cartItemIds: checkedItems.map((item) => item.cartItemId as number),
+      }),
+    );
+  }
 
   if (isPending) {
     return (
@@ -312,7 +326,9 @@ export function CartPageClient() {
 
             <button
               type="button"
-              className="bg-primary text-primary-foreground hover:bg-primary/90 h-[52px] w-full rounded-lg text-[15px] font-bold"
+              onClick={handleOrder}
+              disabled={checkedItems.length === 0}
+              className="bg-primary text-primary-foreground hover:bg-primary/90 h-[52px] w-full rounded-lg text-[15px] font-bold disabled:pointer-events-none disabled:opacity-50"
             >
               주문하기
             </button>
