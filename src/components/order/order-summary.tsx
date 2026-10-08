@@ -60,8 +60,8 @@ export function OrderSummary({ preview, isRefreshing }: OrderSummaryProps) {
       <hr className="border-border" />
 
       <div className="flex items-center justify-between">
-        <span className="text-primary text-[15px] font-bold">결제 예정금액</span>
-        <span className="text-primary text-2xl font-extrabold">
+        <span className="text-price text-[15px] font-bold">결제 예정금액</span>
+        <span className="text-price text-2xl font-extrabold">
           {formatPrice(finalAmount)}
         </span>
       </div>

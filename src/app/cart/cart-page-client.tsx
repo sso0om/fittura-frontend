@@ -318,8 +318,10 @@ export function CartPageClient() {
             <hr className="border-border" />
 
             <div className="flex items-center justify-between">
-              <span className="text-[15px] font-bold">총 결제예정금액</span>
-              <span className="text-xl font-extrabold">
+              <span className="text-price text-[15px] font-bold">
+                총 결제예정금액
+              </span>
+              <span className="text-price text-xl font-extrabold">
                 {formatPrice(totalPaymentAmount)}
               </span>
             </div>

@@ -33,7 +33,7 @@ export function AllCategoriesMenu() {
 
   if (topLevel.length === 0) {
     return (
-      <span className="text-muted-foreground hidden text-sm font-medium md:inline-block">
+      <span className="hidden text-sm font-medium text-white/70 md:inline-block">
         전체 카테고리
       </span>
     );
@@ -48,7 +48,7 @@ export function AllCategoriesMenu() {
       <button
         type="button"
         onClick={() => setClickOpen((prev) => !prev)}
-        className="text-foreground/80 hover:text-foreground text-sm font-medium transition-colors"
+        className="text-sm font-medium text-white/85 transition-colors hover:text-white"
       >
         전체 카테고리
       </button>

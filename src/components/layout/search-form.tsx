@@ -9,12 +9,15 @@ import { Input } from "@/components/ui/input";
 
 interface SearchFormProps {
   className?: string;
+  /** 입력창 스타일 덧씌우기 (어두운 헤더 배경 위에서 쓸 때) */
+  inputClassName?: string;
   onNavigate?: () => void;
   autoFocus?: boolean;
 }
 
 export function SearchForm({
   className,
+  inputClassName,
   onNavigate,
   autoFocus,
 }: SearchFormProps) {
@@ -44,7 +47,7 @@ export function SearchForm({
         onChange={(event) => setKeyword(event.target.value)}
         placeholder="상품을 검색해 보세요"
         aria-label="상품 검색"
-        className="pl-8"
+        className={cn("pl-8", inputClassName)}
         autoFocus={autoFocus}
       />
     </form>
