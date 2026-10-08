@@ -21,6 +21,11 @@ export function parsePositiveIntList(values: string[]): number[] {
     .filter((value): value is number => value !== null);
 }
 
+// ========== 수량 ==========
+
+/** 주문·장바구니 수량 최소값 (서버 검증과 동일) */
+export const MIN_QUANTITY = 1;
+
 // ========== 일반 텍스트 ==========
 
 /** 문자(모든 언어), 숫자, 공백만 허용 - 특수문자 불가 */

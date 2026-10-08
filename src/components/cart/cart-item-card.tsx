@@ -19,10 +19,9 @@ import {
 import { Button } from "@/components/ui/button";
 import { NumberFieldStepper } from "@/components/ui/number-field";
 import { getSkuVariantLabel } from "@/lib/sku-label";
+import { MIN_QUANTITY } from "@/lib/validation";
 import { OptionChangeDialog } from "@/components/cart/option-change-dialog";
 import { ProductThumbnail } from "@/components/product/product-thumbnail";
-
-const MIN_QUANTITY = 1;
 
 export interface CartItemCardProps {
   item: CartItemResDto;

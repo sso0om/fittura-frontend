@@ -32,8 +32,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { getSkuLabel } from "@/lib/sku-label";
+import { MIN_QUANTITY } from "@/lib/validation";
 
-const MIN_QUANTITY = 1;
 const DUPLICATED_MESSAGE = "이미 장바구니에 담긴 옵션입니다.";
 
 export interface OptionChangeDialogProps {
@@ -101,7 +101,7 @@ export function OptionChangeDialog({
 
   function handleValueChange(value: number | null) {
     if (value == null) return;
-    const sku = skus.find((item) => item.id === value);
+    const sku = skus.find((candidate) => candidate.id === value);
     if (sku && isInCart(sku)) {
       setNotice(DUPLICATED_MESSAGE);
       return;

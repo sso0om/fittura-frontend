@@ -7,8 +7,7 @@ import { NumberFieldStepper } from "@/components/ui/number-field";
 import type { SkuResDto } from "@/api/model";
 import { getSkuVariantLabel } from "@/lib/sku-label";
 import { SOLD_OUT, unavailableSaleStatusLabel } from "@/lib/sale-status";
-
-const MIN_QUANTITY = 1;
+import { MIN_QUANTITY } from "@/lib/validation";
 
 export interface SelectedSkuItem {
   /** sku.id를 선택 시점에 확정해 둔 값 - 이후 null 검사 없이 사용 */
