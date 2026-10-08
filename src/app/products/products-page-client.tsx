@@ -1,6 +1,5 @@
 "use client";
 
-import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 
 import { useGetProducts1 } from "@/api/generated/product-v1/product-v1";
@@ -12,25 +11,19 @@ import { ProductGrid } from "@/components/product/product-grid";
 import { ProductFilterSidebar } from "@/components/product/product-filter-sidebar";
 import { CategorySubNav } from "@/components/product/category-sub-nav";
 import { CategoryTrail } from "@/components/product/category-trail";
+import { useProductListParams } from "@/components/product/use-product-list-params";
 import { Pagination } from "@/components/ui/pagination";
-import { parsePositiveInt, parsePositiveIntList } from "@/lib/validation";
 
 const DEFAULT_SORT: ProductSort = "createdDate,desc";
 
 export function ProductsPageClient() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  // 형식이 잘못된 파라미터는 무시 (categoryId가 잘못되면 전체 목록)
-  const categoryId =
-    parsePositiveInt(searchParams.get("categoryId") ?? "") ?? undefined;
-
-  // 헤더 검색창(search-form)에서 /products?keyword= 로 이동
-  const keyword = searchParams.get("keyword")?.trim() || undefined;
-
-  const selectedColors = parsePositiveIntList(searchParams.getAll("colors"));
-  const selectedMaterials = parsePositiveIntList(
-    searchParams.getAll("materials"),
-  );
+  const {
+    categoryId,
+    keyword,
+    selectedColors,
+    selectedMaterials,
+    updateParams,
+  } = useProductListParams();
 
   const [page, setPage] = useState(0);
   const [size, setSize] = useState(20);
@@ -53,20 +46,14 @@ export function ProductsPageClient() {
     setPage(0);
   }
 
-  function updateFilterParam(key: "colors" | "materials", ids: number[]) {
-    const params = new URLSearchParams(searchParams.toString());
-    params.delete(key);
-    ids.forEach((id) => params.append(key, String(id)));
-    router.replace(`/products?${params.toString()}`, { scroll: false });
+  function handleColorsChange(colorIds: number[]) {
+    updateParams({ colors: colorIds.map(String) });
     setPage(0);
   }
 
-  function handleColorsChange(colorIds: number[]) {
-    updateFilterParam("colors", colorIds);
-  }
-
   function handleMaterialsChange(materialIds: number[]) {
-    updateFilterParam("materials", materialIds);
+    updateParams({ materials: materialIds.map(String) });
+    setPage(0);
   }
 
   const { data, isPending, isError } = useGetProducts1({
