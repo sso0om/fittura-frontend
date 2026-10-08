@@ -14,7 +14,7 @@ import { DeliveryType, type CartItemResDto } from "@/api/model";
 import { deliveryTypeLabel } from "@/lib/enum-labels";
 import { formatPrice } from "@/lib/format";
 import { Button } from "@/components/ui/button";
-import { AddressDialog } from "@/components/address/address-dialog";
+import { AddressSummary } from "@/components/address/address-summary";
 import { useSelectedAddress } from "@/components/address/use-selected-address";
 import { CartDeliverySection } from "@/components/cart/cart-delivery-section";
 import { buildOrderUrl } from "@/components/order/order-source";
@@ -42,16 +42,6 @@ export function CartPageClient() {
     selectAddress,
     unselectIfSelected,
   } = useSelectedAddress();
-
-  // 배송지 팝업 - 배송지가 없으면 등록 화면, 있으면 목록 화면부터 시작
-  const [addressDialog, setAddressDialog] = useState<{
-    view: "list" | "create";
-    open: boolean;
-  }>({ view: "list", open: false });
-
-  function openAddressDialog(view: "list" | "create") {
-    setAddressDialog({ view, open: true });
-  }
 
   const items = data?.data?.items ?? [];
   const policies = policyRes?.data ?? [];
@@ -192,51 +182,12 @@ export function CartPageClient() {
     <div className="mx-auto w-full max-w-[1160px] px-6 py-10">
       <h1 className="mb-6 text-2xl font-extrabold">장바구니</h1>
 
-      {/* 주소 정보 */}
-      <div className="border-border mb-5 flex flex-col gap-1.5 rounded-xl border p-5">
-        {isAddressPending ? (
-          <div className="bg-muted h-5 w-48 animate-pulse rounded" />
-        ) : address ? (
-          <>
-            <div className="flex items-center gap-2">
-              <span className="text-[15px] font-semibold">
-                {address.addressName}
-              </span>
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                onClick={() => openAddressDialog("list")}
-              >
-                변경
-              </Button>
-            </div>
-            <span className="text-muted-foreground text-sm">
-              [{address.zipCode}] {address.address}
-              {address.addressDetail ? ` ${address.addressDetail}` : ""}
-            </span>
-          </>
-        ) : (
-          <div>
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              onClick={() => openAddressDialog("create")}
-            >
-              배송지 추가하기
-            </Button>
-          </div>
-        )}
-      </div>
-
-      <AddressDialog
-        open={addressDialog.open}
-        onOpenChange={(open) => setAddressDialog((prev) => ({ ...prev, open }))}
-        initialView={addressDialog.view}
-        currentAddressId={address?.addressId ?? null}
-        onSelectOnce={selectAddress}
+      <AddressSummary
+        address={address}
+        isAddressPending={isAddressPending}
+        onSelectAddress={selectAddress}
         onAddressDeleted={unselectIfSelected}
+        className="border-border mb-5 rounded-xl border p-5"
       />
 
       {items.length === 0 ? (
@@ -326,14 +277,15 @@ export function CartPageClient() {
               </span>
             </div>
 
-            <button
+            <Button
               type="button"
+              size="xl"
+              className="w-full"
               onClick={handleOrder}
               disabled={checkedItems.length === 0}
-              className="bg-primary text-primary-foreground hover:bg-primary/90 h-[52px] w-full rounded-lg text-[15px] font-bold disabled:pointer-events-none disabled:opacity-50"
             >
               주문하기
-            </button>
+            </Button>
           </aside>
         </div>
       )}
