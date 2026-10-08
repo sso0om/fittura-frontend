@@ -35,13 +35,13 @@ export function ProductsPageClient() {
   const [page, setPage] = useState(0);
   const [size, setSize] = useState(20);
   const [sort, setSort] = useState<ProductSort>(DEFAULT_SORT);
-  const [activeOnly, setActiveOnly] = useState(false);
+  const [inStockOnly, setInStockOnly] = useState(false);
 
   // 카테고리 변경 시 필터/정렬/페이지 초기화
   const [trackedCategoryId, setTrackedCategoryId] = useState(categoryId);
   if (categoryId !== trackedCategoryId) {
     setTrackedCategoryId(categoryId);
-    setActiveOnly(false);
+    setInStockOnly(false);
     setSort(DEFAULT_SORT);
     setPage(0);
   }
@@ -72,7 +72,7 @@ export function ProductsPageClient() {
   const { data, isPending, isError } = useGetProducts1({
     categoryId,
     keyword,
-    inStockOnly: activeOnly,
+    inStockOnly,
     colors: selectedColors.length > 0 ? selectedColors : undefined,
     materials: selectedMaterials.length > 0 ? selectedMaterials : undefined,
     page,
@@ -90,8 +90,8 @@ export function ProductsPageClient() {
     setPage(0);
   }
 
-  function handleActiveOnlyChange(next: boolean) {
-    setActiveOnly(next);
+  function handleInStockOnlyChange(next: boolean) {
+    setInStockOnly(next);
     setPage(0);
   }
 
@@ -119,8 +119,8 @@ export function ProductsPageClient() {
             totalCount={totalCount}
             sort={sort}
             onSortChange={handleSortChange}
-            activeOnly={activeOnly}
-            onActiveOnlyChange={handleActiveOnlyChange}
+            inStockOnly={inStockOnly}
+            onInStockOnlyChange={handleInStockOnlyChange}
             pageSize={size}
             onPageSizeChange={handlePageSizeChange}
           />

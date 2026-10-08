@@ -14,7 +14,7 @@ import type { MemberAddressResDto } from "@/api/model";
  */
 const SELECTED_ADDRESS_ID_KEY = "address:selectedId";
 
-export function loadSelectedAddressId(): number | null {
+function loadSelectedAddressId(): number | null {
   if (typeof window === "undefined") return null;
   try {
     const raw = window.sessionStorage.getItem(SELECTED_ADDRESS_ID_KEY);
@@ -25,7 +25,7 @@ export function loadSelectedAddressId(): number | null {
   }
 }
 
-export function saveSelectedAddressId(id: number): void {
+function saveSelectedAddressId(id: number): void {
   try {
     window.sessionStorage.setItem(SELECTED_ADDRESS_ID_KEY, String(id));
   } catch {
@@ -33,7 +33,7 @@ export function saveSelectedAddressId(id: number): void {
   }
 }
 
-export function clearSelectedAddressId(): void {
+function clearSelectedAddressId(): void {
   try {
     window.sessionStorage.removeItem(SELECTED_ADDRESS_ID_KEY);
   } catch {

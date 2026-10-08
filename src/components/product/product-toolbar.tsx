@@ -15,8 +15,8 @@ export interface ProductToolbarProps {
   totalCount: number;
   sort: ProductSort;
   onSortChange: (sort: ProductSort) => void;
-  activeOnly: boolean;
-  onActiveOnlyChange: (activeOnly: boolean) => void;
+  inStockOnly: boolean;
+  onInStockOnlyChange: (inStockOnly: boolean) => void;
   pageSize: number;
   onPageSizeChange: (pageSize: number) => void;
 }
@@ -39,8 +39,8 @@ export function ProductToolbar({
   totalCount,
   sort,
   onSortChange,
-  activeOnly,
-  onActiveOnlyChange,
+  inStockOnly,
+  onInStockOnlyChange,
   pageSize,
   onPageSizeChange,
 }: ProductToolbarProps) {
@@ -53,8 +53,8 @@ export function ProductToolbar({
         <label className="text-foreground flex cursor-pointer items-center gap-1.5 text-[13px] select-none">
           <input
             type="checkbox"
-            checked={activeOnly}
-            onChange={(event) => onActiveOnlyChange(event.target.checked)}
+            checked={inStockOnly}
+            onChange={(event) => onInStockOnlyChange(event.target.checked)}
             className="accent-primary size-4"
           />
           품절제외
