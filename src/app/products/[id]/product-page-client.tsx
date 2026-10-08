@@ -167,7 +167,7 @@ export function ProductPageClient({ productId }: ProductPageClientProps) {
 
           {/* 별점 · 리뷰 개수 */}
           <div className="text-muted-foreground flex items-center gap-1 text-xs">
-            <Star className="fill-foreground text-foreground size-[15px]" />
+            <Star className="fill-star text-star size-[15px]" />
             <span className="text-foreground font-semibold">4.8</span>
             <span>(1,204)</span>
           </div>

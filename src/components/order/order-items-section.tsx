@@ -31,7 +31,7 @@ export function OrderItemsSection({ deliveryGroups }: OrderItemsSectionProps) {
             key={group.deliveryType}
             className="border-border overflow-hidden rounded-xl border"
           >
-            <div className="bg-muted/40 border-border flex items-center justify-between border-b px-5 py-3.5">
+            <div className="bg-foreground/8 border-border border-l-primary flex items-center justify-between border-b border-l-4 px-5 py-3.5">
               <span className="text-[15px] font-bold">
                 {group.deliveryType ? deliveryTypeLabel[group.deliveryType] : ""}
               </span>

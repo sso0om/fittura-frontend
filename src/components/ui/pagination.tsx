@@ -56,7 +56,7 @@ export function Pagination({
           className={cn(
             "flex size-8 items-center justify-center rounded-lg text-sm",
             pageIndex === page
-              ? "bg-foreground text-background font-medium"
+              ? "bg-primary text-primary-foreground font-medium"
               : "text-foreground/80 hover:bg-muted",
           )}
         >

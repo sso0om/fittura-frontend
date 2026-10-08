@@ -40,7 +40,7 @@ export function CartDeliverySection({
 }: CartDeliverySectionProps) {
   return (
     <section className="border-border overflow-hidden rounded-xl border">
-      <div className="bg-muted/40 border-border flex items-center justify-between border-b px-5 py-3.5">
+      <div className="bg-foreground/8 border-border border-l-primary flex items-center justify-between border-b border-l-4 px-5 py-3.5">
         <label className="flex items-center gap-2 text-[15px] font-bold">
           <input
             type="checkbox"
@@ -51,7 +51,7 @@ export function CartDeliverySection({
           {title}
         </label>
         {notice && (
-          <span className="text-muted-foreground text-xs">{notice}</span>
+          <span className="text-price text-xs font-medium">{notice}</span>
         )}
       </div>
 

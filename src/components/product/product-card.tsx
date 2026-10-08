@@ -126,7 +126,7 @@ export function ProductCard({
 
       {hasRating && (
         <div className="text-muted-foreground flex items-center gap-1 text-xs">
-          <Star className="fill-foreground text-foreground size-[13px]" />
+          <Star className="fill-star text-star size-[13px]" />
           <span>{rating}</span>
           <span>({reviewCount})</span>
         </div>

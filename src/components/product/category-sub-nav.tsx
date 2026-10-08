@@ -44,7 +44,7 @@ export function CategorySubNav({ categoryId }: CategorySubNavProps) {
     cn(
       "shrink-0 rounded-full border px-3.5 py-1.5 text-sm whitespace-nowrap transition-colors",
       active
-        ? "bg-foreground text-background border-foreground font-medium"
+        ? "bg-primary text-primary-foreground border-primary font-medium"
         : "border-border text-foreground/80 hover:bg-muted",
     );
 
