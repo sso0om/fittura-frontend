@@ -21,13 +21,13 @@ export interface ProductToolbarProps {
   onPageSizeChange: (pageSize: number) => void;
 }
 
-const SORT_OPTIONS: { value: ProductSort; label: string }[] = [
+export const SORT_OPTIONS: { value: ProductSort; label: string }[] = [
   { value: "createdDate,desc", label: "신상품순" },
   { value: "baseSalePrice,asc", label: "낮은 가격순" },
   { value: "baseSalePrice,desc", label: "높은 가격순" },
 ];
 
-const PAGE_SIZE_OPTIONS = [20, 40, 60, 80].map((size) => ({
+export const PAGE_SIZE_OPTIONS = [20, 40, 60, 80].map((size) => ({
   value: size,
   label: `${size}개씩`,
 }));
