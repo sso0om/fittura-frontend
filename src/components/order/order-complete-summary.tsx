@@ -1,8 +1,7 @@
-import Image from "next/image";
 import Link from "next/link";
-import { Armchair } from "lucide-react";
 
 import type { OrderWithAllResDto } from "@/api/model";
+import { ProductThumbnail } from "@/components/product/product-thumbnail";
 import { formatPhoneNumber, formatPrice } from "@/lib/format";
 
 export interface OrderCompleteSummaryProps {
@@ -26,24 +25,12 @@ export function OrderCompleteSummary({ order }: OrderCompleteSummaryProps) {
               key={item.id}
               className="border-border flex items-start gap-4 border-b py-4 text-sm last:border-b-0"
             >
-              <div className="bg-muted relative size-[64px] shrink-0 overflow-hidden rounded-lg">
-                {item.mainImageUrl ? (
-                  <Image
-                    src={item.mainImageUrl}
-                    alt=""
-                    fill
-                    sizes="64px"
-                    className="object-cover"
-                  />
-                ) : (
-                  <div className="flex size-full items-center justify-center">
-                    <Armchair
-                      className="text-muted-foreground/40 size-7"
-                      strokeWidth={1.5}
-                    />
-                  </div>
-                )}
-              </div>
+              <ProductThumbnail
+                src={item.mainImageUrl}
+                sizes="64px"
+                className="size-[64px] shrink-0 rounded-lg"
+                iconClassName="size-7"
+              />
 
               <div className="min-w-0 flex-1">
                 {item.productId != null ? (
