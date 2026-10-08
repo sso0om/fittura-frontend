@@ -27,13 +27,7 @@ export function CartPageClient() {
     query: { staleTime: Infinity, gcTime: Infinity },
   });
 
-  // 배송지: 선택한 배송지 우선, 없으면 기본 배송지
-  const {
-    address,
-    isPending: isAddressPending,
-    selectAddress,
-    unselectIfSelected,
-  } = useSelectedAddress();
+  const addressSelection = useSelectedAddress();
 
   const items = data?.data?.items ?? [];
   const policies = policyRes?.data ?? [];
@@ -107,10 +101,7 @@ export function CartPageClient() {
       <h1 className="mb-6 text-2xl font-extrabold">장바구니</h1>
 
       <AddressSummary
-        address={address}
-        isAddressPending={isAddressPending}
-        onSelectAddress={selectAddress}
-        onAddressDeleted={unselectIfSelected}
+        addressSelection={addressSelection}
         className="border-border mb-5 rounded-xl border p-5"
       />
 

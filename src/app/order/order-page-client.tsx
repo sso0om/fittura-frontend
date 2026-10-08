@@ -17,13 +17,8 @@ export function OrderPageClient() {
   const searchParams = useSearchParams();
   const source = parseOrderSource(searchParams);
 
-  // 배송지: 선택한 배송지 우선, 없으면 기본 배송지 (로딩이 끝난 뒤 미리보기 호출)
-  const {
-    address,
-    isPending: isAddressPending,
-    selectAddress,
-    unselectIfSelected,
-  } = useSelectedAddress();
+  const addressSelection = useSelectedAddress();
+  const { address, isPending: isAddressPending } = addressSelection;
 
   const [deliveryMemo, setDeliveryMemo] = useState("");
   const [notice, setNotice] = useState<string | null>(null);
@@ -94,10 +89,7 @@ export function OrderPageClient() {
         {/* 좌측: 받는 분 정보 · 주문상품 · 결제방법 */}
         <div className="min-w-0 flex-1">
           <OrderAddressSection
-            address={address}
-            isAddressPending={isAddressPending}
-            onSelectAddress={selectAddress}
-            onAddressDeleted={unselectIfSelected}
+            addressSelection={addressSelection}
             deliveryMemo={deliveryMemo}
             onDeliveryMemoChange={setDeliveryMemo}
           />

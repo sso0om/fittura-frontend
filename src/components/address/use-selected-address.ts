@@ -25,20 +25,22 @@ function loadSelectedAddressId(): number | null {
   return Number.isInteger(id) ? id : null;
 }
 
-/**
- * 화면에 보여줄 배송지
- * - 이번에 선택한 배송지(sessionStorage)가 있으면 그 배송지를 id로 조회
- * - 없으면 기본 배송지 조회 (등록된 배송지가 없으면 null)
- * - 선택한 배송지 조회 실패(삭제됨 등) 시 선택값을 지우고 기본 배송지로 전환
- */
-export function useSelectedAddress(): {
+export interface AddressSelection {
   address: MemberAddressResDto | null;
   isPending: boolean;
   /** 이번 주문에만 사용할 배송지로 지정 (기본 배송지는 바꾸지 않음) */
   selectAddress: (addressId: number) => void;
   /** 배송지 삭제 시 - 선택한 배송지였다면 선택 해제 (기본 배송지로 전환) */
   unselectIfSelected: (addressId: number) => void;
-} {
+}
+
+/**
+ * 화면에 보여줄 배송지
+ * - 이번에 선택한 배송지(sessionStorage)가 있으면 그 배송지를 id로 조회
+ * - 없으면 기본 배송지 조회 (등록된 배송지가 없으면 null)
+ * - 선택한 배송지 조회 실패(삭제됨 등) 시 선택값을 지우고 기본 배송지로 전환
+ */
+export function useSelectedAddress(): AddressSelection {
   const [selectedId, setSelectedId] = useState<number | null>(
     loadSelectedAddressId,
   );
