@@ -5,6 +5,7 @@ import {
   isCartItemChecked,
   isCartItemSelectable,
 } from "@/components/cart/cart-utils";
+import { readSession, writeSession } from "@/lib/session-storage";
 
 /**
  * 장바구니 선택 해제 상태 보관 (sessionStorage)
@@ -14,9 +15,8 @@ import {
 const CART_UNCHECKED_IDS_KEY = "cart:uncheckedIds";
 
 function loadCartUncheckedIds(): Set<number> {
-  if (typeof window === "undefined") return new Set();
   try {
-    const raw = window.sessionStorage.getItem(CART_UNCHECKED_IDS_KEY);
+    const raw = readSession(CART_UNCHECKED_IDS_KEY);
     const parsed: unknown = raw ? JSON.parse(raw) : [];
     return new Set(
       Array.isArray(parsed)
@@ -25,17 +25,6 @@ function loadCartUncheckedIds(): Set<number> {
     );
   } catch {
     return new Set();
-  }
-}
-
-function saveCartUncheckedIds(ids: Set<number>): void {
-  try {
-    window.sessionStorage.setItem(
-      CART_UNCHECKED_IDS_KEY,
-      JSON.stringify([...ids]),
-    );
-  } catch {
-    // 저장 실패 시 무시 - 선택 상태만 유지되지 않을 뿐 기능에는 영향 없음
   }
 }
 
@@ -48,7 +37,8 @@ export function useCartSelection() {
     useState<Set<number>>(loadCartUncheckedIds);
 
   useEffect(() => {
-    saveCartUncheckedIds(uncheckedIds);
+    // 저장 실패 시 선택 상태만 유지되지 않을 뿐 기능에는 영향 없음
+    writeSession(CART_UNCHECKED_IDS_KEY, JSON.stringify([...uncheckedIds]));
   }, [uncheckedIds]);
 
   function isItemChecked(item: CartItemResDto): boolean {

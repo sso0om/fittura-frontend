@@ -5,6 +5,11 @@ import {
   useGetDefaultAddress,
 } from "@/api/generated/memberaddress-v1/memberaddress-v1";
 import type { MemberAddressResDto } from "@/api/model";
+import {
+  readSession,
+  removeSession,
+  writeSession,
+} from "@/lib/session-storage";
 
 /**
  * 이번 주문에 사용할 배송지 id 보관 (sessionStorage)
@@ -15,30 +20,9 @@ import type { MemberAddressResDto } from "@/api/model";
 const SELECTED_ADDRESS_ID_KEY = "address:selectedId";
 
 function loadSelectedAddressId(): number | null {
-  if (typeof window === "undefined") return null;
-  try {
-    const raw = window.sessionStorage.getItem(SELECTED_ADDRESS_ID_KEY);
-    const id = raw == null ? NaN : Number(raw);
-    return Number.isInteger(id) ? id : null;
-  } catch {
-    return null;
-  }
-}
-
-function saveSelectedAddressId(id: number): void {
-  try {
-    window.sessionStorage.setItem(SELECTED_ADDRESS_ID_KEY, String(id));
-  } catch {
-    // 저장 실패 시 무시 - 선택 배송지만 유지되지 않고 기본 배송지로 동작
-  }
-}
-
-function clearSelectedAddressId(): void {
-  try {
-    window.sessionStorage.removeItem(SELECTED_ADDRESS_ID_KEY);
-  } catch {
-    // 무시
-  }
+  const raw = readSession(SELECTED_ADDRESS_ID_KEY);
+  const id = raw == null ? NaN : Number(raw);
+  return Number.isInteger(id) ? id : null;
 }
 
 /**
@@ -60,13 +44,14 @@ export function useSelectedAddress(): {
   );
 
   function selectAddress(addressId: number) {
-    saveSelectedAddressId(addressId);
+    // 저장 실패 시 선택 배송지만 유지되지 않고 기본 배송지로 동작
+    writeSession(SELECTED_ADDRESS_ID_KEY, String(addressId));
     setSelectedId(addressId);
   }
 
   function unselectIfSelected(addressId: number) {
     if (selectedId !== addressId) return;
-    clearSelectedAddressId();
+    removeSession(SELECTED_ADDRESS_ID_KEY);
     setSelectedId(null);
   }
 
@@ -81,7 +66,7 @@ export function useSelectedAddress(): {
 
   // 조회 실패한 선택값은 저장소에서도 제거 -> 다음 진입부터 기본 배송지로 시작
   useEffect(() => {
-    if (selectedQuery.isError) clearSelectedAddressId();
+    if (selectedQuery.isError) removeSession(SELECTED_ADDRESS_ID_KEY);
   }, [selectedQuery.isError]);
 
   const query = hasValidSelection ? selectedQuery : defaultQuery;
