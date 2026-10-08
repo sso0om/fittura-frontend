@@ -260,22 +260,25 @@ export function ProductPageClient({ productId }: ProductPageClientProps) {
 
           {/* 장바구니 · 바로구매 */}
           <div className="mt-1 flex gap-2.5">
-            <button
+            <Button
               type="button"
+              variant="outline"
+              size="xl"
+              className="flex-1 font-semibold"
               onClick={handleAddToCart}
               disabled={items.length === 0 || isAddingToCart}
-              className="border-border hover:bg-muted disabled:pointer-events-none disabled:opacity-50 h-[52px] flex-1 rounded-lg border text-[15px] font-semibold"
             >
               장바구니
-            </button>
-            <button
+            </Button>
+            <Button
               type="button"
+              size="xl"
+              className="flex-1"
               onClick={handleBuyNow}
               disabled={items.length === 0}
-              className="bg-primary text-primary-foreground hover:bg-primary/90 disabled:pointer-events-none disabled:opacity-50 h-[52px] flex-1 rounded-lg text-[15px] font-bold"
             >
               바로구매
-            </button>
+            </Button>
           </div>
         </div>
       </div>

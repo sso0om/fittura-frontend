@@ -1,4 +1,5 @@
 import type { OrderPreviewResDto } from "@/api/model";
+import { Button } from "@/components/ui/button";
 import { formatPrice } from "@/lib/format";
 
 export interface OrderSummaryProps {
@@ -75,14 +76,15 @@ export function OrderSummary({
       </div>
 
       {/* 재계산 중에는 이전 금액이 보이므로 결제 불가 */}
-      <button
+      <Button
         type="button"
+        size="xl"
+        className="w-full"
         disabled={isPaying || isRefreshing}
         onClick={onPay}
-        className="bg-primary text-primary-foreground h-[52px] w-full rounded-lg text-[15px] font-bold disabled:pointer-events-none disabled:opacity-50"
       >
         {isPaying ? "결제 진행 중..." : `${formatPrice(finalAmount)} 결제하기`}
-      </button>
+      </Button>
     </aside>
   );
 }
