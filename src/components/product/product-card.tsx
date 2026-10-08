@@ -1,8 +1,8 @@
-import Image from "next/image";
 import Link from "next/link";
-import { Armchair, Heart, Star } from "lucide-react";
+import { Heart, Star } from "lucide-react";
 
 import { cn } from "cn";
+import { ProductThumbnail } from "@/components/product/product-thumbnail";
 import { formatPrice } from "@/lib/format";
 
 export interface ProductCardProps {
@@ -52,24 +52,13 @@ export function ProductCard({
         className="absolute inset-0 z-[1] rounded-2xl"
       />
 
-      <div className="bg-muted relative aspect-square w-full overflow-hidden rounded-2xl">
-        {mainImageUrl ? (
-          <Image
-            src={mainImageUrl}
-            alt=""
-            fill
-            sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
-            className="object-cover transition-transform group-hover:scale-[1.03]"
-          />
-        ) : (
-          <div className="flex size-full items-center justify-center">
-            <Armchair
-              className="text-muted-foreground/40 size-14"
-              strokeWidth={1.5}
-            />
-          </div>
-        )}
-
+      <ProductThumbnail
+        src={mainImageUrl}
+        sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
+        className="aspect-square w-full rounded-2xl"
+        imageClassName="transition-transform group-hover:scale-[1.03]"
+        iconClassName="size-14"
+      >
         {/* 좋아요 - 추가 예정 (disabled)*/}
         <button
           type="button"
@@ -97,7 +86,7 @@ export function ProductCard({
             </span>
           </div>
         )}
-      </div>
+      </ProductThumbnail>
 
       <Link
         href={href}

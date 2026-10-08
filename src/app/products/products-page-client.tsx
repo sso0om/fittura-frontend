@@ -13,20 +13,24 @@ import { ProductFilterSidebar } from "@/components/product/product-filter-sideba
 import { CategorySubNav } from "@/components/product/category-sub-nav";
 import { CategoryTrail } from "@/components/product/category-trail";
 import { Pagination } from "@/components/ui/pagination";
+import { parsePositiveInt, parsePositiveIntList } from "@/lib/validation";
 
 const DEFAULT_SORT: ProductSort = "createdDate,desc";
 
 export function ProductsPageClient() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const categoryIdParam = searchParams.get("categoryId");
-  const categoryId = categoryIdParam ? Number(categoryIdParam) : undefined;
+  // 형식이 잘못된 파라미터는 무시 (categoryId가 잘못되면 전체 목록)
+  const categoryId =
+    parsePositiveInt(searchParams.get("categoryId") ?? "") ?? undefined;
 
   // 헤더 검색창(search-form)에서 /products?keyword= 로 이동
   const keyword = searchParams.get("keyword")?.trim() || undefined;
 
-  const selectedColors = searchParams.getAll("colors").map(Number);
-  const selectedMaterials = searchParams.getAll("materials").map(Number);
+  const selectedColors = parsePositiveIntList(searchParams.getAll("colors"));
+  const selectedMaterials = parsePositiveIntList(
+    searchParams.getAll("materials"),
+  );
 
   const [page, setPage] = useState(0);
   const [size, setSize] = useState(20);

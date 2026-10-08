@@ -1,11 +1,10 @@
-import Image from "next/image";
 import Link from "next/link";
-import { Armchair } from "lucide-react";
 
 import type {
   DeliveryGroupResDto,
   OrderPreviewItemResDto,
 } from "@/api/model";
+import { ProductThumbnail } from "@/components/product/product-thumbnail";
 import { deliveryTypeLabel } from "@/lib/enum-labels";
 import { formatPrice } from "@/lib/format";
 import { getSkuVariantLabel } from "@/lib/sku-label";
@@ -69,24 +68,11 @@ function OrderItemRow({ item }: { item: OrderPreviewItemResDto }) {
 
   return (
     <div className="border-border flex gap-4 border-b px-5 py-5 last:border-b-0">
-      <div className="bg-muted relative size-[80px] shrink-0 overflow-hidden rounded-lg">
-        {mainImageUrl ? (
-          <Image
-            src={mainImageUrl}
-            alt=""
-            fill
-            sizes="80px"
-            className="object-cover"
-          />
-        ) : (
-          <div className="flex size-full items-center justify-center">
-            <Armchair
-              className="text-muted-foreground/40 size-8"
-              strokeWidth={1.5}
-            />
-          </div>
-        )}
-      </div>
+      <ProductThumbnail
+        src={mainImageUrl}
+        sizes="80px"
+        className="size-[80px] shrink-0 rounded-lg"
+      />
 
       <div className="min-w-0 flex-1">
         {productId != null ? (

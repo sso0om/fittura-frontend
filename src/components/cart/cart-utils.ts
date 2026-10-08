@@ -6,7 +6,12 @@ import {
 import { formatPrice } from "@/lib/format";
 import { getUnavailableSaleStatus } from "@/lib/sale-status";
 
-export function isCartItemSelectable(item: CartItemResDto): boolean {
+/** 선택·삭제·주문에 쓸 수 있는 아이템 - cartItemId가 있음이 보장됨 */
+export type SelectableCartItem = CartItemResDto & { cartItemId: number };
+
+export function isCartItemSelectable(
+  item: CartItemResDto,
+): item is SelectableCartItem {
   return (
     item.cartItemId != null &&
     getUnavailableSaleStatus({

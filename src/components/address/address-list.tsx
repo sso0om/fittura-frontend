@@ -38,6 +38,7 @@ export function AddressList({
   const selectedId =
     checkedId ?? currentAddressId ?? addresses[0]?.addressId ?? null;
   const selected = addresses.find((a) => a.addressId === selectedId);
+  const selectedAddressId = selected?.addressId;
 
   const invalidateAddresses = useInvalidateAddresses();
   const { mutate: changeDefault, isPending: isChangingDefault } =
@@ -115,8 +116,10 @@ export function AddressList({
       <div className="grid grid-cols-2">
         <button
           type="button"
-          disabled={selected?.addressId == null}
-          onClick={() => onSelectOnce(selected?.addressId as number)}
+          disabled={selectedAddressId == null}
+          onClick={() => {
+            if (selectedAddressId != null) onSelectOnce(selectedAddressId);
+          }}
           className="bg-foreground text-background h-14 text-base font-bold disabled:opacity-50"
         >
           이번만 배송지 변경
@@ -124,13 +127,14 @@ export function AddressList({
         <button
           type="button"
           disabled={
-            selected?.addressId == null ||
-            selected.defaultAddress === true ||
+            selectedAddressId == null ||
+            selected?.defaultAddress === true ||
             isChangingDefault
           }
-          onClick={() =>
-            changeDefault({ addressId: selected?.addressId as number })
-          }
+          onClick={() => {
+            if (selectedAddressId != null)
+              changeDefault({ addressId: selectedAddressId });
+          }}
           className="bg-point text-point-foreground h-14 text-base font-bold disabled:opacity-50"
         >
           기본배송지 변경

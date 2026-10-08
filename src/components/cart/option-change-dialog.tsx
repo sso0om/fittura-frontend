@@ -32,8 +32,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { getSkuLabel } from "@/lib/sku-label";
+import { MIN_QUANTITY } from "@/lib/validation";
 
-const MIN_QUANTITY = 1;
 const DUPLICATED_MESSAGE = "이미 장바구니에 담긴 옵션입니다.";
 
 export interface OptionChangeDialogProps {
@@ -53,7 +53,7 @@ export function OptionChangeDialog({
 }: OptionChangeDialogProps) {
   const { cartItemId, productId, productStatus, skuId } = item;
 
-  const { data } = useGetProductSkus(productId as number, {
+  const { data } = useGetProductSkus(productId ?? 0, {
     query: { enabled: open && productId != null },
   });
   const skus = data?.data ?? [];
@@ -91,7 +91,7 @@ export function OptionChangeDialog({
 
   /** 이미 장바구니에 있는 SKU (지금 변경하려는 아이템 자신은 제외) */
   function isInCart(sku: SkuResDto): boolean {
-    return sku.id !== skuId && cartSkuIds.includes(sku.id as number);
+    return sku.id != null && sku.id !== skuId && cartSkuIds.includes(sku.id);
   }
 
   /** 판매 상태 기준 선택 가능 여부 - 장바구니 중복은 선택 시 안내 팝업으로 알림 */
@@ -101,7 +101,7 @@ export function OptionChangeDialog({
 
   function handleValueChange(value: number | null) {
     if (value == null) return;
-    const sku = skus.find((item) => item.id === value);
+    const sku = skus.find((candidate) => candidate.id === value);
     if (sku && isInCart(sku)) {
       setNotice(DUPLICATED_MESSAGE);
       return;

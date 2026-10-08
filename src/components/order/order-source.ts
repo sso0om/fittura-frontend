@@ -1,4 +1,5 @@
 import type { OrderSkuReqDto } from "@/api/model";
+import { parsePositiveInt, parsePositiveIntList } from "@/lib/validation";
 
 /**
  * 주문서 진입 소스
@@ -27,12 +28,6 @@ export function buildOrderUrl(source: OrderSource): string {
   return `${ORDER_PATH}?${params.toString()}`;
 }
 
-export function parsePositiveInt(raw: string): number | null {
-  if (!/^\d+$/.test(raw)) return null;
-  const value = Number(raw);
-  return Number.isSafeInteger(value) && value > 0 ? value : null;
-}
-
 /** 형식이 잘못됐거나 비어 있으면 null */
 export function parseOrderSource(params: {
   get(name: string): string | null;
@@ -43,9 +38,11 @@ export function parseOrderSource(params: {
     const raw = params.get("cartItemIds");
     if (!raw) return null;
 
-    const ids = raw.split(",").map(parsePositiveInt);
-    if (ids.some((id) => id === null)) return null;
-    return { type: "cart", cartItemIds: ids as number[] };
+    // 하나라도 형식이 잘못되면 전체를 거부 (일부만 주문되는 상황 방지)
+    const tokens = raw.split(",");
+    const cartItemIds = parsePositiveIntList(tokens);
+    if (cartItemIds.length !== tokens.length) return null;
+    return { type: "cart", cartItemIds };
   }
 
   if (type === "direct") {

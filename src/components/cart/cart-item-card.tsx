@@ -1,10 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { useQueryClient } from "@tanstack/react-query";
-import { Armchair, X } from "lucide-react";
+import { X } from "lucide-react";
 
 import {
   getGetCartQueryKey,
@@ -20,9 +19,9 @@ import {
 import { Button } from "@/components/ui/button";
 import { NumberFieldStepper } from "@/components/ui/number-field";
 import { getSkuVariantLabel } from "@/lib/sku-label";
+import { MIN_QUANTITY } from "@/lib/validation";
 import { OptionChangeDialog } from "@/components/cart/option-change-dialog";
-
-const MIN_QUANTITY = 1;
+import { ProductThumbnail } from "@/components/product/product-thumbnail";
 
 export interface CartItemCardProps {
   item: CartItemResDto;
@@ -85,18 +84,13 @@ export function CartItemCard({
 
   const productNameText = productName ?? "상품명 없음";
 
-  const thumbnail = mainImageUrl ? (
-    <Image
+  const thumbnail = (
+    <ProductThumbnail
       src={mainImageUrl}
-      alt=""
-      fill
       sizes="92px"
-      className="object-cover"
+      className="size-[92px] rounded-lg"
+      iconClassName="size-9"
     />
-  ) : (
-    <div className="flex size-full items-center justify-center">
-      <Armchair className="text-muted-foreground/40 size-9" strokeWidth={1.5} />
-    </div>
   );
 
   return (
@@ -122,14 +116,12 @@ export function CartItemCard({
         <Link
           href={`/products/${productId}`}
           aria-label={`${productNameText} 상세 보기`}
-          className="bg-muted relative size-[92px] shrink-0 overflow-hidden rounded-lg"
+          className="block shrink-0"
         >
           {thumbnail}
         </Link>
       ) : (
-        <div className="bg-muted relative size-[92px] shrink-0 overflow-hidden rounded-lg">
-          {thumbnail}
-        </div>
+        <div className="shrink-0">{thumbnail}</div>
       )}
 
       <div className="flex min-w-0 flex-1 flex-col gap-3">

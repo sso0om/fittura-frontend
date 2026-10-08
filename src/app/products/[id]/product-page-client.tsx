@@ -60,13 +60,14 @@ export function ProductPageClient({ productId }: ProductPageClientProps) {
   function handleSelectSku(sku: SkuResDto) {
     if (sku.id == null) return;
 
-    const alreadySelected = items.some((item) => item.sku.id === sku.id);
+    const skuId = sku.id;
+    const alreadySelected = items.some((item) => item.skuId === skuId);
     if (alreadySelected) {
       setNotice("이미 선택된 옵션입니다.");
       return;
     }
 
-    setItems((prev) => [...prev, { sku, quantity: 1 }]);
+    setItems((prev) => [...prev, { skuId, sku, quantity: 1 }]);
   }
 
   function handleAddToCart() {
@@ -75,7 +76,7 @@ export function ProductPageClient({ productId }: ProductPageClientProps) {
     createCartItems(
       {
         data: items.map((item) => ({
-          skuId: item.sku.id!,
+          skuId: item.skuId,
           quantity: item.quantity,
         })),
       },
@@ -88,16 +89,16 @@ export function ProductPageClient({ productId }: ProductPageClientProps) {
   function handleQuantityChange(skuId: number, nextQuantity: number) {
     setItems((prev) => {
       if (nextQuantity <= 0) {
-        return prev.filter((item) => item.sku.id !== skuId);
+        return prev.filter((item) => item.skuId !== skuId);
       }
       return prev.map((item) =>
-        item.sku.id === skuId ? { ...item, quantity: nextQuantity } : item,
+        item.skuId === skuId ? { ...item, quantity: nextQuantity } : item,
       );
     });
   }
 
   function handleRemove(skuId: number) {
-    setItems((prev) => prev.filter((item) => item.sku.id !== skuId));
+    setItems((prev) => prev.filter((item) => item.skuId !== skuId));
   }
 
   /**
@@ -113,10 +114,10 @@ export function ProductPageClient({ productId }: ProductPageClientProps) {
         skuStatus: item.sku.status,
         isSoldOut: item.sku.isSoldOut,
       });
-      if (status === null || item.sku.id == null) return [];
+      if (status === null) return [];
       return [
         {
-          skuId: item.sku.id,
+          skuId: item.skuId,
           label: `${getSkuVariantLabel(item.sku) || "옵션"} - ${unavailableSaleStatusLabel[status]}`,
         },
       ];
@@ -131,7 +132,7 @@ export function ProductPageClient({ productId }: ProductPageClientProps) {
       buildOrderUrl({
         type: "direct",
         orderSkus: items.map((item) => ({
-          skuId: item.sku.id!,
+          skuId: item.skuId,
           quantity: item.quantity,
         })),
       }),
@@ -260,22 +261,25 @@ export function ProductPageClient({ productId }: ProductPageClientProps) {
 
           {/* 장바구니 · 바로구매 */}
           <div className="mt-1 flex gap-2.5">
-            <button
+            <Button
               type="button"
+              variant="outline"
+              size="xl"
+              className="flex-1 font-semibold"
               onClick={handleAddToCart}
               disabled={items.length === 0 || isAddingToCart}
-              className="border-border hover:bg-muted disabled:pointer-events-none disabled:opacity-50 h-[52px] flex-1 rounded-lg border text-[15px] font-semibold"
             >
               장바구니
-            </button>
-            <button
+            </Button>
+            <Button
               type="button"
+              size="xl"
+              className="flex-1"
               onClick={handleBuyNow}
               disabled={items.length === 0}
-              className="bg-primary text-primary-foreground hover:bg-primary/90 disabled:pointer-events-none disabled:opacity-50 h-[52px] flex-1 rounded-lg text-[15px] font-bold"
             >
               바로구매
-            </button>
+            </Button>
           </div>
         </div>
       </div>

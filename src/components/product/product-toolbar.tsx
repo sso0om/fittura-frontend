@@ -1,3 +1,11 @@
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
 export type ProductSort =
   | "createdDate,desc"
   | "baseSalePrice,asc"
@@ -19,10 +27,10 @@ const SORT_OPTIONS: { value: ProductSort; label: string }[] = [
   { value: "baseSalePrice,desc", label: "높은 가격순" },
 ];
 
-const PAGE_SIZE_OPTIONS = [20, 40, 60, 80];
-
-const selectClass =
-  "border-border bg-background text-foreground focus-visible:border-ring focus-visible:ring-ring/50 h-8 rounded-lg border px-3 text-[13px] outline-none focus-visible:ring-3";
+const PAGE_SIZE_OPTIONS = [20, 40, 60, 80].map((size) => ({
+  value: size,
+  label: `${size}개씩`,
+}));
 
 /**
  * 상품 개수 + 품절제외 체크박스 + 정렬 드롭다운 + 페이지당 개수 드롭다운
@@ -47,34 +55,46 @@ export function ProductToolbar({
             type="checkbox"
             checked={activeOnly}
             onChange={(event) => onActiveOnlyChange(event.target.checked)}
-            className="accent-foreground size-4"
+            className="accent-primary size-4"
           />
           품절제외
         </label>
-        <select
+        <Select
+          items={SORT_OPTIONS}
           value={sort}
-          onChange={(event) => onSortChange(event.target.value as ProductSort)}
-          className={selectClass}
-          aria-label="정렬 기준"
+          onValueChange={(next) => {
+            if (next != null) onSortChange(next);
+          }}
         >
-          {SORT_OPTIONS.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </select>
-        <select
+          <SelectTrigger aria-label="정렬 기준" className="w-32 text-[13px]">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            {SORT_OPTIONS.map((option) => (
+              <SelectItem key={option.value} value={option.value}>
+                {option.label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        <Select
+          items={PAGE_SIZE_OPTIONS}
           value={pageSize}
-          onChange={(event) => onPageSizeChange(Number(event.target.value))}
-          className={selectClass}
-          aria-label="페이지당 개수"
+          onValueChange={(next) => {
+            if (next != null) onPageSizeChange(next);
+          }}
         >
-          {PAGE_SIZE_OPTIONS.map((option) => (
-            <option key={option} value={option}>
-              {option}개씩
-            </option>
-          ))}
-        </select>
+          <SelectTrigger aria-label="페이지당 개수" className="w-24 text-[13px]">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            {PAGE_SIZE_OPTIONS.map((option) => (
+              <SelectItem key={option.value} value={option.value}>
+                {option.label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </div>
     </div>
   );

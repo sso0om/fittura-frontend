@@ -22,9 +22,11 @@ export function AllCategoriesMenu() {
 
   const activeCategory =
     topLevel.find((category) => category.id === activeId) ?? topLevel[0];
-  const children = activeCategory
-    ? (data?.childrenByParentId.get(activeCategory.id as number) ?? [])
-    : [];
+  const activeCategoryId = activeCategory?.id;
+  const children =
+    activeCategoryId != null
+      ? (data?.childrenByParentId.get(activeCategoryId) ?? [])
+      : [];
 
   function close() {
     setHoverOpen(false);
