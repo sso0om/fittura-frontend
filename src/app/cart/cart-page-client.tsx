@@ -64,7 +64,7 @@ export function CartPageClient() {
 
   function isItemChecked(item: CartItemResDto): boolean {
     return (
-      isCartItemSelectable(item) && !uncheckedIds.has(item.cartItemId as number)
+      isCartItemSelectable(item) && !uncheckedIds.has(item.cartItemId)
     );
   }
 
@@ -73,9 +73,8 @@ export function CartPageClient() {
       const next = new Set(prev);
       for (const item of targetItems) {
         if (!isCartItemSelectable(item)) continue;
-        const id = item.cartItemId as number;
-        if (checked) next.delete(id);
-        else next.add(id);
+        if (checked) next.delete(item.cartItemId);
+        else next.add(item.cartItemId);
       }
       return next;
     });
@@ -139,7 +138,7 @@ export function CartPageClient() {
     setIsDeletingSelected(true);
     try {
       await Promise.allSettled(
-        checkedItems.map((item) => deleteCartItem(item.cartItemId as number)),
+        checkedItems.map((item) => deleteCartItem(item.cartItemId)),
       );
     } finally {
       await queryClient.invalidateQueries({ queryKey: getGetCartQueryKey() });
@@ -155,7 +154,7 @@ export function CartPageClient() {
     router.push(
       buildOrderUrl({
         type: "cart",
-        cartItemIds: checkedItems.map((item) => item.cartItemId as number),
+        cartItemIds: checkedItems.map((item) => item.cartItemId),
       }),
     );
   }

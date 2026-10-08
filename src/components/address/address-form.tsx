@@ -50,7 +50,8 @@ export function AddressForm({
   onSaved,
   onDeleted = () => {},
 }: AddressFormProps) {
-  const isEdit = address?.addressId != null;
+  const addressId = address?.addressId;
+  const isEdit = addressId != null;
 
   // 서버 규칙과 동일: 다른 배송지가 있으면 기본 배송지는 삭제 불가
   const canDelete = !address?.defaultAddress || isOnlyAddress;
@@ -128,7 +129,7 @@ export function AddressForm({
     };
 
     if (isEdit) {
-      updateAddress({ addressId: address.addressId as number, data });
+      updateAddress({ addressId, data });
       return;
     }
     createAddress({ data });
@@ -249,7 +250,7 @@ export function AddressForm({
         >
           {isEdit && (
             <AddressDeleteButton
-              addressId={address.addressId as number}
+              addressId={addressId}
               disabled={!canDelete}
               onDeleted={onDeleted}
               onDone={onSaved}

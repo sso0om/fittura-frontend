@@ -11,6 +11,8 @@ import { SOLD_OUT, unavailableSaleStatusLabel } from "@/lib/sale-status";
 const MIN_QUANTITY = 1;
 
 export interface SelectedSkuItem {
+  /** sku.id를 선택 시점에 확정해 둔 값 - 이후 null 검사 없이 사용 */
+  skuId: number;
   sku: SkuResDto;
   quantity: number;
 }
@@ -31,9 +33,7 @@ export function SelectedSkuList({
   return (
     <div className="flex flex-col gap-2">
       {items.map((item) => {
-        const skuId = item.sku.id;
-        if (skuId == null) return null;
-
+        const { skuId } = item;
         const { originalPrice, salePrice, discountRate } = item.sku;
         const hasDiscount = (discountRate ?? 0) > 0;
 
