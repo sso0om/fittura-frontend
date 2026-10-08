@@ -1,4 +1,4 @@
-import { parsePositiveInt } from "@/components/order/order-source";
+import { parsePositiveInt } from "@/lib/validation";
 
 export const PAYMENT_CALLBACK_PATH = "/order/payment/callback";
 export const ORDER_COMPLETE_PATH = "/order/complete";

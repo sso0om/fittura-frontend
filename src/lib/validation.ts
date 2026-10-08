@@ -5,6 +5,22 @@ import { z } from "zod";
  * - 백엔드 요청 DTO 검증과 같은 기준을 유지
  */
 
+// ========== 숫자 파라미터 (URL 쿼리·경로) ==========
+
+/** 양의 정수 문자열만 허용 - 숫자 외 문자·0·음수·안전 범위 초과는 null */
+export function parsePositiveInt(raw: string): number | null {
+  if (!/^\d+$/.test(raw)) return null;
+  const value = Number(raw);
+  return Number.isSafeInteger(value) && value > 0 ? value : null;
+}
+
+/** 잘못된 값은 버리고 유효한 양의 정수만 남김 (필터 id 목록 등) */
+export function parsePositiveIntList(values: string[]): number[] {
+  return values
+    .map(parsePositiveInt)
+    .filter((value): value is number => value !== null);
+}
+
 // ========== 일반 텍스트 ==========
 
 /** 문자(모든 언어), 숫자, 공백만 허용 - 특수문자 불가 */
