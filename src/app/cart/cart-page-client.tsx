@@ -140,7 +140,7 @@ export function CartPageClient() {
   const checkedItems = allSelectableItems.filter(isItemChecked);
 
   /** 선택 삭제
-   * 일부 실패해도 나머지는 삭제되도록 allSettled 사용 (실패 메시지는 axios 인터셉터가 토스트로 노출)
+   * 일부 실패해도 나머지는 삭제되도록 allSettled 사용 (실패 메시지는 axios 인터셉터가 노출)
    * 완료 후 장바구니 1회 재조회
    */
   async function handleDeleteSelected() {

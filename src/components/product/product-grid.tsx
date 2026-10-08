@@ -10,7 +10,7 @@ export interface ProductGridProps {
 /**
  * 상품 카드 그리드
  * 데이터 상태(로딩/에러/빈 목록)만 처리
- * discountRate · rating · reviewCount · liked는 추가 예정
+ * reviewCount · liked는 추가 예정
  */
 export function ProductGrid({
   products,
