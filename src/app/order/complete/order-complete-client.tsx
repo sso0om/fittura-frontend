@@ -7,7 +7,10 @@ import { Check } from "lucide-react";
 import { useGetOrder } from "@/api/generated/order-v1/order-v1";
 import { parseOrderCompleteOrderId } from "@/components/order/checkout-routes";
 import { OrderCompleteSummary } from "@/components/order/order-complete-summary";
+import { PageMessage } from "@/components/common/page-message";
 import { Button } from "@/components/ui/button";
+
+const SHOPPING_LINK = { href: "/products", label: "쇼핑 계속하기" };
 
 export function OrderCompleteClient() {
   const searchParams = useSearchParams();
@@ -21,7 +24,11 @@ export function OrderCompleteClient() {
 
   if (orderId === null) {
     return (
-      <CompleteMessage message="잘못된 접근입니다. 주문 정보를 확인할 수 없습니다." />
+      <PageMessage
+        message="잘못된 접근입니다. 주문 정보를 확인할 수 없습니다."
+        link={SHOPPING_LINK}
+        className="max-w-[720px]"
+      />
     );
   }
 
@@ -35,7 +42,11 @@ export function OrderCompleteClient() {
 
   if (isError || !order) {
     return (
-      <CompleteMessage message="주문 정보를 불러오지 못했습니다. 결제는 정상 처리되었으니 잠시 후 주문 내역에서 확인해 주세요." />
+      <PageMessage
+        message="주문 정보를 불러오지 못했습니다. 결제는 정상 처리되었으니 잠시 후 주문 내역에서 확인해 주세요."
+        link={SHOPPING_LINK}
+        className="max-w-[720px]"
+      />
     );
   }
 
@@ -60,17 +71,6 @@ export function OrderCompleteClient() {
           render={<Link href="/products">쇼핑 계속하기</Link>}
         />
       </div>
-    </div>
-  );
-}
-
-function CompleteMessage({ message }: { message: string }) {
-  return (
-    <div className="mx-auto w-full max-w-[720px] px-6 py-16 text-center">
-      <p className="text-muted-foreground mb-4 text-sm">{message}</p>
-      <Link href="/products" className="text-sm underline underline-offset-2">
-        쇼핑 계속하기
-      </Link>
     </div>
   );
 }

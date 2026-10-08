@@ -12,6 +12,7 @@ import {
 import { useGetDeliveryPolicy } from "@/api/generated/delivery-v1/delivery-v1";
 import { formatPrice } from "@/lib/format";
 import { Button } from "@/components/ui/button";
+import { PageMessage } from "@/components/common/page-message";
 import { AddressSummary } from "@/components/address/address-summary";
 import { useSelectedAddress } from "@/components/address/use-selected-address";
 import { CartDeliverySection } from "@/components/cart/cart-delivery-section";
@@ -88,11 +89,10 @@ export function CartPageClient() {
 
   if (isError) {
     return (
-      <div className="mx-auto w-full max-w-[1160px] px-6 py-16 text-center">
-        <p className="text-muted-foreground text-sm">
-          장바구니를 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.
-        </p>
-      </div>
+      <PageMessage
+        message="장바구니를 불러오지 못했습니다. 잠시 후 다시 시도해 주세요."
+        className="max-w-[1160px]"
+      />
     );
   }
 

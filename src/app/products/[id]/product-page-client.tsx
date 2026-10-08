@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Heart, Share2, Ticket } from "lucide-react";
 
@@ -12,6 +11,7 @@ import {
   unavailableSaleStatusLabel,
 } from "@/lib/sale-status";
 import { Button } from "@/components/ui/button";
+import { PageMessage } from "@/components/common/page-message";
 import { useGetProduct1 } from "@/api/generated/product-v1/product-v1";
 import { useCreateCartItems } from "@/api/generated/cart-v1/cart-v1";
 import type { SkuResDto } from "@/api/model";
@@ -157,14 +157,11 @@ export function ProductPageClient({ productId }: ProductPageClientProps) {
 
   if (isError || !product) {
     return (
-      <div className="mx-auto w-full max-w-[1600px] px-6 py-16 text-center">
-        <p className="text-muted-foreground mb-4 text-sm">
-          상품 정보를 불러오지 못했습니다.
-        </p>
-        <Link href="/products" className="text-sm underline underline-offset-2">
-          상품 목록으로 이동
-        </Link>
-      </div>
+      <PageMessage
+        message="상품 정보를 불러오지 못했습니다."
+        link={{ href: "/products", label: "상품 목록으로 이동" }}
+        className="max-w-[1600px]"
+      />
     );
   }
 
