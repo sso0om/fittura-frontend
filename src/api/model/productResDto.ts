@@ -9,7 +9,7 @@ import type { ProductType } from './productType';
 import type { ProductStatus } from './productStatus';
 
 export interface ProductResDto {
-  basePrice?: number;
+  baseOriginalPrice?: number;
   baseSalePrice?: number;
   deliveryType?: DeliveryType;
   discountRate?: number;

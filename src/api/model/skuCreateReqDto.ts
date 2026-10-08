@@ -10,8 +10,8 @@
  */
 export interface SkuCreateReqDto {
   colorId?: number;
+  discountPrice?: number;
   materialId?: number;
-  price: number;
-  salePrice?: number;
+  originalPrice: number;
   stockQuantity: number;
 }

@@ -9,8 +9,15 @@
  * 나의 배송지 생성 요청 DTO
  */
 export interface MAddressCreateReqDto {
-  /** @minLength 1 */
+  /**
+   * @minLength 0
+   * @maxLength 255
+   */
   address: string;
+  /**
+   * @minLength 0
+   * @maxLength 255
+   */
   addressDetail?: string;
   /**
    * @minLength 0

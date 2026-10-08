@@ -4,17 +4,21 @@
  * OpenAPI definition
  * OpenAPI spec version: v0
  */
-import type { AddressCreateReqDto } from './addressCreateReqDto';
 
 /**
- * 주문 생성 요청 DTO
+ * 장바구니 주문 생성 요청 DTO
  */
-export interface OrderCreateReqDto {
+export interface CartOrderCreateReqDto {
+  addressId: number;
   /**
    * @minItems 1
    * @maxItems 2147483647
    */
-  cartItems: number[];
-  orderAddress: AddressCreateReqDto;
+  cartItemIds: number[];
+  /**
+   * @minLength 0
+   * @maxLength 255
+   */
+  deliveryMemo?: string;
   pointUsedAmount: number;
 }

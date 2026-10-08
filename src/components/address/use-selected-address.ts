@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import {
   useGetAddress,
   useGetDefaultAddress,
-} from "@/api/generated/auth-v1/auth-v1";
+} from "@/api/generated/memberaddress-v1/memberaddress-v1";
 import type { MemberAddressResDto } from "@/api/model";
 
 /**

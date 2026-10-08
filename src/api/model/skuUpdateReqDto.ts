@@ -10,9 +10,9 @@
  */
 export interface SkuUpdateReqDto {
   colorId?: number;
+  discountPrice?: number;
   id?: number;
   materialId?: number;
-  price: number;
-  salePrice?: number;
+  originalPrice: number;
   stockQuantity: number;
 }

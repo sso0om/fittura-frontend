@@ -89,7 +89,7 @@ function FilterGroup({
                   type="checkbox"
                   checked={selectedIds.includes(id)}
                   onChange={() => onToggle(id)}
-                  className="accent-foreground size-4"
+                  className="accent-primary size-4"
                 />
                 {option.name}
               </label>

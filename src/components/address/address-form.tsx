@@ -9,7 +9,7 @@ import { cn } from "cn";
 import {
   useCreateMemberAddress,
   useUpdateMemberAddress,
-} from "@/api/generated/auth-v1/auth-v1";
+} from "@/api/generated/memberaddress-v1/memberaddress-v1";
 import type { MemberAddressResDto } from "@/api/model";
 import { Input } from "@/components/ui/input";
 import { PhoneNumberInput } from "@/components/common/phone-number-input";

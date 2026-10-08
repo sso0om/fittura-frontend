@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-import { useDeleteAddress } from "@/api/generated/auth-v1/auth-v1";
+import { useDeleteAddress } from "@/api/generated/memberaddress-v1/memberaddress-v1";
 import {
   AlertDialog,
   AlertDialogCancel,

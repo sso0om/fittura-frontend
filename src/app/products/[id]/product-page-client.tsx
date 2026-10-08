@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Heart, Share2, Star, Ticket } from "lucide-react";
+import { Heart, Share2, Ticket } from "lucide-react";
 
 import { deliveryTypeLabel } from "@/lib/enum-labels";
 import { formatPrice } from "@/lib/format";
@@ -24,6 +25,7 @@ import {
 import { getSkuVariantLabel } from "@/lib/sku-label";
 import { NoticeDialog } from "@/components/ui/notice-dialog";
 import { CartAddedDialog } from "@/components/product/cart-added-dialog";
+import { buildOrderUrl } from "@/components/order/order-source";
 import {
   UnavailableOptionsDialog,
   type UnavailableOption,
@@ -34,7 +36,7 @@ export interface ProductPageClientProps {
 }
 
 export function ProductPageClient({ productId }: ProductPageClientProps) {
-  const { data: productRes } = useGetProduct1(productId);
+  const { data: productRes, isPending, isError } = useGetProduct1(productId);
   const product = productRes?.data;
 
   const deliveryLabel = product?.deliveryType
@@ -125,13 +127,42 @@ export function ProductPageClient({ productId }: ProductPageClientProps) {
       return;
     }
 
-    // TODO: 주문 기능 연동
+    router.push(
+      buildOrderUrl({
+        type: "direct",
+        orderSkus: items.map((item) => ({
+          skuId: item.sku.id!,
+          quantity: item.quantity,
+        })),
+      }),
+    );
   }
 
   const orderTotal = items.reduce(
     (sum, item) => sum + (item.sku.salePrice ?? 0) * item.quantity,
     0,
   );
+
+  if (isPending) {
+    return (
+      <div className="mx-auto w-full max-w-[1600px] px-6 py-8 sm:px-8 lg:px-12">
+        <div className="bg-muted h-8 w-64 animate-pulse rounded" />
+      </div>
+    );
+  }
+
+  if (isError || !product) {
+    return (
+      <div className="mx-auto w-full max-w-[1600px] px-6 py-16 text-center">
+        <p className="text-muted-foreground mb-4 text-sm">
+          상품 정보를 불러오지 못했습니다.
+        </p>
+        <Link href="/products" className="text-sm underline underline-offset-2">
+          상품 목록으로 이동
+        </Link>
+      </div>
+    );
+  }
 
   return (
     <div className="mx-auto w-full max-w-[1600px] px-6 py-8 sm:px-8 lg:px-12">
@@ -145,7 +176,7 @@ export function ProductPageClient({ productId }: ProductPageClientProps) {
           {/* 상품명 · 좋아요 · 공유 */}
           <div className="flex items-start gap-2">
             <h1 className="flex-1 text-xl leading-snug font-bold">
-              오크 프레임 좌식 접이식 거실테이블
+              {product.name}
             </h1>
             {/* 좋아요 · 공유: 추후 기능 추가 예정 */}
             <Button type="button" variant="ghost" size="icon" aria-label="좋아요">
@@ -155,13 +186,7 @@ export function ProductPageClient({ productId }: ProductPageClientProps) {
               <Share2 className="size-5" />
             </Button>
           </div>
-
-          {/* 별점 · 리뷰 개수 */}
-          <div className="text-muted-foreground flex items-center gap-1 text-xs">
-            <Star className="fill-foreground text-foreground size-[15px]" />
-            <span className="text-foreground font-semibold">4.8</span>
-            <span>(1,204)</span>
-          </div>
+          {/* TODO: 별점 · 리뷰 개수 */}
 
           <hr className="border-border" />
 
@@ -169,7 +194,7 @@ export function ProductPageClient({ productId }: ProductPageClientProps) {
           <div className="flex flex-col gap-1">
             {hasDiscount && (
               <span className="text-muted-foreground text-sm line-through">
-                {formatPrice(product?.basePrice ?? 0)}
+                {formatPrice(product?.baseOriginalPrice ?? 0)}
               </span>
             )}
             <div className="flex items-baseline gap-2.5">
@@ -179,7 +204,7 @@ export function ProductPageClient({ productId }: ProductPageClientProps) {
                 </span>
               )}
               <span className="text-foreground text-[28px] font-extrabold">
-                {formatPrice(product?.baseSalePrice ?? product?.basePrice ?? 0)}
+                {formatPrice(product?.baseSalePrice ?? product?.baseOriginalPrice ?? 0)}
               </span>
             </div>
           </div>

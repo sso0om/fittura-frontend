@@ -38,7 +38,7 @@ type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 
 /**
- * 제품 목록 조회 API - sort 예시: basePrice,desc / createdDate,desc
+ * 제품 목록 조회 API - sort 예시: baseOriginalPrice,desc / createdDate,desc
  * @summary 제품 목록 조회
  */
 export const getProducts1 = (

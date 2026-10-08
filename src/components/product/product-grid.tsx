@@ -54,8 +54,8 @@ export function ProductGrid({
           key={product.id}
           href={`/products/${product.id}`}
           title={product.name ?? ""}
-          price={product.baseSalePrice ?? product.basePrice ?? 0}
-          originalPrice={product.basePrice}
+          salePrice={product.baseSalePrice ?? product.baseOriginalPrice ?? 0}
+          originalPrice={product.baseOriginalPrice}
           discountRate={product.discountRate ?? 0}
           soldOut={product.isSoldOut ?? false}
           discontinued={product.status === ProductStatus.DISCONTINUED}

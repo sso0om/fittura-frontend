@@ -15,15 +15,19 @@ import {
 import { SearchForm } from "@/components/layout/search-form";
 import { AllCategoriesMenu } from "@/components/layout/all-categories-menu";
 
+/** 딥 그린 헤더 위 아이콘 버튼 - 기본 ghost의 hover(밝은 배경 + 어두운 글씨) 대신 흰색 계열 */
+const HEADER_ICON_BUTTON =
+  "hover:bg-white/10 hover:text-white aria-expanded:bg-white/10 aria-expanded:text-white";
+
 /**
- * 1단짜리 헤더
+ * 1단짜리 헤더 (딥 그린 배경, 흰 글씨)
  * 항목: 로고 · 전체 카테고리(드롭다운) · 검색 · 아이콘(마이페이지 → 좋아요 → 장바구니)
  */
 export function SiteHeader() {
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
 
   return (
-    <header className="bg-background/95 supports-[backdrop-filter]:bg-background/80 sticky top-0 z-40 border-b backdrop-blur">
+    <header className="bg-sage-800 sticky top-0 z-40 text-white">
       <div className="mx-auto flex h-14 w-full max-w-[1600px] items-center gap-4 px-6 sm:px-8 lg:px-12">
         <Sheet open={mobileSearchOpen} onOpenChange={setMobileSearchOpen}>
           <SheetTrigger
@@ -31,7 +35,7 @@ export function SiteHeader() {
               <Button
                 variant="ghost"
                 size="icon"
-                className="md:hidden"
+                className={`md:hidden ${HEADER_ICON_BUTTON}`}
                 aria-label="검색"
               >
                 <Search className="size-5" />
@@ -55,12 +59,16 @@ export function SiteHeader() {
 
         <AllCategoriesMenu />
 
-        <SearchForm className="hidden max-w-xl flex-1 md:block" />
+        <SearchForm
+          className="hidden max-w-xl flex-1 md:block"
+          inputClassName="border-transparent bg-white text-foreground"
+        />
 
         <div className="ml-auto flex items-center gap-1">
           <Button
             variant="ghost"
             size="icon"
+            className={HEADER_ICON_BUTTON}
             nativeButton={false}
             render={
               <Link href="/mypage" aria-label="마이페이지">
@@ -69,12 +77,19 @@ export function SiteHeader() {
             }
           />
           {/* 좋아요: 추후 기능 추가 예정 — 현재는 UI만 존재, 클릭 동작 없음 */}
-          <Button type="button" variant="ghost" size="icon" aria-label="좋아요">
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            className={HEADER_ICON_BUTTON}
+            aria-label="좋아요"
+          >
             <Heart className="size-5" />
           </Button>
           <Button
             variant="ghost"
             size="icon"
+            className={HEADER_ICON_BUTTON}
             nativeButton={false}
             render={
               <Link href="/cart" aria-label="장바구니">

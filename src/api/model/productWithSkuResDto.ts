@@ -13,7 +13,7 @@ import type { ProductStatus } from './productStatus';
  * 제품 응답 DTO
  */
 export interface ProductWithSkuResDto {
-  basePrice?: number;
+  baseOriginalPrice?: number;
   baseSalePrice?: number;
   categoryId?: number;
   deliveryFee?: number;

@@ -8,8 +8,8 @@ import { formatPrice } from "@/lib/format";
 export interface ProductCardProps {
   href: string;
   title: string;
-  /** 최종 판매가 */
-  price: number;
+  /** 판매가 (할인 반영) */
+  salePrice: number;
   /** 할인 전 정가 - 할인 중이 아니면 생략 */
   originalPrice?: number;
   /** 할인율(%) - 0 이하이면 할인 UI를 표시하지 않음 */
@@ -27,7 +27,7 @@ export interface ProductCardProps {
 export function ProductCard({
   href,
   title,
-  price,
+  salePrice,
   originalPrice,
   discountRate = 0,
   rating,
@@ -119,14 +119,14 @@ export function ProductCard({
             </span>
           )}
           <span className="text-foreground text-base font-bold">
-            {formatPrice(price)}
+            {formatPrice(salePrice)}
           </span>
         </div>
       </div>
 
       {hasRating && (
         <div className="text-muted-foreground flex items-center gap-1 text-xs">
-          <Star className="fill-foreground text-foreground size-[13px]" />
+          <Star className="fill-star text-star size-[13px]" />
           <span>{rating}</span>
           <span>({reviewCount})</span>
         </div>

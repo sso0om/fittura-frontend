@@ -24,10 +24,14 @@ import type {
 } from '@tanstack/react-query';
 
 import type {
+  CartOrderCreateReqDto,
+  CartOrderPreviewReqDto,
   ClaimOrderReqDto,
+  DirectOrderCreateReqDto,
+  DirectOrderPreviewReqDto,
   GetAllOrdersParams,
-  OrderCreateReqDto,
   RsDataLong,
+  RsDataOrderPreviewResDto,
   RsDataOrderWithAllResDto,
   RsDataPageOrderWithDeliveryResDto,
   RsDataVoid
@@ -135,30 +139,30 @@ export function useGetAllOrders<TData = Awaited<ReturnType<typeof getAllOrders>>
 
 
 /**
- * 주문 생성 API
- * @summary 주문 생성
+ * 장바구니에서 넘어온 주문 생성 API
+ * @summary 장바구니 주문 생성
  */
-export const createOrder = (
-    orderCreateReqDto: BodyType<OrderCreateReqDto>,
+export const createOrderCart = (
+    cartOrderCreateReqDto: BodyType<CartOrderCreateReqDto>,
  options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
       
       
       return customInstance<RsDataLong>(
-      {url: `/api/v1/orders`, method: 'POST',
+      {url: `/api/v1/orders/cart`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
-      data: orderCreateReqDto, signal
+      data: cartOrderCreateReqDto, signal
     },
       options);
     }
   
 
 
-export const getCreateOrderMutationOptions = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createOrder>>, TError,{data: BodyType<OrderCreateReqDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof createOrder>>, TError,{data: BodyType<OrderCreateReqDto>}, TContext> => {
+export const getCreateOrderCartMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createOrderCart>>, TError,{data: BodyType<CartOrderCreateReqDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof createOrderCart>>, TError,{data: BodyType<CartOrderCreateReqDto>}, TContext> => {
 
-const mutationKey = ['createOrder'];
+const mutationKey = ['createOrderCart'];
 const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
@@ -168,10 +172,10 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createOrder>>, {data: BodyType<OrderCreateReqDto>}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createOrderCart>>, {data: BodyType<CartOrderCreateReqDto>}> = (props) => {
           const {data} = props ?? {};
 
-          return  createOrder(data,requestOptions)
+          return  createOrderCart(data,requestOptions)
         }
 
         
@@ -179,23 +183,218 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
   return  { mutationFn, ...mutationOptions }}
 
-    export type CreateOrderMutationResult = NonNullable<Awaited<ReturnType<typeof createOrder>>>
-    export type CreateOrderMutationBody = BodyType<OrderCreateReqDto>
-    export type CreateOrderMutationError = ErrorType<unknown>
+    export type CreateOrderCartMutationResult = NonNullable<Awaited<ReturnType<typeof createOrderCart>>>
+    export type CreateOrderCartMutationBody = BodyType<CartOrderCreateReqDto>
+    export type CreateOrderCartMutationError = ErrorType<unknown>
 
     /**
- * @summary 주문 생성
+ * @summary 장바구니 주문 생성
  */
-export const useCreateOrder = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createOrder>>, TError,{data: BodyType<OrderCreateReqDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+export const useCreateOrderCart = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createOrderCart>>, TError,{data: BodyType<CartOrderCreateReqDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof createOrder>>,
+        Awaited<ReturnType<typeof createOrderCart>>,
         TError,
-        {data: BodyType<OrderCreateReqDto>},
+        {data: BodyType<CartOrderCreateReqDto>},
         TContext
       > => {
 
-      const mutationOptions = getCreateOrderMutationOptions(options);
+      const mutationOptions = getCreateOrderCartMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    /**
+ * 상품 선택 후 바로 넘어온 주문 생성 API
+ * @summary 바로 주문 생성
+ */
+export const createOrderDirect = (
+    directOrderCreateReqDto: BodyType<DirectOrderCreateReqDto>,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<RsDataLong>(
+      {url: `/api/v1/orders/direct`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: directOrderCreateReqDto, signal
+    },
+      options);
+    }
+  
+
+
+export const getCreateOrderDirectMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createOrderDirect>>, TError,{data: BodyType<DirectOrderCreateReqDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof createOrderDirect>>, TError,{data: BodyType<DirectOrderCreateReqDto>}, TContext> => {
+
+const mutationKey = ['createOrderDirect'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createOrderDirect>>, {data: BodyType<DirectOrderCreateReqDto>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  createOrderDirect(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CreateOrderDirectMutationResult = NonNullable<Awaited<ReturnType<typeof createOrderDirect>>>
+    export type CreateOrderDirectMutationBody = BodyType<DirectOrderCreateReqDto>
+    export type CreateOrderDirectMutationError = ErrorType<unknown>
+
+    /**
+ * @summary 바로 주문 생성
+ */
+export const useCreateOrderDirect = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createOrderDirect>>, TError,{data: BodyType<DirectOrderCreateReqDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof createOrderDirect>>,
+        TError,
+        {data: BodyType<DirectOrderCreateReqDto>},
+        TContext
+      > => {
+
+      const mutationOptions = getCreateOrderDirectMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    /**
+ * 장바구니에서 넘어온 주문 전 조회 API
+ * @summary 주문 전 조회 (장바구니)
+ */
+export const getOrderPreviewCart = (
+    cartOrderPreviewReqDto: BodyType<CartOrderPreviewReqDto>,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<RsDataOrderPreviewResDto>(
+      {url: `/api/v1/orders/preview/cart`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: cartOrderPreviewReqDto, signal
+    },
+      options);
+    }
+  
+
+
+export const getGetOrderPreviewCartMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof getOrderPreviewCart>>, TError,{data: BodyType<CartOrderPreviewReqDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof getOrderPreviewCart>>, TError,{data: BodyType<CartOrderPreviewReqDto>}, TContext> => {
+
+const mutationKey = ['getOrderPreviewCart'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof getOrderPreviewCart>>, {data: BodyType<CartOrderPreviewReqDto>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  getOrderPreviewCart(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type GetOrderPreviewCartMutationResult = NonNullable<Awaited<ReturnType<typeof getOrderPreviewCart>>>
+    export type GetOrderPreviewCartMutationBody = BodyType<CartOrderPreviewReqDto>
+    export type GetOrderPreviewCartMutationError = ErrorType<unknown>
+
+    /**
+ * @summary 주문 전 조회 (장바구니)
+ */
+export const useGetOrderPreviewCart = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof getOrderPreviewCart>>, TError,{data: BodyType<CartOrderPreviewReqDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof getOrderPreviewCart>>,
+        TError,
+        {data: BodyType<CartOrderPreviewReqDto>},
+        TContext
+      > => {
+
+      const mutationOptions = getGetOrderPreviewCartMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    /**
+ * 상품 선택 후 바로 주문으로 넘어온 주문 전 조회 API
+ * @summary 주문 전 조회(바로 주문)
+ */
+export const getOrderPreviewDirect = (
+    directOrderPreviewReqDto: BodyType<DirectOrderPreviewReqDto>,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<RsDataOrderPreviewResDto>(
+      {url: `/api/v1/orders/preview/direct`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: directOrderPreviewReqDto, signal
+    },
+      options);
+    }
+  
+
+
+export const getGetOrderPreviewDirectMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof getOrderPreviewDirect>>, TError,{data: BodyType<DirectOrderPreviewReqDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof getOrderPreviewDirect>>, TError,{data: BodyType<DirectOrderPreviewReqDto>}, TContext> => {
+
+const mutationKey = ['getOrderPreviewDirect'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof getOrderPreviewDirect>>, {data: BodyType<DirectOrderPreviewReqDto>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  getOrderPreviewDirect(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type GetOrderPreviewDirectMutationResult = NonNullable<Awaited<ReturnType<typeof getOrderPreviewDirect>>>
+    export type GetOrderPreviewDirectMutationBody = BodyType<DirectOrderPreviewReqDto>
+    export type GetOrderPreviewDirectMutationError = ErrorType<unknown>
+
+    /**
+ * @summary 주문 전 조회(바로 주문)
+ */
+export const useGetOrderPreviewDirect = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof getOrderPreviewDirect>>, TError,{data: BodyType<DirectOrderPreviewReqDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof getOrderPreviewDirect>>,
+        TError,
+        {data: BodyType<DirectOrderPreviewReqDto>},
+        TContext
+      > => {
+
+      const mutationOptions = getGetOrderPreviewDirectMutationOptions(options);
 
       return useMutation(mutationOptions, queryClient);
     }
