@@ -5,13 +5,21 @@ export interface OrderSummaryProps {
   preview: OrderPreviewResDto;
   /** 배송지 변경 등으로 재계산 중 - 이전 값을 흐리게 표시 */
   isRefreshing: boolean;
+  onPay: () => void;
+  /** 주문 생성~결제 이동 중 - 중복 주문 방지를 위해 버튼 잠금 */
+  isPaying: boolean;
 }
 
 /**
  * 결제 금액 요약 - 모든 값은 서버 미리보기 그대로 표시 (클라이언트 재계산 금지)
  * 상품할인은 표시용 차이값(정가 합 - 판매가 합)만 계산
  */
-export function OrderSummary({ preview, isRefreshing }: OrderSummaryProps) {
+export function OrderSummary({
+  preview,
+  isRefreshing,
+  onPay,
+  isPaying,
+}: OrderSummaryProps) {
   const originalAmount = preview.totalOriginalAmount ?? 0;
   const productDiscount = originalAmount - (preview.totalAmount ?? 0);
   const couponDiscount = preview.discountAmount ?? 0;
@@ -66,13 +74,14 @@ export function OrderSummary({ preview, isRefreshing }: OrderSummaryProps) {
         </span>
       </div>
 
-      {/* TODO: 주문 생성 + 결제 연동(토스) 전까지 비활성 */}
+      {/* 재계산 중에는 이전 금액이 보이므로 결제 불가 */}
       <button
         type="button"
-        disabled
+        disabled={isPaying || isRefreshing}
+        onClick={onPay}
         className="bg-primary text-primary-foreground h-[52px] w-full rounded-lg text-[15px] font-bold disabled:pointer-events-none disabled:opacity-50"
       >
-        {formatPrice(finalAmount)} 결제하기
+        {isPaying ? "결제 진행 중..." : `${formatPrice(finalAmount)} 결제하기`}
       </button>
     </aside>
   );

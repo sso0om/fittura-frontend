@@ -27,7 +27,7 @@ export function buildOrderUrl(source: OrderSource): string {
   return `${ORDER_PATH}?${params.toString()}`;
 }
 
-function parsePositiveInt(raw: string): number | null {
+export function parsePositiveInt(raw: string): number | null {
   if (!/^\d+$/.test(raw)) return null;
   const value = Number(raw);
   return Number.isSafeInteger(value) && value > 0 ? value : null;

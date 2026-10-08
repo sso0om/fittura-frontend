@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 
@@ -9,7 +9,9 @@ import { OrderAddressSection } from "@/components/order/order-address-section";
 import { OrderItemsSection } from "@/components/order/order-items-section";
 import { parseOrderSource } from "@/components/order/order-source";
 import { OrderSummary } from "@/components/order/order-summary";
+import { useCheckout } from "@/components/order/use-checkout";
 import { useOrderPreview } from "@/components/order/use-order-preview";
+import { NoticeDialog } from "@/components/ui/notice-dialog";
 
 export function OrderPageClient() {
   const searchParams = useSearchParams();
@@ -23,8 +25,15 @@ export function OrderPageClient() {
     unselectIfSelected,
   } = useSelectedAddress();
 
-  // TODO: 주문 생성(결제하기) 연동 시 deliveryMemo로 전달
   const [deliveryMemo, setDeliveryMemo] = useState("");
+  const [notice, setNotice] = useState<string | null>(null);
+  const closeNotice = useCallback(() => setNotice(null), []);
+
+  const {
+    mutate: checkout,
+    isPending: isCheckingOut,
+    isSuccess: isCheckoutDone,
+  } = useCheckout();
 
   const {
     data: preview,
@@ -67,6 +76,16 @@ export function OrderPageClient() {
     );
   }
 
+  const handlePay = () => {
+    const addressId = address?.addressId;
+    if (addressId == null) {
+      setNotice("배송지를 등록해 주세요.");
+      return;
+    }
+
+    checkout({ source, addressId, deliveryMemo });
+  };
+
   return (
     <div className="mx-auto w-full max-w-[1160px] px-6 py-10">
       <h1 className="mb-6 text-2xl font-extrabold">결제하기</h1>
@@ -95,8 +114,15 @@ export function OrderPageClient() {
         </div>
 
         {/* 우측: 결제 금액 */}
-        <OrderSummary preview={preview} isRefreshing={isPlaceholderData} />
+        <OrderSummary
+          preview={preview}
+          isRefreshing={isPlaceholderData}
+          onPay={handlePay}
+          isPaying={isCheckingOut || isCheckoutDone}
+        />
       </div>
+
+      <NoticeDialog message={notice} onClose={closeNotice} />
     </div>
   );
 }
