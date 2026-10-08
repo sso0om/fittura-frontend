@@ -1,12 +1,14 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 
-import { deliveryTypeLabel } from "@/lib/enum-labels";
-import { formatPrice } from "@/lib/format";
 import { useSelectedAddress } from "@/components/address/use-selected-address";
+import { OrderAddressSection } from "@/components/order/order-address-section";
+import { OrderItemsSection } from "@/components/order/order-items-section";
 import { parseOrderSource } from "@/components/order/order-source";
+import { OrderSummary } from "@/components/order/order-summary";
 import { useOrderPreview } from "@/components/order/use-order-preview";
 
 export function OrderPageClient() {
@@ -14,12 +16,21 @@ export function OrderPageClient() {
   const source = parseOrderSource(searchParams);
 
   // 배송지: 선택한 배송지 우선, 없으면 기본 배송지 (로딩이 끝난 뒤 미리보기 호출)
-  const { address, isPending: isAddressPending } = useSelectedAddress();
+  const {
+    address,
+    isPending: isAddressPending,
+    selectAddress,
+    unselectIfSelected,
+  } = useSelectedAddress();
+
+  // TODO: 주문 생성(결제하기) 연동 시 deliveryMemo로 전달
+  const [deliveryMemo, setDeliveryMemo] = useState("");
 
   const {
     data: preview,
     isPending,
     isError,
+    isPlaceholderData,
   } = useOrderPreview(source, address?.addressId, !isAddressPending);
 
   if (source === null) {
@@ -60,32 +71,32 @@ export function OrderPageClient() {
     <div className="mx-auto w-full max-w-[1160px] px-6 py-10">
       <h1 className="mb-6 text-2xl font-extrabold">결제하기</h1>
 
-      <p className="text-muted-foreground mb-4 text-sm">
-        배송지: {address ? `${address.addressName} ${address.address}` : "없음"}
-      </p>
+      <div className="flex gap-10">
+        {/* 좌측: 받는 분 정보 · 주문상품 · 결제방법 */}
+        <div className="min-w-0 flex-1">
+          <OrderAddressSection
+            address={address}
+            isAddressPending={isAddressPending}
+            onSelectAddress={selectAddress}
+            onAddressDeleted={unselectIfSelected}
+            deliveryMemo={deliveryMemo}
+            onDeliveryMemoChange={setDeliveryMemo}
+          />
 
-      {preview.deliveryGroups?.map((group) => (
-        <section key={group.deliveryType} className="mb-4 text-sm">
-          <h2 className="font-bold">
-            {group.deliveryType ? deliveryTypeLabel[group.deliveryType] : ""} (
-            배송비 {formatPrice(group.deliveryFee ?? 0)})
-          </h2>
-          <ul>
-            {group.items?.map((item) => (
-              <li key={item.skuId}>
-                {item.productName} × {item.quantity} ={" "}
-                {formatPrice(item.itemTotalAmount ?? 0)}
-              </li>
-            ))}
-          </ul>
-        </section>
-      ))}
+          <OrderItemsSection deliveryGroups={preview.deliveryGroups ?? []} />
 
-      <p className="text-sm">
-        주문 금액 {formatPrice(preview.totalOriginalAmount ?? 0)} / 배송비{" "}
-        {formatPrice(preview.deliveryFee ?? 0)} / 결제 예정{" "}
-        <strong>{formatPrice(preview.finalAmount ?? 0)}</strong>
-      </p>
+          {/* TODO: 토스 결제 연동 시 결제수단 선택 UI */}
+          <section className="border-foreground border-t-2 py-6">
+            <h2 className="mb-5 text-xl font-extrabold">결제방법</h2>
+            <p className="text-muted-foreground text-sm">
+              결제수단 선택은 결제 연동 후 제공됩니다.
+            </p>
+          </section>
+        </div>
+
+        {/* 우측: 결제 금액 */}
+        <OrderSummary preview={preview} isRefreshing={isPlaceholderData} />
+      </div>
     </div>
   );
 }
