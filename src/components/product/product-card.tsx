@@ -3,7 +3,7 @@ import { Heart, Star } from "lucide-react";
 
 import { cn } from "cn";
 import { ProductThumbnail } from "@/components/product/product-thumbnail";
-import { formatPrice } from "@/lib/format";
+import { formatPrice, isDiscounted } from "@/lib/format";
 
 export interface ProductCardProps {
   href: string;
@@ -12,7 +12,7 @@ export interface ProductCardProps {
   salePrice: number;
   /** 할인 전 정가 - 할인 중이 아니면 생략 */
   originalPrice?: number;
-  /** 할인율(%) - 0 이하이면 할인 UI를 표시하지 않음 */
+  /** 할인율(%) - 정가 > 판매가일 때 표시 */
   discountRate?: number;
   rating?: number;
   reviewCount?: number;
@@ -39,7 +39,7 @@ export function ProductCard({
   discontinued = false,
   className,
 }: ProductCardProps) {
-  const hasDiscount = discountRate > 0;
+  const hasDiscount = isDiscounted(originalPrice, salePrice);
   const hasRating = rating != null && reviewCount != null;
   const overlayLabel = discontinued ? "품절" : soldOut ? "일시품절" : null;
 

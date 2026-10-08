@@ -4,6 +4,14 @@ export function formatPrice(price: number): string {
   return `${new Intl.NumberFormat("ko-KR").format(price)}원`;
 }
 
+/** 할인 중 여부 - 정가가 판매가보다 클 때 (화면별 할인 표시 기준 통일) */
+export function isDiscounted(
+  originalPrice: number | undefined,
+  salePrice: number | undefined,
+): boolean {
+  return originalPrice != null && salePrice != null && originalPrice > salePrice;
+}
+
 /**
  * 휴대폰 번호 앞자리를 뺀 나머지에 하이픈 추가 (입력 중에도 사용)
  * - 7자리 이하: 123-4567 / 8자리: 1234-5678
