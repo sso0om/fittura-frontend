@@ -97,7 +97,7 @@ function CallbackMessage({
           variant="outline"
           className="h-10 px-5"
           nativeButton={false}
-          render={<Link href="/">쇼핑 계속하기</Link>}
+          render={<Link href="/products">쇼핑 계속하기</Link>}
         />
         <Button
           className="h-10 px-5"

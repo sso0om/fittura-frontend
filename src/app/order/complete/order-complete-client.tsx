@@ -57,7 +57,7 @@ export function OrderCompleteClient() {
         <Button
           className="h-12 px-10 text-[15px] font-bold"
           nativeButton={false}
-          render={<Link href="/">쇼핑 계속하기</Link>}
+          render={<Link href="/products">쇼핑 계속하기</Link>}
         />
       </div>
     </div>
@@ -68,8 +68,8 @@ function CompleteMessage({ message }: { message: string }) {
   return (
     <div className="mx-auto w-full max-w-[720px] px-6 py-16 text-center">
       <p className="text-muted-foreground mb-4 text-sm">{message}</p>
-      <Link href="/" className="text-sm underline underline-offset-2">
-        홈으로 이동
+      <Link href="/products" className="text-sm underline underline-offset-2">
+        쇼핑 계속하기
       </Link>
     </div>
   );
