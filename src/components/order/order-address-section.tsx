@@ -1,27 +1,21 @@
 "use client";
 
-import type { MemberAddressResDto } from "@/api/model";
 import { AddressSummary } from "@/components/address/address-summary";
+import type { AddressSelection } from "@/components/address/use-selected-address";
 import { Input } from "@/components/ui/input";
 
 /** 서버 deliveryMemo 최대 길이 */
 const DELIVERY_MEMO_MAX_LENGTH = 255;
 
 export interface OrderAddressSectionProps {
-  address: MemberAddressResDto | null;
-  isAddressPending: boolean;
-  onSelectAddress: (addressId: number) => void;
-  onAddressDeleted: (addressId: number) => void;
+  addressSelection: AddressSelection;
   deliveryMemo: string;
   onDeliveryMemoChange: (value: string) => void;
 }
 
 /** 받는 분 정보 - 배송지(기존 배송지 팝업 재사용) + 배송 요청사항 */
 export function OrderAddressSection({
-  address,
-  isAddressPending,
-  onSelectAddress,
-  onAddressDeleted,
+  addressSelection,
   deliveryMemo,
   onDeliveryMemoChange,
 }: OrderAddressSectionProps) {
@@ -33,10 +27,7 @@ export function OrderAddressSection({
         <div className="flex gap-6">
           <span className="w-28 shrink-0 text-sm font-bold">배송지 정보</span>
           <AddressSummary
-            address={address}
-            isAddressPending={isAddressPending}
-            onSelectAddress={onSelectAddress}
-            onAddressDeleted={onAddressDeleted}
+            addressSelection={addressSelection}
             showReceiver
             className="min-w-0 flex-1"
           />

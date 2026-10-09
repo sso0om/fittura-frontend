@@ -3,16 +3,14 @@
 import { useState } from "react";
 
 import { cn } from "cn";
-import type { MemberAddressResDto } from "@/api/model";
 import { AddressDialog } from "@/components/address/address-dialog";
+import type { AddressSelection } from "@/components/address/use-selected-address";
 import { Button } from "@/components/ui/button";
 import { formatPhoneNumber } from "@/lib/format";
 
 export interface AddressSummaryProps {
-  address: MemberAddressResDto | null;
-  isAddressPending: boolean;
-  onSelectAddress: (addressId: number) => void;
-  onAddressDeleted: (addressId: number) => void;
+  /** useSelectedAddress() 반환값 - 한 훅 인스턴스를 부모에서 공유 (여기서 다시 호출하지 않음) */
+  addressSelection: AddressSelection;
   /** 받는 분·연락처 줄 표시 (주문서) - 장바구니는 배송지명과 주소만 */
   showReceiver?: boolean;
   className?: string;
@@ -23,13 +21,12 @@ export interface AddressSummaryProps {
  * 배송지가 없으면 등록 화면, 있으면 목록 화면부터 시작
  */
 export function AddressSummary({
-  address,
-  isAddressPending,
-  onSelectAddress,
-  onAddressDeleted,
+  addressSelection,
   showReceiver = false,
   className,
 }: AddressSummaryProps) {
+  const { address, isPending, selectAddress, unselectIfSelected } =
+    addressSelection;
   const [dialog, setDialog] = useState<{
     view: "list" | "create";
     open: boolean;
@@ -37,7 +34,7 @@ export function AddressSummary({
 
   return (
     <div className={cn("flex flex-col gap-1.5", className)}>
-      {isAddressPending ? (
+      {isPending ? (
         <div className="bg-muted h-5 w-48 animate-pulse rounded" />
       ) : address ? (
         <>
@@ -85,8 +82,8 @@ export function AddressSummary({
         onOpenChange={(open) => setDialog((prev) => ({ ...prev, open }))}
         initialView={dialog.view}
         currentAddressId={address?.addressId ?? null}
-        onSelectOnce={onSelectAddress}
-        onAddressDeleted={onAddressDeleted}
+        onSelectOnce={selectAddress}
+        onAddressDeleted={unselectIfSelected}
       />
     </div>
   );

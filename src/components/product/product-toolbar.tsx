@@ -15,19 +15,19 @@ export interface ProductToolbarProps {
   totalCount: number;
   sort: ProductSort;
   onSortChange: (sort: ProductSort) => void;
-  activeOnly: boolean;
-  onActiveOnlyChange: (activeOnly: boolean) => void;
+  inStockOnly: boolean;
+  onInStockOnlyChange: (inStockOnly: boolean) => void;
   pageSize: number;
   onPageSizeChange: (pageSize: number) => void;
 }
 
-const SORT_OPTIONS: { value: ProductSort; label: string }[] = [
+export const SORT_OPTIONS: { value: ProductSort; label: string }[] = [
   { value: "createdDate,desc", label: "신상품순" },
   { value: "baseSalePrice,asc", label: "낮은 가격순" },
   { value: "baseSalePrice,desc", label: "높은 가격순" },
 ];
 
-const PAGE_SIZE_OPTIONS = [20, 40, 60, 80].map((size) => ({
+export const PAGE_SIZE_OPTIONS = [20, 40, 60, 80].map((size) => ({
   value: size,
   label: `${size}개씩`,
 }));
@@ -39,8 +39,8 @@ export function ProductToolbar({
   totalCount,
   sort,
   onSortChange,
-  activeOnly,
-  onActiveOnlyChange,
+  inStockOnly,
+  onInStockOnlyChange,
   pageSize,
   onPageSizeChange,
 }: ProductToolbarProps) {
@@ -53,8 +53,8 @@ export function ProductToolbar({
         <label className="text-foreground flex cursor-pointer items-center gap-1.5 text-[13px] select-none">
           <input
             type="checkbox"
-            checked={activeOnly}
-            onChange={(event) => onActiveOnlyChange(event.target.checked)}
+            checked={inStockOnly}
+            onChange={(event) => onInStockOnlyChange(event.target.checked)}
             className="accent-primary size-4"
           />
           품절제외

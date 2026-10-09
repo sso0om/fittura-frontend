@@ -5,6 +5,11 @@ import {
   useGetDefaultAddress,
 } from "@/api/generated/memberaddress-v1/memberaddress-v1";
 import type { MemberAddressResDto } from "@/api/model";
+import {
+  readSession,
+  removeSession,
+  writeSession,
+} from "@/lib/session-storage";
 
 /**
  * 이번 주문에 사용할 배송지 id 보관 (sessionStorage)
@@ -14,31 +19,19 @@ import type { MemberAddressResDto } from "@/api/model";
  */
 const SELECTED_ADDRESS_ID_KEY = "address:selectedId";
 
-export function loadSelectedAddressId(): number | null {
-  if (typeof window === "undefined") return null;
-  try {
-    const raw = window.sessionStorage.getItem(SELECTED_ADDRESS_ID_KEY);
-    const id = raw == null ? NaN : Number(raw);
-    return Number.isInteger(id) ? id : null;
-  } catch {
-    return null;
-  }
+function loadSelectedAddressId(): number | null {
+  const raw = readSession(SELECTED_ADDRESS_ID_KEY);
+  const id = raw == null ? NaN : Number(raw);
+  return Number.isInteger(id) ? id : null;
 }
 
-export function saveSelectedAddressId(id: number): void {
-  try {
-    window.sessionStorage.setItem(SELECTED_ADDRESS_ID_KEY, String(id));
-  } catch {
-    // 저장 실패 시 무시 - 선택 배송지만 유지되지 않고 기본 배송지로 동작
-  }
-}
-
-export function clearSelectedAddressId(): void {
-  try {
-    window.sessionStorage.removeItem(SELECTED_ADDRESS_ID_KEY);
-  } catch {
-    // 무시
-  }
+export interface AddressSelection {
+  address: MemberAddressResDto | null;
+  isPending: boolean;
+  /** 이번 주문에만 사용할 배송지로 지정 (기본 배송지는 바꾸지 않음) */
+  selectAddress: (addressId: number) => void;
+  /** 배송지 삭제 시 - 선택한 배송지였다면 선택 해제 (기본 배송지로 전환) */
+  unselectIfSelected: (addressId: number) => void;
 }
 
 /**
@@ -47,26 +40,20 @@ export function clearSelectedAddressId(): void {
  * - 없으면 기본 배송지 조회 (등록된 배송지가 없으면 null)
  * - 선택한 배송지 조회 실패(삭제됨 등) 시 선택값을 지우고 기본 배송지로 전환
  */
-export function useSelectedAddress(): {
-  address: MemberAddressResDto | null;
-  isPending: boolean;
-  /** 이번 주문에만 사용할 배송지로 지정 (기본 배송지는 바꾸지 않음) */
-  selectAddress: (addressId: number) => void;
-  /** 배송지 삭제 시 - 선택한 배송지였다면 선택 해제 (기본 배송지로 전환) */
-  unselectIfSelected: (addressId: number) => void;
-} {
+export function useSelectedAddress(): AddressSelection {
   const [selectedId, setSelectedId] = useState<number | null>(
     loadSelectedAddressId,
   );
 
   function selectAddress(addressId: number) {
-    saveSelectedAddressId(addressId);
+    // 저장 실패 시 선택 배송지만 유지되지 않고 기본 배송지로 동작
+    writeSession(SELECTED_ADDRESS_ID_KEY, String(addressId));
     setSelectedId(addressId);
   }
 
   function unselectIfSelected(addressId: number) {
     if (selectedId !== addressId) return;
-    clearSelectedAddressId();
+    removeSession(SELECTED_ADDRESS_ID_KEY);
     setSelectedId(null);
   }
 
@@ -81,7 +68,7 @@ export function useSelectedAddress(): {
 
   // 조회 실패한 선택값은 저장소에서도 제거 -> 다음 진입부터 기본 배송지로 시작
   useEffect(() => {
-    if (selectedQuery.isError) clearSelectedAddressId();
+    if (selectedQuery.isError) removeSession(SELECTED_ADDRESS_ID_KEY);
   }, [selectedQuery.isError]);
 
   const query = hasValidSelection ? selectedQuery : defaultQuery;

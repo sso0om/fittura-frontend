@@ -11,7 +11,7 @@ import {
   useUpdateCartItem,
 } from "@/api/generated/cart-v1/cart-v1";
 import { SkuStatus, type CartItemResDto } from "@/api/model";
-import { formatPrice } from "@/lib/format";
+import { formatPrice, isDiscounted } from "@/lib/format";
 import {
   getUnavailableSaleStatus,
   unavailableSaleStatusLabel,
@@ -68,8 +68,7 @@ export function CartItemCard({
   const isAvailable = unavailableStatus === null;
   const canLinkToProduct =
     productId != null && unavailableStatus !== SkuStatus.PAUSED;
-  const hasDiscount =
-    originalPrice != null && salePrice != null && originalPrice !== salePrice;
+  const hasDiscount = isDiscounted(originalPrice, salePrice);
   const variantLabel = getSkuVariantLabel(item);
 
   function handleQuantityChange(nextQuantity: number) {
@@ -171,7 +170,7 @@ export function CartItemCard({
             {hasDiscount && (
               <div className="flex items-baseline gap-1.5">
                 <span className="text-muted-foreground text-xs line-through">
-                  {formatPrice(originalPrice)}
+                  {formatPrice(originalPrice ?? 0)}
                 </span>
                 {discountRate != null && (
                   <span className="text-destructive text-sm font-bold">

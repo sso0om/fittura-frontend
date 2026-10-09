@@ -6,7 +6,7 @@ import type {
 } from "@/api/model";
 import { ProductThumbnail } from "@/components/product/product-thumbnail";
 import { deliveryTypeLabel } from "@/lib/enum-labels";
-import { formatPrice } from "@/lib/format";
+import { formatPrice, isDiscounted } from "@/lib/format";
 import { getSkuVariantLabel } from "@/lib/sku-label";
 
 export interface OrderItemsSectionProps {
@@ -61,8 +61,7 @@ function OrderItemRow({ item }: { item: OrderPreviewItemResDto }) {
     itemTotalAmount,
   } = item;
 
-  const hasDiscount =
-    originalPrice != null && salePrice != null && originalPrice !== salePrice;
+  const hasDiscount = isDiscounted(originalPrice, salePrice);
   const variantLabel = getSkuVariantLabel(item);
   const productNameText = productName ?? "상품명 없음";
 
@@ -99,7 +98,7 @@ function OrderItemRow({ item }: { item: OrderPreviewItemResDto }) {
         {hasDiscount && (
           <div className="flex items-baseline gap-1.5">
             <span className="text-muted-foreground text-xs line-through">
-              {formatPrice(originalPrice)}
+              {formatPrice(originalPrice ?? 0)}
             </span>
             {discountRate != null && (
               <span className="text-destructive text-xs font-bold">

@@ -1,17 +1,17 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Heart, Share2, Ticket } from "lucide-react";
 
 import { deliveryTypeLabel } from "@/lib/enum-labels";
-import { formatPrice } from "@/lib/format";
+import { formatPrice, isDiscounted } from "@/lib/format";
 import {
   getUnavailableSaleStatus,
   unavailableSaleStatusLabel,
 } from "@/lib/sale-status";
 import { Button } from "@/components/ui/button";
+import { PageMessage } from "@/components/common/page-message";
 import { useGetProduct1 } from "@/api/generated/product-v1/product-v1";
 import { useCreateCartItems } from "@/api/generated/cart-v1/cart-v1";
 import type { SkuResDto } from "@/api/model";
@@ -43,9 +43,12 @@ export function ProductPageClient({ productId }: ProductPageClientProps) {
     ? deliveryTypeLabel[product.deliveryType]
     : undefined;
 
-  const hasDiscount = (product?.discountRate ?? 0) > 0;
+  const hasDiscount = isDiscounted(
+    product?.baseOriginalPrice,
+    product?.baseSalePrice,
+  );
 
-  const [items, setItems] = useState<SelectedSkuItem[]>([]);
+  const [selectedItems, setSelectedItems] = useState<SelectedSkuItem[]>([]);
   const router = useRouter();
   const [isCartAddedDialogOpen, setIsCartAddedDialogOpen] = useState(false);
   /** 사용자 안내 문구 (null이면 닫힘) */
@@ -61,21 +64,21 @@ export function ProductPageClient({ productId }: ProductPageClientProps) {
     if (sku.id == null) return;
 
     const skuId = sku.id;
-    const alreadySelected = items.some((item) => item.skuId === skuId);
+    const alreadySelected = selectedItems.some((item) => item.skuId === skuId);
     if (alreadySelected) {
       setNotice("이미 선택된 옵션입니다.");
       return;
     }
 
-    setItems((prev) => [...prev, { skuId, sku, quantity: 1 }]);
+    setSelectedItems((prev) => [...prev, { skuId, sku, quantity: 1 }]);
   }
 
   function handleAddToCart() {
-    if (items.length === 0) return;
+    if (selectedItems.length === 0) return;
 
     createCartItems(
       {
-        data: items.map((item) => ({
+        data: selectedItems.map((item) => ({
           skuId: item.skuId,
           quantity: item.quantity,
         })),
@@ -87,7 +90,7 @@ export function ProductPageClient({ productId }: ProductPageClientProps) {
   }
 
   function handleQuantityChange(skuId: number, nextQuantity: number) {
-    setItems((prev) => {
+    setSelectedItems((prev) => {
       if (nextQuantity <= 0) {
         return prev.filter((item) => item.skuId !== skuId);
       }
@@ -98,7 +101,7 @@ export function ProductPageClient({ productId }: ProductPageClientProps) {
   }
 
   function handleRemove(skuId: number) {
-    setItems((prev) => prev.filter((item) => item.skuId !== skuId));
+    setSelectedItems((prev) => prev.filter((item) => item.skuId !== skuId));
   }
 
   /**
@@ -106,9 +109,9 @@ export function ProductPageClient({ productId }: ProductPageClientProps) {
    * 일시품절은 장바구니 담기만 가능하고 바로구매는 불가
    */
   function handleBuyNow() {
-    if (items.length === 0) return;
+    if (selectedItems.length === 0) return;
 
-    const blocked = items.flatMap((item) => {
+    const blocked = selectedItems.flatMap((item) => {
       const status = getUnavailableSaleStatus({
         productStatus: product?.status,
         skuStatus: item.sku.status,
@@ -131,7 +134,7 @@ export function ProductPageClient({ productId }: ProductPageClientProps) {
     router.push(
       buildOrderUrl({
         type: "direct",
-        orderSkus: items.map((item) => ({
+        orderSkus: selectedItems.map((item) => ({
           skuId: item.skuId,
           quantity: item.quantity,
         })),
@@ -139,7 +142,7 @@ export function ProductPageClient({ productId }: ProductPageClientProps) {
     );
   }
 
-  const orderTotal = items.reduce(
+  const orderTotal = selectedItems.reduce(
     (sum, item) => sum + (item.sku.salePrice ?? 0) * item.quantity,
     0,
   );
@@ -154,14 +157,11 @@ export function ProductPageClient({ productId }: ProductPageClientProps) {
 
   if (isError || !product) {
     return (
-      <div className="mx-auto w-full max-w-[1600px] px-6 py-16 text-center">
-        <p className="text-muted-foreground mb-4 text-sm">
-          상품 정보를 불러오지 못했습니다.
-        </p>
-        <Link href="/products" className="text-sm underline underline-offset-2">
-          상품 목록으로 이동
-        </Link>
-      </div>
+      <PageMessage
+        message="상품 정보를 불러오지 못했습니다."
+        link={{ href: "/products", label: "상품 목록으로 이동" }}
+        className="max-w-[1600px]"
+      />
     );
   }
 
@@ -244,7 +244,7 @@ export function ProductPageClient({ productId }: ProductPageClientProps) {
 
           {/* 선택한 SKU 목록 */}
           <SelectedSkuList
-            items={items}
+            items={selectedItems}
             onQuantityChange={handleQuantityChange}
             onRemove={handleRemove}
           />
@@ -267,7 +267,7 @@ export function ProductPageClient({ productId }: ProductPageClientProps) {
               size="xl"
               className="flex-1 font-semibold"
               onClick={handleAddToCart}
-              disabled={items.length === 0 || isAddingToCart}
+              disabled={selectedItems.length === 0 || isAddingToCart}
             >
               장바구니
             </Button>
@@ -276,7 +276,7 @@ export function ProductPageClient({ productId }: ProductPageClientProps) {
               size="xl"
               className="flex-1"
               onClick={handleBuyNow}
-              disabled={items.length === 0}
+              disabled={selectedItems.length === 0}
             >
               바로구매
             </Button>

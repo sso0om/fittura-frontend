@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
 
@@ -10,22 +10,15 @@ import {
   useGetCart,
 } from "@/api/generated/cart-v1/cart-v1";
 import { useGetDeliveryPolicy } from "@/api/generated/delivery-v1/delivery-v1";
-import { DeliveryType, type CartItemResDto } from "@/api/model";
-import { deliveryTypeLabel } from "@/lib/enum-labels";
 import { formatPrice } from "@/lib/format";
 import { Button } from "@/components/ui/button";
+import { PageMessage } from "@/components/common/page-message";
 import { AddressSummary } from "@/components/address/address-summary";
 import { useSelectedAddress } from "@/components/address/use-selected-address";
 import { CartDeliverySection } from "@/components/cart/cart-delivery-section";
 import { buildOrderUrl } from "@/components/order/order-source";
-import {
-  calcDeliveryFee,
-  getDeliveryNotice,
-  isCartItemSelectable,
-  loadCartUncheckedIds,
-  saveCartUncheckedIds,
-  sumCartItems,
-} from "@/components/cart/cart-utils";
+import { summarizeCart } from "@/components/cart/cart-utils";
+import { useCartSelection } from "@/components/cart/use-cart-selection";
 
 export function CartPageClient() {
   // 장바구니: 화면 진입 시마다 조회 (전역 staleTime 무시), 수정/삭제 시 invalidate로 재조회
@@ -35,98 +28,27 @@ export function CartPageClient() {
     query: { staleTime: Infinity, gcTime: Infinity },
   });
 
-  // 배송지: 선택한 배송지 우선, 없으면 기본 배송지
-  const {
-    address,
-    isPending: isAddressPending,
-    selectAddress,
-    unselectIfSelected,
-  } = useSelectedAddress();
+  const addressSelection = useSelectedAddress();
 
   const items = data?.data?.items ?? [];
   const policies = policyRes?.data ?? [];
 
-  /**
-   * 선택 해제한 아이템 id만 보관 -> 기본은 선택 가능한 아이템 전체 선택
-   * 재조회로 아이템이 추가/삭제돼도 별도 동기화 없이 선택 상태가 유지됨
-   * 새로고침/페이지 이동 후에도 유지되도록 sessionStorage에 저장
-   */
-  const [uncheckedIds, setUncheckedIds] =
-    useState<Set<number>>(loadCartUncheckedIds);
-
-  useEffect(() => {
-    saveCartUncheckedIds(uncheckedIds);
-  }, [uncheckedIds]);
+  const { uncheckedIds, isItemChecked, setItemsChecked } = useCartSelection();
+  const {
+    sections,
+    selectableItems,
+    checkedItems,
+    isAllChecked,
+    originalAmount,
+    productDiscountAmount,
+    isDeliveryFeeUnknown,
+    deliveryFee,
+    expectedFinalAmount,
+  } = summarizeCart(items, uncheckedIds, policies);
 
   const queryClient = useQueryClient();
   const router = useRouter();
   const [isDeletingSelected, setIsDeletingSelected] = useState(false);
-
-  function isItemChecked(item: CartItemResDto): boolean {
-    return (
-      isCartItemSelectable(item) && !uncheckedIds.has(item.cartItemId)
-    );
-  }
-
-  function setItemsChecked(targetItems: CartItemResDto[], checked: boolean) {
-    setUncheckedIds((prev) => {
-      const next = new Set(prev);
-      for (const item of targetItems) {
-        if (!isCartItemSelectable(item)) continue;
-        if (checked) next.delete(item.cartItemId);
-        else next.add(item.cartItemId);
-      }
-      return next;
-    });
-  }
-
-  const sections = Object.values(DeliveryType).map((deliveryType) => {
-    const sectionItems = items.filter(
-      (item) => item.deliveryType === deliveryType,
-    );
-    const selectableItems = sectionItems.filter(isCartItemSelectable);
-    const selectedItems = selectableItems.filter(isItemChecked);
-    const policy = policies.find((p) => p.deliveryType === deliveryType);
-    const amount = sumCartItems(selectedItems);
-
-    return {
-      deliveryType,
-      items: sectionItems,
-      selectableItems,
-      allChecked:
-        selectableItems.length > 0 &&
-        selectedItems.length === selectableItems.length,
-      amount,
-      deliveryFee: calcDeliveryFee(
-        deliveryType,
-        selectedItems,
-        amount.itemTotal,
-        policy,
-      ),
-      notice: getDeliveryNotice(deliveryType, amount.itemTotal, policy),
-    };
-  });
-
-  // 결제 예정금액
-  const orderAmount = sections.reduce(
-    (sum, section) => sum + section.amount.originalTotal,
-    0,
-  );
-  const discountAmount = sections.reduce(
-    (sum, section) => sum + section.amount.discountTotal,
-    0,
-  );
-  const isDeliveryFeeUnknown = sections.some(
-    (section) => section.deliveryFee == null,
-  );
-  const deliveryFee = sections.reduce(
-    (sum, section) => sum + (section.deliveryFee ?? 0),
-    0,
-  );
-  const totalPaymentAmount = orderAmount - discountAmount + deliveryFee;
-
-  const allSelectableItems = items.filter(isCartItemSelectable);
-  const checkedItems = allSelectableItems.filter(isItemChecked);
 
   /** 선택 삭제
    * 일부 실패해도 나머지는 삭제되도록 allSettled 사용 (실패 메시지는 axios 인터셉터가 노출)
@@ -145,8 +67,6 @@ export function CartPageClient() {
       setIsDeletingSelected(false);
     }
   }
-  const isAllChecked =
-    allSelectableItems.length > 0 && allSelectableItems.every(isItemChecked);
 
   function handleOrder() {
     if (checkedItems.length === 0) return;
@@ -169,11 +89,10 @@ export function CartPageClient() {
 
   if (isError) {
     return (
-      <div className="mx-auto w-full max-w-[1160px] px-6 py-16 text-center">
-        <p className="text-muted-foreground text-sm">
-          장바구니를 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.
-        </p>
-      </div>
+      <PageMessage
+        message="장바구니를 불러오지 못했습니다. 잠시 후 다시 시도해 주세요."
+        className="max-w-[1160px]"
+      />
     );
   }
 
@@ -182,10 +101,7 @@ export function CartPageClient() {
       <h1 className="mb-6 text-2xl font-extrabold">장바구니</h1>
 
       <AddressSummary
-        address={address}
-        isAddressPending={isAddressPending}
-        onSelectAddress={selectAddress}
-        onAddressDeleted={unselectIfSelected}
+        addressSelection={addressSelection}
         className="border-border mb-5 rounded-xl border p-5"
       />
 
@@ -204,7 +120,7 @@ export function CartPageClient() {
                 <input
                   type="checkbox"
                   checked={isAllChecked}
-                  disabled={allSelectableItems.length === 0}
+                  disabled={selectableItems.length === 0}
                   onChange={(e) => setItemsChecked(items, e.target.checked)}
                 />
                 전체 선택
@@ -222,20 +138,9 @@ export function CartPageClient() {
             {sections.map((section) => (
               <CartDeliverySection
                 key={section.deliveryType}
-                title={deliveryTypeLabel[section.deliveryType]}
-                notice={section.notice}
-                items={section.items}
+                section={section}
                 isItemChecked={isItemChecked}
-                onItemCheckedChange={(item, checked) =>
-                  setItemsChecked([item], checked)
-                }
-                allChecked={section.allChecked}
-                hasSelectableItem={section.selectableItems.length > 0}
-                onAllCheckedChange={(checked) =>
-                  setItemsChecked(section.items, checked)
-                }
-                deliveryFee={section.deliveryFee}
-                itemTotal={section.amount.itemTotal}
+                onItemsCheckedChange={setItemsChecked}
               />
             ))}
           </div>
@@ -247,13 +152,13 @@ export function CartPageClient() {
             <div className="flex flex-col gap-2.5 text-sm">
               <div className="flex justify-between">
                 <span className="text-muted-foreground">주문 금액</span>
-                <span>{formatPrice(orderAmount)}</span>
+                <span>{formatPrice(originalAmount)}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-muted-foreground">상품 할인</span>
                 <span>
-                  {discountAmount > 0
-                    ? `-${formatPrice(discountAmount)}`
+                  {productDiscountAmount > 0
+                    ? `-${formatPrice(productDiscountAmount)}`
                     : formatPrice(0)}
                 </span>
               </div>
@@ -272,7 +177,7 @@ export function CartPageClient() {
                 총 결제예정금액
               </span>
               <span className="text-price text-xl font-extrabold">
-                {formatPrice(totalPaymentAmount)}
+                {formatPrice(expectedFinalAmount)}
               </span>
             </div>
 

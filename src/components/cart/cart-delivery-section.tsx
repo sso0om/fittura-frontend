@@ -1,43 +1,30 @@
 "use client";
 
 import type { CartItemResDto } from "@/api/model";
+import { deliveryTypeLabel } from "@/lib/enum-labels";
 import { formatPrice } from "@/lib/format";
 import { CartItemCard } from "@/components/cart/cart-item-card";
+import type { CartSection } from "@/components/cart/cart-utils";
 
 export interface CartDeliverySectionProps {
-  title: string;
-  /** 헤더 우측 배송 안내 문구 */
-  notice: string | null;
-  items: CartItemResDto[];
+  section: CartSection;
   isItemChecked: (item: CartItemResDto) => boolean;
-  onItemCheckedChange: (item: CartItemResDto, checked: boolean) => void;
-  /** 섹션 전체 선택 체크 상태 */
-  allChecked: boolean;
-  /** 선택 가능한 아이템이 없으면 섹션 전체 선택 비활성 */
-  hasSelectableItem: boolean;
-  onAllCheckedChange: (checked: boolean) => void;
-  /** 선택 아이템 기준 배송비 */
-  deliveryFee: number | null;
-  /** 선택 아이템 기준 상품 금액 합 (배송비 제외) */
-  itemTotal: number;
+  onItemsCheckedChange: (items: CartItemResDto[], checked: boolean) => void;
 }
 
 /**
  * 배송 타입별 장바구니 섹션 (일반 배송 / 기사 배송 공통)
- * 배송비·문구 계산은 부모(cart-utils)에서 하고, 이 컴포넌트는 표시만 담당
+ * 배송비·문구 계산은 cart-utils(summarizeCart)에서 하고, 이 컴포넌트는 표시만 담당
  */
 export function CartDeliverySection({
-  title,
-  notice,
-  items,
+  section,
   isItemChecked,
-  onItemCheckedChange,
-  allChecked,
-  hasSelectableItem,
-  onAllCheckedChange,
-  deliveryFee,
-  itemTotal,
+  onItemsCheckedChange,
 }: CartDeliverySectionProps) {
+  const { items, selectableItems, allChecked, amount, deliveryFee, notice } =
+    section;
+  const title = deliveryTypeLabel[section.deliveryType];
+
   return (
     <section className="border-border overflow-hidden rounded-xl border">
       <div className="bg-foreground/8 border-border border-l-primary flex items-center justify-between border-b border-l-4 px-5 py-3.5">
@@ -45,8 +32,8 @@ export function CartDeliverySection({
           <input
             type="checkbox"
             checked={allChecked}
-            disabled={!hasSelectableItem}
-            onChange={(e) => onAllCheckedChange(e.target.checked)}
+            disabled={selectableItems.length === 0}
+            onChange={(e) => onItemsCheckedChange(items, e.target.checked)}
           />
           {title}
         </label>
@@ -65,7 +52,9 @@ export function CartDeliverySection({
             key={item.cartItemId}
             item={item}
             checked={isItemChecked(item)}
-            onCheckedChange={(checked) => onItemCheckedChange(item, checked)}
+            onCheckedChange={(checked) =>
+              onItemsCheckedChange([item], checked)
+            }
           />
         ))
       )}
@@ -82,7 +71,7 @@ export function CartDeliverySection({
             {title} 예상 주문 금액
           </span>
           <span className="text-base font-extrabold">
-            {formatPrice(itemTotal + (deliveryFee ?? 0))}
+            {formatPrice(amount.itemTotalAmount + (deliveryFee ?? 0))}
           </span>
         </div>
       </div>

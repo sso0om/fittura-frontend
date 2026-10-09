@@ -1,7 +1,6 @@
 "use client";
 
 import { useCallback, useState } from "react";
-import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 
 import { useSelectedAddress } from "@/components/address/use-selected-address";
@@ -11,19 +10,17 @@ import { parseOrderSource } from "@/components/order/order-source";
 import { OrderSummary } from "@/components/order/order-summary";
 import { useCheckout } from "@/components/order/use-checkout";
 import { useOrderPreview } from "@/components/order/use-order-preview";
+import { PageMessage } from "@/components/common/page-message";
 import { NoticeDialog } from "@/components/ui/notice-dialog";
+
+const CART_LINK = { href: "/cart", label: "장바구니로 이동" };
 
 export function OrderPageClient() {
   const searchParams = useSearchParams();
   const source = parseOrderSource(searchParams);
 
-  // 배송지: 선택한 배송지 우선, 없으면 기본 배송지 (로딩이 끝난 뒤 미리보기 호출)
-  const {
-    address,
-    isPending: isAddressPending,
-    selectAddress,
-    unselectIfSelected,
-  } = useSelectedAddress();
+  const addressSelection = useSelectedAddress();
+  const { address, isPending: isAddressPending } = addressSelection;
 
   const [deliveryMemo, setDeliveryMemo] = useState("");
   const [notice, setNotice] = useState<string | null>(null);
@@ -44,14 +41,11 @@ export function OrderPageClient() {
 
   if (source === null) {
     return (
-      <div className="mx-auto w-full max-w-[1160px] px-6 py-16 text-center">
-        <p className="text-muted-foreground mb-4 text-sm">
-          잘못된 접근입니다. 장바구니에서 다시 주문해 주세요.
-        </p>
-        <Link href="/cart" className="text-sm underline underline-offset-2">
-          장바구니로 이동
-        </Link>
-      </div>
+      <PageMessage
+        message="잘못된 접근입니다. 장바구니에서 다시 주문해 주세요."
+        link={CART_LINK}
+        className="max-w-[1160px]"
+      />
     );
   }
 
@@ -65,14 +59,11 @@ export function OrderPageClient() {
 
   if (isError || !preview) {
     return (
-      <div className="mx-auto w-full max-w-[1160px] px-6 py-16 text-center">
-        <p className="text-muted-foreground mb-4 text-sm">
-          주문 정보를 불러오지 못했습니다.
-        </p>
-        <Link href="/cart" className="text-sm underline underline-offset-2">
-          장바구니로 이동
-        </Link>
-      </div>
+      <PageMessage
+        message="주문 정보를 불러오지 못했습니다."
+        link={CART_LINK}
+        className="max-w-[1160px]"
+      />
     );
   }
 
@@ -94,10 +85,7 @@ export function OrderPageClient() {
         {/* 좌측: 받는 분 정보 · 주문상품 · 결제방법 */}
         <div className="min-w-0 flex-1">
           <OrderAddressSection
-            address={address}
-            isAddressPending={isAddressPending}
-            onSelectAddress={selectAddress}
-            onAddressDeleted={unselectIfSelected}
+            addressSelection={addressSelection}
             deliveryMemo={deliveryMemo}
             onDeliveryMemoChange={setDeliveryMemo}
           />

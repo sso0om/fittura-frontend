@@ -2,7 +2,7 @@
 
 import { X } from "lucide-react";
 
-import { formatPrice } from "@/lib/format";
+import { formatPrice, isDiscounted } from "@/lib/format";
 import { NumberFieldStepper } from "@/components/ui/number-field";
 import type { SkuResDto } from "@/api/model";
 import { getSkuVariantLabel } from "@/lib/sku-label";
@@ -34,7 +34,7 @@ export function SelectedSkuList({
       {items.map((item) => {
         const { skuId } = item;
         const { originalPrice, salePrice, discountRate } = item.sku;
-        const hasDiscount = (discountRate ?? 0) > 0;
+        const hasDiscount = isDiscounted(originalPrice, salePrice);
 
         return (
           <div
