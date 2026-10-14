@@ -21,7 +21,7 @@ export interface CheckoutParams {
  * - 승인은 콜백 라우트에서 수행 (Toss successUrl 구조와 동일)
  * - 성공하면 화면이 이동하므로 호출부는 isPending || isSuccess로 버튼을 잠근다 (이동 중 연타 방지)
  * - 실패 시 재시도하면 새 주문을 만든다 (남은 PENDING 주문은 만료 처리 몫)
- * - 에러 안내는 axios 인터셉터가 처리
+ * - 에러 안내는 QueryClient 전역 onError(app/providers.tsx)가 처리 (API 에러·응답 필드 누락 모두)
  */
 export function useCheckout() {
   const router = useRouter();
