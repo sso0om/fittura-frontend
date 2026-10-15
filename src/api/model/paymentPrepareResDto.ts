@@ -12,6 +12,7 @@ import type { PgProvider } from './pgProvider';
  */
 export interface PaymentPrepareResDto {
   orderId?: number;
+  orderName?: string;
   paymentId?: number;
   paymentMethod?: PaymentMethod;
   paymentNumber?: string;

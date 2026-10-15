@@ -1,23 +1,50 @@
-import type { PaymentPrepareResDto } from "@/api/model";
-import { buildPaymentCallbackUrl } from "@/components/order/checkout-routes";
+import { ANONYMOUS, loadTossPayments } from "@tosspayments/tosspayments-sdk";
 
-/**
- * paymentKey 획득 단계 - 결제 준비 이후 ~ 승인 콜백 이동 전까지
- *
- * 현재는 Mock PG: 임의 paymentKey를 만들어 콜백 라우트로 바로 이동한다.
- * TODO: Toss 연동 시 이 함수만 교체 - SDK requestPayment()에
- *  successUrl = 콜백 라우트(paymentId 포함)를 넘기면 Toss가 paymentKey를 붙여 리다이렉트한다.
- */
+import type { PaymentPrepareResDto } from "@/api/model";
+import {
+  buildPaymentSuccessPath,
+  PAYMENT_FAIL_PATH,
+} from "@/components/order/checkout-routes";
+
+const ORDER_NAME_MAX_LENGTH = 100;
+
+/** Toss 결제창 호출 */
 export async function requestPaymentKey(
   prepared: PaymentPrepareResDto,
-  replace: (url: string) => void,
+  onCancel: () => void,
 ): Promise<void> {
-  const paymentId = prepared.paymentId;
-  if (paymentId == null) {
-    throw new Error("결제 준비 응답에 paymentId가 없습니다.");
+  const { paymentId, paymentNumber, totalAmount, orderName } = prepared;
+  if (
+    paymentId == null ||
+    paymentNumber == null ||
+    totalAmount == null ||
+    orderName == null
+  ) {
+    throw new Error("결제 준비 응답에 필수 값이 없습니다.");
   }
 
-  // 서버 제한 200자 이하 (mock_ + uuid = 41자)
-  const paymentKey = `mock_${crypto.randomUUID()}`;
-  replace(buildPaymentCallbackUrl({ paymentId, paymentKey }));
+  const clientKey = process.env.NEXT_PUBLIC_TOSS_CLIENT_KEY;
+  if (!clientKey) {
+    throw new Error("NEXT_PUBLIC_TOSS_CLIENT_KEY가 설정되지 않았습니다.");
+  }
+
+  const safeOrderName = orderName.slice(0, ORDER_NAME_MAX_LENGTH);
+  const tossPayments = await loadTossPayments(clientKey);
+  const widgets = tossPayments.widgets({ customerKey: ANONYMOUS });
+  await widgets.setAmount({ currency: "KRW", value: totalAmount });
+
+  const paymentWindow = await widgets.renderPaymentWindow({
+    orderName: safeOrderName,
+  });
+
+  paymentWindow.on("paymentRequest", async () => {
+    await widgets.requestPayment({
+      orderId: paymentNumber,
+      orderName: safeOrderName,
+      successUrl: `${window.location.origin}${buildPaymentSuccessPath(paymentId)}`,
+      failUrl: `${window.location.origin}${PAYMENT_FAIL_PATH}`,
+    });
+  });
+
+  paymentWindow.on("cancel", async () => onCancel());
 }

@@ -16,4 +16,5 @@ export const OrderStatus = {
   COMPLETED: 'COMPLETED',
   CANCELLED: 'CANCELLED',
   RETURNED: 'RETURNED',
+  EXPIRED: 'EXPIRED',
 } as const;
