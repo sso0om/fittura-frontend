@@ -1,5 +1,4 @@
 import { useMutation } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
 
 import {
   createOrderCart,
@@ -17,16 +16,14 @@ export interface CheckoutParams {
 }
 
 /**
- * 결제하기: 주문 생성 -> 결제 준비 -> paymentKey 획득(콜백 라우트 이동)
- * - 승인은 콜백 라우트에서 수행 (Toss successUrl 구조와 동일)
- * - 성공하면 화면이 이동하므로 호출부는 isPending || isSuccess로 버튼을 잠근다 (이동 중 연타 방지)
- * - 실패 시 재시도하면 새 주문을 만든다 (남은 PENDING 주문은 만료 처리 몫)
- * - 에러 안내는 QueryClient 전역 onError(app/providers.tsx)가 처리 (API 에러·응답 필드 누락 모두)
+ * 결제하기: 주문 생성 -> 결제 준비 -> Toss 결제창 렌더링(결제 요청 시 성공은 콜백 라우트, 실패는 fail 라우트로 이동)
+ * - 승인: 콜백 라우트에서 수행 (Toss successUrl)
+ * - 결제창이 떠 있거나 이동 중: 호출부 isPending || isSuccess (연타 방지), 창을 닫으면 reset
+ * - 취소·실패 후 재시도: 새 주문 생성
+ * - 에러: QueryClient 전역 onError
  */
 export function useCheckout() {
-  const router = useRouter();
-
-  return useMutation({
+  const mutation = useMutation({
     mutationFn: async ({ source, addressId, deliveryMemo }: CheckoutParams) => {
       // TODO: 포인트 사용 기능 추가 시 pointUsedAmount 전달
       const common = {
@@ -54,7 +51,10 @@ export function useCheckout() {
         throw new Error("결제 준비 응답이 비어 있습니다.");
       }
 
-      await requestPaymentKey(prepareRes.data, (url) => router.replace(url));
+      // 결제창을 닫으면 상태를 초기화해 버튼 잠금을 푼다
+      await requestPaymentKey(prepareRes.data, () => mutation.reset());
     },
   });
+
+  return mutation;
 }

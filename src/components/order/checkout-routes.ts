@@ -1,6 +1,7 @@
 import { parsePositiveInt } from "@/lib/validation";
 
 export const PAYMENT_CALLBACK_PATH = "/order/payment/callback";
+export const PAYMENT_FAIL_PATH = "/order/payment/fail";
 export const ORDER_COMPLETE_PATH = "/order/complete";
 
 /** 서버 PaymentApproveReqDto.paymentKey 최대 길이 */
@@ -11,18 +12,10 @@ export interface PaymentCallbackParams {
   paymentKey: string;
 }
 
-export function buildPaymentCallbackUrl({
-  paymentId,
-  paymentKey,
-}: PaymentCallbackParams): string {
-  const params = new URLSearchParams({
-    paymentId: String(paymentId),
-    paymentKey,
-  });
-  return `${PAYMENT_CALLBACK_PATH}?${params.toString()}`;
+export function buildPaymentSuccessPath(paymentId: number): string {
+  return `${PAYMENT_CALLBACK_PATH}?paymentId=${paymentId}`;
 }
 
-/** 형식이 잘못됐으면 null (값 검증은 서버가 승인 시 다시 함) */
 export function parsePaymentCallback(params: {
   get(name: string): string | null;
 }): PaymentCallbackParams | null {
