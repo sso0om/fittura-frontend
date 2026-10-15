@@ -25,7 +25,12 @@ export default function Providers({ children }: { children: ReactNode }) {
 
     return new QueryClient({
       queryCache: new QueryCache({ onError: handleError }),
-      mutationCache: new MutationCache({ onError: handleError }),
+      mutationCache: new MutationCache({
+        onError: (error, _variables, _onMutateResult, mutation) => {
+          if (mutation.meta?.skipGlobalError) return;
+          handleError(error);
+        },
+      }),
       defaultOptions: {
         queries: {
           staleTime: 60 * 1000,

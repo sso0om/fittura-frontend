@@ -1,7 +1,7 @@
 import Axios from "axios";
 
 // 백엔드 RsData 응답 래퍼 형태 (에러 처리용 최소 형태만 정의)
-interface ApiErrorResponse {
+export interface ApiErrorResponse {
   code?: string;
   message?: string;
   data?: unknown;
@@ -16,11 +16,19 @@ export interface ApiErrorInfo {
 const DEFAULT_ERROR_MESSAGE =
   "일시적인 오류가 발생했습니다. 잠시 후 다시 시도해주세요.";
 
+export interface ParsedApiError extends ApiErrorResponse {
+  /** 서버 응답 자체가 없음 (네트워크 오류·타임아웃) */
+  noResponse: boolean;
+}
+
+/** 화면이 에러 코드로 직접 분기해야 할 때 사용 - axios 에러가 아니면 null */
+export function parseApiError(error: unknown): ParsedApiError | null {
+  if (!Axios.isAxiosError<ApiErrorResponse>(error)) return null;
+  return { ...error.response?.data, noResponse: error.response == null };
+}
+
 /**
- * 에러를 사용자에게 보여줄 정보로 변환 - 보여주지 않을 에러는 null
- * - 취소된 요청: React StrictMode(개발 모드)의 mount-unmount-mount 재실행으로
- *   react-query가 첫 번째(가짜) 마운트의 요청을 취소하는 경우라 실제 에러가 아님
- * - axios를 거치지 않은 에러(응답 필드 누락 등): 구체 메시지는 개발자용이라 콘솔에만 남기고 일반 문구 노출
+ * 에러를 사용자에게 보여줄 정보로 변환
  */
 export function toApiErrorInfo(error: unknown): ApiErrorInfo | null {
   if (Axios.isCancel(error)) {
